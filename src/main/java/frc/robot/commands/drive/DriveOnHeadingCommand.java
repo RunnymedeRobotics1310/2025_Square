@@ -17,7 +17,7 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     private long                 startTimeMs;
     private double               P_VALUE = 0.05;
 
-    public DriveOnHeadingCommand(int speed, Rotation2d heading, long durationMs, DriveSubsystem driveSubsystem) {
+    public DriveOnHeadingCommand(Rotation2d heading, double speed, long durationMs, DriveSubsystem driveSubsystem) {
 
         this.desiredHeading = heading;
         this.durationMs     = durationMs;
