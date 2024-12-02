@@ -41,9 +41,11 @@ public class DriveSubsystem extends SubsystemBase {
 
     private AHRS                  navXGyro                 = new AHRS() {
                                                                // Override the "Value" in the gyro
-                                                               // sendable to use the angle instead of
+                                                               // sendable to use the angle instead
+                                                               // of
                                                                // the yaw.
-                                                               // Using the angle makes the gyro appear
+                                                               // Using the angle makes the gyro
+                                                               // appear
                                                                // in the correct position accounting
                                                                // for the
                                                                // offset. The yaw is the raw sensor
@@ -107,6 +109,10 @@ public class DriveSubsystem extends SubsystemBase {
 
         // NOTE: The follower motors are set to follow the primary
         // motors
+    }
+
+    public double getHeading() {
+        return navXGyro.getAngle();
     }
 
     /** Safely stop the subsystem from moving */
