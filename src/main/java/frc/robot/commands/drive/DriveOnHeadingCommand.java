@@ -6,14 +6,15 @@ import frc.robot.subsystems.DriveSubsystem;
 public class DriveOnHeadingCommand extends LoggingCommand {
 
     private double               desiredHeading;
-    private int                  time;
+    private long                 time;
     private final DriveSubsystem driveSubsystem;
     private double               leftSpeed;
     private double               rightSpeed;
     private double               turn;
     private double               robotHeading;
+    private double               offset;
 
-    public DriveOnHeadingCommand(int speed, double heading, int time, DriveSubsystem driveSubsystem) {
+    public DriveOnHeadingCommand(int speed, double heading, long time, DriveSubsystem driveSubsystem) {
 
         this.desiredHeading = heading;
         this.time           = time;
@@ -31,10 +32,13 @@ public class DriveOnHeadingCommand extends LoggingCommand {
 
     @Override
     public void execute() {
-        robotHeading = driveSubsystem.
+        robotHeading = driveSubsystem.getHeading();
+
+        offset       = (desiredHeading - robotHeading) % 360;
 
 
-            driveSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
+
+        driveSubsystem.setMotorSpeeds(leftSpeed + offset, rightSpeed - offset);
 
     }
 
