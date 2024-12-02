@@ -44,7 +44,7 @@ public class CancelCommand extends LoggingCommand {
 
     @Override
     public void execute() {
-        stopAll();
+        isFinished();
     }
 
     @Override
