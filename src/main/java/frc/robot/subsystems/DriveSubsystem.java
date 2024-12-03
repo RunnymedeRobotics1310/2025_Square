@@ -128,8 +128,8 @@ public class DriveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        lightsSubsystem.setProximity(isTargetDetected());
-        lightsSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
+        // lightsSubsystem.setProximity(isTargetDetected());
+        // lightsSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
 
         SmartDashboard.putNumber("Right Motor", rightSpeed);
         SmartDashboard.putNumber("Left  Motor", leftSpeed);

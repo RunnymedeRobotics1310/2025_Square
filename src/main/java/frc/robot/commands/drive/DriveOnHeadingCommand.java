@@ -15,7 +15,7 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     private Rotation2d           robotHeading;
     private double               offset;
     private long                 startTimeMs;
-    private double               P_VALUE = 0.05;
+    private double               P_VALUE = 0.005;
 
     public DriveOnHeadingCommand(Rotation2d heading, double speed, long durationMs, DriveSubsystem driveSubsystem) {
 
