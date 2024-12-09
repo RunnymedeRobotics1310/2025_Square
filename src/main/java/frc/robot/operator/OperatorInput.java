@@ -1,10 +1,12 @@
 package frc.robot.operator;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
+import frc.robot.commands.drive.DriveOnHeadingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
 /**
@@ -35,6 +37,10 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getStartButton();
     }
 
+    public boolean isX() {
+        return driverController.getXButton();
+    }
+
     /**
      * Use this method to define your robotFunction -> command mappings.
      *
@@ -44,6 +50,9 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> isCancel())
             .onTrue(new CancelCommand(this, driveSubsystem));
+
+        new Trigger(() -> isX())
+            .onTrue(new DriveOnHeadingCommand(new Rotation2d().fromDegrees(270), .25, 2000, driveSubsystem));
 
     }
 

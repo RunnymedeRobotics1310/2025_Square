@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -41,9 +42,11 @@ public class DriveSubsystem extends SubsystemBase {
 
     private AHRS                  navXGyro                 = new AHRS() {
                                                                // Override the "Value" in the gyro
-                                                               // sendable to use the angle instead of
+                                                               // sendable to use the angle instead
+                                                               // of
                                                                // the yaw.
-                                                               // Using the angle makes the gyro appear
+                                                               // Using the angle makes the gyro
+                                                               // appear
                                                                // in the correct position accounting
                                                                // for the
                                                                // offset. The yaw is the raw sensor
@@ -107,6 +110,10 @@ public class DriveSubsystem extends SubsystemBase {
 
         // NOTE: The follower motors are set to follow the primary
         // motors
+    }
+
+    public Rotation2d getHeading() {
+        return new Rotation2d().fromDegrees(navXGyro.getAngle());
     }
 
     /** Safely stop the subsystem from moving */
