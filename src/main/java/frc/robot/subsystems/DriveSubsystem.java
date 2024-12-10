@@ -116,6 +116,10 @@ public class DriveSubsystem extends SubsystemBase {
         return new Rotation2d().fromDegrees(navXGyro.getAngle());
     }
 
+    public void zeroGyro() {
+        navXGyro.zeroYaw();
+    }
+
     /** Safely stop the subsystem from moving */
     public void stop() {
         setMotorSpeeds(0, 0);
