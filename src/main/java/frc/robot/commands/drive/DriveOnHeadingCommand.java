@@ -32,17 +32,18 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     public void initialize() {
         logCommandStart();
         startTimeMs = System.currentTimeMillis();
+        System.out.println("Driving at " + desiredHeading.getDegrees() + " degrees.");
     }
 
     @Override
     public void execute() {
         robotHeading = driveSubsystem.getHeading();
 
-        offset       = (desiredHeading.getDegrees() - robotHeading.getDegrees()) % 360;
+        offset       = ((desiredHeading.getDegrees() - robotHeading.getDegrees()) % 360) - 180;
 
 
 
-        driveSubsystem.setMotorSpeeds(leftSpeed + offset * P_VALUE, rightSpeed - offset * P_VALUE);
+        driveSubsystem.setMotorSpeeds(leftSpeed - offset * P_VALUE, rightSpeed + offset * P_VALUE);
 
     }
 

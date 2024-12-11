@@ -113,7 +113,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public Rotation2d getHeading() {
-        return new Rotation2d().fromDegrees(navXGyro.getAngle());
+        return navXGyro.getRotation2d();
     }
 
     public void zeroGyro() {
