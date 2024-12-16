@@ -10,6 +10,8 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     private long                 startTimeMillis;
     private long                 durationMillis;
     private double               speed;
+    private Rotation2d           desiredHeading;
+
 
 
     /**
@@ -22,6 +24,7 @@ public class DriveOnHeadingCommand extends LoggingCommand {
         this.durationMillis = durationMillis;
         this.speed          = speed;
         this.driveSubsystem = driveSubsystem;
+        this.desiredHeading = desiredHeading;
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveSubsystem);
@@ -56,7 +59,13 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     @Override
     public void execute() {
         log("hello, this is the execute");
-        driveSubsystem.setMotorSpeeds(speed, speed);
+        if (desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees() > 0) {
+            driveSubsystem.setMotorSpeeds(0.5, -0.5);
+        }
+        else {
+            driveSubsystem.setMotorSpeeds(-0.1, 0.1);
+        }
+
     }
 
 
