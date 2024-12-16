@@ -33,7 +33,6 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        log("boe jiden said this was the initialize");
         logCommandStart();
         startTimeMillis = System.currentTimeMillis();
     }
@@ -51,16 +50,14 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        log("hi, this is the end");
         logCommandEnd(interrupted);
         driveSubsystem.setMotorSpeeds(0, 0);
     }
 
     @Override
     public void execute() {
-        log("hello, this is the execute");
-        if (desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees() > 0) {
-            driveSubsystem.setMotorSpeeds(0.5, -0.5);
+        if ((desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees()) % 360 > 0) {
+            driveSubsystem.setMotorSpeeds(0.1, -0.1);
         }
         else {
             driveSubsystem.setMotorSpeeds(-0.1, 0.1);
