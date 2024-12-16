@@ -52,7 +52,7 @@ public class OperatorInput extends SubsystemBase {
             .onTrue(new CancelCommand(this, driveSubsystem));
 
         new Trigger(() -> isX())
-            .onTrue(new DriveOnHeadingCommand(new Rotation2d().fromDegrees(270), .25, 2000, driveSubsystem));
+            .onTrue(new DriveOnHeadingCommand(Rotation2d.fromDegrees(270), .25, 2000, driveSubsystem));
 
     }
 
