@@ -19,6 +19,7 @@ public class DriveOnHeadingCommand extends LoggingCommand {
      */
     public DriveOnHeadingCommand(Rotation2d desiredHeading, double speed, long durationMillis, DriveSubsystem driveSubsystem) {
 
+        this.durationMillis = durationMillis;
         this.speed          = speed;
         this.driveSubsystem = driveSubsystem;
 
@@ -41,7 +42,6 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     @Override
     public boolean isFinished() {
         // The default drive command never ends, but can be interrupted by other commands.
-
         return System.currentTimeMillis() - startTimeMillis > durationMillis;
     }
 
