@@ -29,7 +29,6 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     public void initialize() {
         logCommandStart();
         startTime = System.currentTimeMillis();
-
     }
 
     @Override
