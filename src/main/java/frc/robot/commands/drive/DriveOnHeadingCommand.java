@@ -45,18 +45,20 @@ public class DriveOnHeadingCommand extends LoggingCommand {
         // log("execution");
 
         if ((desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees()) % 360 > 0) {
-            driveSubsystem.setMotorSpeeds(1, -1);
-            System.out.println(driveSubsystem.getHeading().getDegrees());
-        }
-        else /*
-              * ((desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees()) % 360 < 0)
-              */ {
             driveSubsystem.setMotorSpeeds(-1, 1);
             System.out.println(driveSubsystem.getHeading().getDegrees());
+
+            if (driveSubsystem.getHeading().getDegrees() > 270)
+                driveSubsystem.setMotorSpeeds(1, -1);
+            }
         }
+        // else /*
+        // * ((desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees()) % 360 < 0)
+        // */ {
+        // driveSubsystem.setMotorSpeeds(-1, -1);
+        // System.out.println(driveSubsystem.getHeading().getDegrees());
+        
 
-
-    }
 
 
     // Returns true when the command should end.
