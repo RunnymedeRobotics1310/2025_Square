@@ -113,7 +113,11 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public Rotation2d getHeading() {
-        return new Rotation2d().fromDegrees(navXGyro.getAngle());
+        return navXGyro.getRotation2d();
+    }
+
+    public void zeroGyro() {
+        navXGyro.zeroYaw();
     }
 
     /** Safely stop the subsystem from moving */
@@ -128,8 +132,8 @@ public class DriveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        lightsSubsystem.setProximity(isTargetDetected());
-        lightsSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
+        // lightsSubsystem.setProximity(isTargetDetected());
+        // lightsSubsystem.setMotorSpeeds(leftSpeed, rightSpeed);
 
         SmartDashboard.putNumber("Right Motor", rightSpeed);
         SmartDashboard.putNumber("Left  Motor", leftSpeed);
