@@ -57,10 +57,10 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     @Override
     public void execute() {
         if ((desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees()) % 360 > 0) {
-            driveSubsystem.setMotorSpeeds(0.1, -0.1);
+            driveSubsystem.setMotorSpeeds(0.3, -0.3);
         }
         else {
-            driveSubsystem.setMotorSpeeds(-0.1, 0.1);
+            driveSubsystem.setMotorSpeeds(-0.3, 0.3);
         }
 
     }
