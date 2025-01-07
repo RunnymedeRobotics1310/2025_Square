@@ -1,5 +1,6 @@
 package frc.robot.commands.drive;
 
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -11,7 +12,7 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     private long                 durationMillis;
     private double               speed;
     private Rotation2d           desiredHeading;
-
+    private double               angleDistance;
 
 
     /**
@@ -25,6 +26,7 @@ public class DriveOnHeadingCommand extends LoggingCommand {
         this.speed          = speed;
         this.driveSubsystem = driveSubsystem;
         this.desiredHeading = desiredHeading;
+
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveSubsystem);
@@ -56,11 +58,15 @@ public class DriveOnHeadingCommand extends LoggingCommand {
 
     @Override
     public void execute() {
-        if ((desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees()) % 360 > 0) {
-            driveSubsystem.setMotorSpeeds(0.3, -0.3);
+
+        angleDistance = Math.abs(desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees());
+
+        if (desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees() > 0) {
+
+            driveSubsystem.setMotorSpeeds(angleDistance + 0.1, -(angleDistance + 0.1));
         }
         else {
-            driveSubsystem.setMotorSpeeds(-0.3, 0.3);
+            driveSubsystem.setMotorSpeeds(-(angleDistance + 0.1), angleDistance);
         }
 
     }
