@@ -10,6 +10,8 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     private long                 startTime;
     private long                 durationTime;
     private double               speed;
+    private double               angleDifferance;
+    private Rotation2d           desiredHeading;
 
     /**
      * Creates a new ExampleCommand.
@@ -18,7 +20,9 @@ public class DriveOnHeadingCommand extends LoggingCommand {
      */
     public DriveOnHeadingCommand(Rotation2d desiredHeading, double speed, long durationMillis, DriveSubsystem driveSubsystem) {
 
-        this.driveSubsystem = driveSubsystem;
+        this.driveSubsystem  = driveSubsystem;
+        this.angleDifferance = angleDifferance;
+        this.desiredHeading  = desiredHeading;
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveSubsystem);
@@ -28,12 +32,26 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     @Override
     public void initialize() {
         logCommandStart();
-        startTime = System.currentTimeMillis();
+        startTime    = System.currentTimeMillis();
+        durationTime = 10000;
     }
 
+    // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        driveSubsystem.setMotorSpeeds(speed, speed);
+
+        angleDifferance = ((desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees()) % 360);
+
+        log("angle differance" + angleDifferance);
+
+
+        if (angleDifferance >= 0) {
+            driveSubsystem.setMotorSpeeds(angleDifferance / 720, -angleDifferance / 720);
+        }
+        else if (angleDifferance < 0) {
+            driveSubsystem.setMotorSpeeds(-angleDifferance / 720, angleDifferance / 720);
+        }
+
     }
 
     // Returns true when the command should end.
