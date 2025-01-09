@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
+
 public class DriveOnHeading extends LoggingCommand {
 
     private final DriveSubsystem driveSubsystem;
@@ -11,6 +12,8 @@ public class DriveOnHeading extends LoggingCommand {
     private long                 startTimeMillis;
     private long                 durationMillis;
     private double               speed;
+    private double               angleDifferance;
+    private Rotation2d           desiredHeading;
 
 
     /**
@@ -38,8 +41,15 @@ public class DriveOnHeading extends LoggingCommand {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        driveSubsystem.setMotorSpeeds(speed, speed);
 
+        angleDifferance = desiredHeading.getDegrees() % 360 - driveSubsystem.getHeading().getDegrees() % 360;
+
+        if (angleDifferance >= 0) {
+            driveSubsystem.setMotorSpeeds(angleDifferance / 180, -angleDifferance / 180);
+        }
+        else if (angleDifferance < 0) {
+            driveSubsystem.setMotorSpeeds(-angleDifferance / 180, angleDifferance / 180);
+        }
 
     }
 
