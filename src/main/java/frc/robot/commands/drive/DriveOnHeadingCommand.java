@@ -61,48 +61,38 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     @Override
     public void execute() {
 
-
-
-        // error = (desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees()) % 360;
-
-        // turnSpeed = 0.75 * Math.abs(error) / 180;
-        // // turnSpeed = Math.max(turnSpeed, 0.1);
-
-        // log("desired" + desiredHeading.getDegrees());
-        // log("heading" + driveSubsystem.getHeading().getDegrees() % 360);
-
-        // if ((desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees() % 360) < 180)
-        // {
-        // driveSubsystem.setMotorSpeeds(-turnSpeed, turnSpeed);
-        // }
-        // else {
-        // driveSubsystem.setMotorSpeeds(turnSpeed, -turnSpeed);
-        // }
-
-        // log("error = " + error);
-        // log("speed = " + turnSpeed);
-
-
         error = desiredHeading.minus(driveSubsystem.getHeading()).getDegrees();
 
-        // Ensure the turn speed is proportional to the error, capped between 0.1 and 0.75
-        double turnSpeed = 0.75 * Math.abs(error) / 180;
+        // Normalize the error to the range of -180 to 180
+        if (error > 180) {
+            error -= 360;
+        }
+        else if (error < -180) {
+            error += 360;
+        }
+
+        // Ensure the turn speed is proportional to the error
+        double turnSpeed = 0.8 * Math.abs(error) / 180;
         turnSpeed = Math.max(turnSpeed, 0.15);
 
         // Log the desired and current heading
         log("desired: " + desiredHeading.getDegrees());
         log("heading: " + driveSubsystem.getHeading().getDegrees());
 
-        // If the error is positive (meaning we need to turn left), set motor speeds accordingly
-        if (Math.abs(error) > 180) {
-            // Turn in one direction
-            driveSubsystem.setMotorSpeeds(-turnSpeed, turnSpeed); // Left motor negative, Right
-            // motor positive
+        // If the robot is at the position, move on heading, if not rotate to heading
+        if (turnSpeed > 0.1 && error > 5) {
+            // If the error is positive (meaning we need to turn left), set motor speeds accordingly
+            if (error > 0) {
+                // Turn counter-clockwise (left motor negative, right motor positive)
+                driveSubsystem.setMotorSpeeds(-turnSpeed, turnSpeed);
+            }
+            else {
+                // Turn clockwise (left motor positive, right motor negative)
+                driveSubsystem.setMotorSpeeds(turnSpeed, -turnSpeed);
+            }
         }
         else {
-            // Turn in the opposite direction
-            driveSubsystem.setMotorSpeeds(turnSpeed, -turnSpeed); // Left motor positive, Right
-            // motor negative
+            driveSubsystem.setMotorSpeeds(0, 0);
         }
 
     }
