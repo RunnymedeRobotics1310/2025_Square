@@ -39,7 +39,8 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     @Override
     public void initialize() {
         logCommandStart();
-        startTimeMillis = System.currentTimeMillis();
+        startTimeMillis   = System.currentTimeMillis();
+        isTurningComplete = false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -108,17 +109,21 @@ public class DriveOnHeadingCommand extends LoggingCommand {
         }
         else {
             if (error < 1 || error > -1) {
+                // If turn is complete, record drive start time
                 if (!isTurningComplete) {
                     isTurningComplete = true;
                     driveingStartTime = System.currentTimeMillis();
                 }
+                // If needed adjust heading left
                 if (error > 5) {
                     driveSubsystem.setMotorSpeeds(speed - turnSpeed * 0.5, speed);
                 }
                 else {
+                    // If needed adjust heading right
                     if (error < 0) {
                         driveSubsystem.setMotorSpeeds(speed, speed - turnSpeed * 0.5);
                     }
+                    // If going on heading, go at speed
                     else {
                         driveSubsystem.setMotorSpeeds(speed, speed);
                     }
