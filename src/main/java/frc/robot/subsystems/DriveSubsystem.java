@@ -62,7 +62,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     // The motors on the right side of the drive.
     private final TalonSRX            rightPrimaryMotor  = new TalonSRX(DriveConstants.RIGHT_MOTOR_CAN_ID);
-    private final TalonSRX            rightFollowerMotor = new TalonSRX(DriveConstants.LEFT_MOTOR_CAN_ID + 1);
+    private final TalonSRX            rightFollowerMotor = new TalonSRX(DriveConstants.RIGHT_MOTOR_CAN_ID + 1);
     
     private final DigitalInput    targetSensor             = new DigitalInput(0);
 
@@ -356,7 +356,6 @@ public class DriveSubsystem extends SubsystemBase {
 
         SmartDashboard.putNumber("Ultrasonic Voltage", ultrasonicDistanceSensor.getVoltage());
         SmartDashboard.putNumber("Ultrasonic Distance (cm)", getUltrasonicDistanceCm());
-
 
     }
 
