@@ -10,8 +10,14 @@ public class DriveOnHeadingCommand extends LoggingCommand {
 
     private long                 startTimeMillis;
     private long                 durationMillis;
+    private double               maxSpeed;
     private double               speed;
     private Rotation2d           desiredHeading;
+
+    private double               angleDistance;
+    private double               effectiveSpeed;
+    private long                 driveDurationMillis;
+    private boolean              startDrive;
 
 
     /**
@@ -19,12 +25,13 @@ public class DriveOnHeadingCommand extends LoggingCommand {
      *
      * @param driveSubsystem The subsystem used by this command.
      */
-    public DriveOnHeadingCommand(Rotation2d desiredHeading, double speed, long durationMillis, DriveSubsystem driveSubsystem) {
+    public DriveOnHeadingCommand(Rotation2d desiredHeading, double maxSpeed, long durationMillis, DriveSubsystem driveSubsystem) {
 
         this.driveSubsystem = driveSubsystem;
-        this.speed          = speed;
+        this.maxSpeed       = speed;
         this.durationMillis = durationMillis;
         this.desiredHeading = desiredHeading;
+        this.startDrive     = startDrive;
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveSubsystem);
@@ -34,38 +41,79 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        log("3,2,1 start");
+        log("Start!");
         logCommandStart();
         startTimeMillis = System.currentTimeMillis();
+        durationMillis  = 4000;
+        startDrive      = false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        // log("execution");
 
-        if ((desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees()) % 360 > 0) {
-            driveSubsystem.setMotorSpeeds(-1, 1);
-            System.out.println(driveSubsystem.getHeading().getDegrees());
+        if (!startDrive) {
+            angleDistance = (desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees())
+                % 360;
+            maxSpeed      = 1.5;
 
-            if (driveSubsystem.getHeading().getDegrees() > 270)
-                driveSubsystem.setMotorSpeeds(1, -1);
+            if (angleDistance > 180) {
+                angleDistance -= 360;
+            }
+
+            else if (angleDistance < -180) {
+                angleDistance += 360;
+
+            }
+
+            effectiveSpeed = maxSpeed * (((Math.abs(angleDistance)) / 180));
+
+            if (Math.abs(angleDistance) < 20) {
+                effectiveSpeed *= 0.1;
+
+            }
+
+            if (Math.abs(angleDistance) < 4) {
+                startDrive = true;
+            }
+            if (angleDistance > 0) {
+                driveSubsystem.setMotorSpeeds(-effectiveSpeed, effectiveSpeed);
+            }
+
+            else {
+                driveSubsystem.setMotorSpeeds(effectiveSpeed, -effectiveSpeed);
             }
         }
-        // else /*
-        // * ((desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees()) % 360 < 0)
-        // */ {
-        // driveSubsystem.setMotorSpeeds(-1, -1);
-        // System.out.println(driveSubsystem.getHeading().getDegrees());
-        
+
+        if (startDrive == true) {
+            effectiveSpeed = 0.2;
+
+            if (System.currentTimeMillis() - startTimeMillis >= durationMillis / 2) {
+                driveSubsystem.setMotorSpeeds(effectiveSpeed, effectiveSpeed);
+            }
+        }
 
 
 
-    // Returns true when the command should end.
+        log("START DRIVE START DRIVE START DRIVE " + startDrive);
+        log("EFFCTIVE SPEED: " + effectiveSpeed);
+
+
+    }
+
+
+
+    // *
+    // driveSubsystem.setMotorSpeeds(-1, -1);
+    // Syst
+
+
+
     @Override
     public boolean isFinished() {
+
         if (System.currentTimeMillis() - startTimeMillis > durationMillis) {
-            log("Hyhhhhhhhh");
+            log("isFinished called");
             return true;
         }
         return false;
@@ -75,7 +123,7 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        log("what's up this is the end");
+        log("end");
         logCommandEnd(interrupted);
         driveSubsystem.setMotorSpeeds(0, 0);
     }
