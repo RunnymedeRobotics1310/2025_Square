@@ -4,15 +4,15 @@
 package frc.robot;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose.
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean constants. This class should not be used for any other
+ * purpose.
  * <p>
- * All constants should be declared globally (i.e. public static).
- * <br>
+ * All constants should be declared globally (i.e. public static). <br>
  * Do not put anything functional in this class.
  * <p>
- * It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
 
@@ -54,6 +54,13 @@ public final class Constants {
         public static final double  DRIVE_SCALING_BOOST  = 1;
         public static final double  DRIVE_SCALING_NORMAL = .6;
         public static final double  DRIVE_SCALING_SLOW   = .3;
+    }
+
+    public static final class CoralConstants {
+
+        public static final int ELEVATOR_MOTOR_CAN_ID = 30;
+        public static final int ARM_MOTOR_CAN_ID      = 31;
+        public static final int INTAKE_MOTOR_CAN_ID   = 32;
     }
 
     public static final class LightsConstants {

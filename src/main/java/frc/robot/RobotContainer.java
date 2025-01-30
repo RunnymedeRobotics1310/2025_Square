@@ -26,6 +26,7 @@ public class RobotContainer {
     // constructors so that they can indicate status information on the lights
     private final LightsSubsystem lightsSubsystem = new LightsSubsystem();
     private final DriveSubsystem  driveSubsystem  = new DriveSubsystem(lightsSubsystem);
+    // FIXME: add the coral subsystem
 
     // Driver and operator controllers
     private final OperatorInput   operatorInput   = new OperatorInput();
@@ -38,6 +39,7 @@ public class RobotContainer {
             new DefaultDriveCommand(operatorInput, driveSubsystem));
 
         // Configure the button bindings - pass in all subsystems
+        // FIXME: add the coral subsystem
         operatorInput.configureButtonBindings(driveSubsystem);
 
         // Add a trigger to flash the LEDs in sync with the
