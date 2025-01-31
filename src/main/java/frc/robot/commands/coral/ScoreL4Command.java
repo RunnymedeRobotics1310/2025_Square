@@ -7,6 +7,9 @@ import frc.robot.subsystems.CoralSubsystem;
 public class ScoreL4Command extends LoggingCommand {
 
     private final CoralSubsystem coralSubsystem;
+    private final double         l4Height          = 20;
+    private final double         elevatorTolerance = 1;
+
 
     public ScoreL4Command(CoralSubsystem coralSubsystem) {
 
@@ -22,12 +25,19 @@ public class ScoreL4Command extends LoggingCommand {
 
     @Override
     public void execute() {
+        coralSubsystem.setElevatorSpeed(0.5);
 
+        if (coralSubsystem.getElevatorEncoder() <= l4Height + elevatorTolerance &&
+            coralSubsystem.getElevatorEncoder() >= l4Height - elevatorTolerance) {
+            coralSubsystem.setElevatorSpeed(0);
+        }
     }
 
     @Override
     public boolean isFinished() {
+        log("AT L4");
         return false;
+
     }
 
     @Override
