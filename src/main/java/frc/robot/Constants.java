@@ -58,9 +58,17 @@ public final class Constants {
 
     public static final class CoralConstants {
 
-        public static final int ELEVATOR_MOTOR_CAN_ID = 30;
-        public static final int ARM_MOTOR_CAN_ID      = 31;
-        public static final int INTAKE_MOTOR_CAN_ID   = 32;
+        public static final int    ELEVATOR_MOTOR_CAN_ID = 30;
+        public static final int    ARM_MOTOR_CAN_ID      = 31;
+        public static final int    INTAKE_MOTOR_CAN_ID   = 32;
+
+        // placeholder value for height of elevator when scoring at lvl 4
+        public static final int    LEVEL_FOUR_HEIGHT     = 20;
+
+        public static final int    ELEVATOR_TOLERANCE    = 1;
+
+        // placeholder value for speed of elevator
+        public static final double ELEVATOR_SPEED        = 0.5;
     }
 
     public static final class LightsConstants {
@@ -68,4 +76,6 @@ public final class Constants {
         public static final int LED_STRING_PWM_PORT = 9;
         public static final int LED_STRING_LENGTH   = 60;
     }
+
+
 }

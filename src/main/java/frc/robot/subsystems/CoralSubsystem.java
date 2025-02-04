@@ -8,9 +8,9 @@ public class CoralSubsystem extends SubsystemBase {
     private final LightsSubsystem lightsSubsystem;
 
     // Coral Subsystem Motors
-//    private final TalonSRX        elevatorMotor             = new TalonSRX(CoralConstants.ELEVATOR_MOTOR_CAN_ID);
-//    private final TalonSRX        armMotor                  = new TalonSRX(CoralConstants.ARM_MOTOR_CAN_ID);
-//    private final TalonSRX        intakeMotor               = new TalonSRX(CoralConstants.INTAKE_MOTOR_CAN_ID);
+    // private final TalonSRX elevatorMotor = new TalonSRX(CoralConstants.ELEVATOR_MOTOR_CAN_ID);
+    // private final TalonSRX armMotor = new TalonSRX(CoralConstants.ARM_MOTOR_CAN_ID);
+    // private final TalonSRX intakeMotor = new TalonSRX(CoralConstants.INTAKE_MOTOR_CAN_ID);
 
     private double              elevatorSpeed                       = 0;
     private double              armSpeed                            = 0;
@@ -18,6 +18,7 @@ public class CoralSubsystem extends SubsystemBase {
 
     private double              elevatorEncoderOffset               = 0;
     private double              elevatorEncoder                     = 0;
+
 
     // Simulation constants
     // Full speed up: the elevator will raise 60 inches in 2 seconds with a loop time of 20ms.
@@ -38,10 +39,13 @@ public class CoralSubsystem extends SubsystemBase {
 
         this.elevatorSpeed = speed;
 
+
+
         checkSafety();
 
         // elevatorMotor.set(ControlMode.PercentOutput, elevatorSpeed);
     }
+
 
     public boolean isElevatorAtLowerLimit() {
 
