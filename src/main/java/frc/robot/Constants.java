@@ -57,12 +57,14 @@ public final class Constants {
     }
 
     public static final class CoralConstants {
+        public static final double CORAL_INTAKE_SPEED = 0.5;
+        public static final double CORAL_OUTAKE_SPEED = 0.8;
 
         public static final int ELEVATOR_MOTOR_CAN_ID = 30;
         public static final int ARM_MOTOR_CAN_ID      = 31;
         public static final int INTAKE_MOTOR_CAN_ID   = 32;
     }
-
+    
     public static final class LightsConstants {
 
         public static final int LED_STRING_PWM_PORT = 9;

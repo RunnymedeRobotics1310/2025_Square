@@ -91,6 +91,12 @@ public class CoralSubsystem extends SubsystemBase {
      * FIXME: Make intake routines similar to the elevator routines
      * NOTE: the intake will not have encoders or limit switches.
      */
+    public void setIntakeSpeed(double speed) {
+
+        this.intakeSpeed = speed;
+
+        checkSafety();
+    }
 
 
 

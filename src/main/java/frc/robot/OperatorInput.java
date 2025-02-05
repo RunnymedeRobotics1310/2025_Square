@@ -11,7 +11,12 @@ import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorInputConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.GameController;
+import frc.robot.commands.coral.EjectCoralCommand;
+import frc.robot.commands.coral.InjectCoralCommand;
+import frc.robot.commands.coral.IntakeCoralCommand;
+import frc.robot.commands.coral.PlantCoralCommand;
 import frc.robot.commands.drive.DriveOnHeadingCommand;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
 /**
@@ -64,8 +69,9 @@ public class OperatorInput extends SubsystemBase {
      * NOTE: This routine must only be called once from the RobotContainer
      *
      * @param driveSubsystem
+     * @param coralSubsystem
      */
-    public void configureButtonBindings(DriveSubsystem driveSubsystem) {
+    public void configureButtonBindings(DriveSubsystem driveSubsystem, CoralSubsystem coralSubsystem) {
 
         // Cancel Command - cancels all running commands on all subsystems
         new Trigger(() -> isCancel())
@@ -88,8 +94,24 @@ public class OperatorInput extends SubsystemBase {
         new Trigger(() -> driverController.getPOV() == 180)
             .onTrue(new DriveOnHeadingCommand(180, .5, 100, driveSubsystem));
 
+        // new Trigger(() -> driverController.getPOV() == 270)
+        // .onTrue(new DriveOnHeadingCommand(270, .5, 100, driveSubsystem));
+
+        // Eject Coral
+        new Trigger(() -> driverController.getRightBumperButton() && driverController.getPOV() == 270)
+            .whileTrue(new EjectCoralCommand(coralSubsystem));
+
+        // Inject Coral
         new Trigger(() -> driverController.getPOV() == 270)
-            .onTrue(new DriveOnHeadingCommand(270, .5, 100, driveSubsystem));
+            .whileTrue(new InjectCoralCommand(coralSubsystem));
+
+        // Intake Coral
+        new Trigger(() -> driverController.getLeftTriggerAxis() > 0.5)
+            .onTrue(new IntakeCoralCommand(coralSubsystem));
+
+        // Plant Coral
+        new Trigger(() -> driverController.getRightTriggerAxis() > 0.5)
+            .onTrue(new PlantCoralCommand(coralSubsystem));
     }
 
     /*

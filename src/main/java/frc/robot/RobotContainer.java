@@ -12,6 +12,7 @@ import frc.robot.commands.auto.AutoCommand;
 import frc.robot.commands.drive.DefaultDriveCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LightsSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,7 +27,8 @@ public class RobotContainer {
     // constructors so that they can indicate status information on the lights
     private final LightsSubsystem lightsSubsystem = new LightsSubsystem();
     private final DriveSubsystem  driveSubsystem  = new DriveSubsystem(lightsSubsystem);
-    // FIXME: add the coral subsystem
+    private final CoralSubsystem coralSubsystem = new CoralSubsystem();
+    // FIXME: add lightsSubsystem to the coral subsystem
 
     // Driver and operator controllers
     private final OperatorInput   operatorInput   = new OperatorInput();
@@ -39,8 +41,7 @@ public class RobotContainer {
             new DefaultDriveCommand(operatorInput, driveSubsystem));
 
         // Configure the button bindings - pass in all subsystems
-        // FIXME: add the coral subsystem
-        operatorInput.configureButtonBindings(driveSubsystem);
+        operatorInput.configureButtonBindings(driveSubsystem, coralSubsystem);
 
         // Add a trigger to flash the LEDs in sync with the
         // RSL light for 5 flashes when the robot is enabled
