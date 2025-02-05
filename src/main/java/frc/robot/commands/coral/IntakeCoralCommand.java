@@ -36,8 +36,12 @@ public class IntakeCoralCommand extends LoggingCommand {
 
     @Override
     public boolean isFinished() {
+
         if (coralSubsystem.isCoralDetected()) {
             // stop the motors when coral is detected
+            // FIXME: need to test whether this is true
+            // we may need to wait a few MS for the coral to be in the middle.
+            // FIXME: move the motor stop to the end routine.
             coralSubsystem.setIntakeSpeed(0);
             return true;
         }

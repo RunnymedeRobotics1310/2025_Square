@@ -98,6 +98,10 @@ public class CoralSubsystem extends SubsystemBase {
         checkSafety();
     }
 
+    public boolean isCoralDetected() {
+        // FIXME: how should the coral be detected?
+        return false;
+    }
 
 
     /*
@@ -161,4 +165,5 @@ public class CoralSubsystem extends SubsystemBase {
 
         return sb.toString();
     }
+
 }

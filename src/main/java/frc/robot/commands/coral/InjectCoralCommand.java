@@ -13,6 +13,8 @@ public class InjectCoralCommand extends LoggingCommand {
     private final CoralSubsystem coralSubsystem;
 
     /**
+     * FIXME: javadoc
+     *
      * Cancel the commands running on all subsystems.
      *
      * All subsystems must be passed to this command, and each subsystem should have a stop command
@@ -38,6 +40,7 @@ public class InjectCoralCommand extends LoggingCommand {
     @Override
     public boolean isFinished() {
 
+        // FIXME: How does this command finish?
         return false;
     }
 

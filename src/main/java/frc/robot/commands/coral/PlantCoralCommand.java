@@ -36,11 +36,17 @@ public class PlantCoralCommand extends LoggingCommand {
 
     @Override
     public boolean isFinished() {
+
+        // FIXME: maybe stop .1 seconds after the coral is no longer
+        // detected to give it time to clear the wheels.
         if (!coralSubsystem.isCoralDetected()) {
+            // FIXME: move to the end routine
+            // wheels should stop when the command ends
             // stop the motors when coral is gone
             coralSubsystem.setIntakeSpeed(0);
             return true;
         }
+
         return false;
     }
 
