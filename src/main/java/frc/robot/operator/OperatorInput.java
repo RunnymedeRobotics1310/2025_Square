@@ -2,6 +2,7 @@ package frc.robot.operator;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -41,6 +42,10 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getXButton();
     }
 
+    public boolean isZeroGyro() {
+        return driverController.getBackButton();
+    }
+
     /**
      * Use this method to define your robotFunction -> command mappings.
      *
@@ -53,6 +58,9 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> isX())
             .onTrue(new DriveOnHeadingCommand(new Rotation2d().fromDegrees(270), .25, 2000, driveSubsystem));
+
+        new Trigger(() -> isZeroGyro())
+            .onTrue(new InstantCommand(() -> driveSubsystem.zeroGyro()));
 
     }
 

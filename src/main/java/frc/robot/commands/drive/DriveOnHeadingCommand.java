@@ -12,6 +12,9 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     private double               speed;
     private double               angleDifferance;
     private Rotation2d           desiredHeading;
+    private boolean              driveStart;
+    private double               driveTime;
+
 
     /**
      * Creates a new ExampleCommand.
@@ -33,23 +36,40 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     public void initialize() {
         logCommandStart();
         startTime    = System.currentTimeMillis();
-        durationTime = 10000;
+        durationTime = 30000;
+        driveStart   = false;
+        driveTime    = 99999999;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
 
-        angleDifferance = ((desiredHeading.getDegrees() - driveSubsystem.getHeading().getDegrees()) % 360);
+        angleDifferance = ((desiredHeading.getDegrees() - (driveSubsystem.getHeading().getDegrees() % 360)) % 360);
 
         log("angle differance" + angleDifferance);
+        log("speed value" + angleDifferance / 180);
 
+        if (!driveStart) {
+            speed = Math.max((angleDifferance / 180) * .3, 0.15);
+            if (Math.abs(angleDifferance) < 15) {
+                speed = 0.15;
+            }
 
-        if (angleDifferance >= 0) {
-            driveSubsystem.setMotorSpeeds(angleDifferance / 720, -angleDifferance / 720);
+            if (angleDifferance > 180) {
+                driveSubsystem.setMotorSpeeds(speed, -speed);
+            }
+            else if (angleDifferance <= 180) {
+                driveSubsystem.setMotorSpeeds(-speed, speed);
+            }
+            else if (angleDifferance < 0.1) {
+                driveTime  = System.currentTimeMillis();
+                driveStart = true;
+            }
         }
-        else if (angleDifferance < 0) {
-            driveSubsystem.setMotorSpeeds(-angleDifferance / 720, angleDifferance / 720);
+        else {
+            speed = 0.5;
+            driveSubsystem.setMotorSpeeds(speed, speed);
         }
 
     }
@@ -58,7 +78,8 @@ public class DriveOnHeadingCommand extends LoggingCommand {
     @Override
     public boolean isFinished() {
         // The default drive command never ends, but can be interrupted by other commands.
-        return System.currentTimeMillis() - startTime > durationTime;
+        return System.currentTimeMillis() - startTime > durationTime || System.currentTimeMillis() - driveTime > 3000;
+
 
     }
 
