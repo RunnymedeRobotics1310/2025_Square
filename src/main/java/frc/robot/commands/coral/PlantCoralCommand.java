@@ -5,19 +5,14 @@ import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.CoralSubsystem;
 
 /**
- * This command is used to safely stop the robot in its current position, and to cancel any running
- * commands
+ * Pushes coral out of the arm, then stops the wheels when the coral is gone.
  */
 public class PlantCoralCommand extends LoggingCommand {
 
     private final CoralSubsystem coralSubsystem;
 
-    /**
-     * Cancel the commands running on all subsystems.
-     *
-     * All subsystems must be passed to this command, and each subsystem should have a stop command
-     * that safely stops the robot from moving.
-     */
+    public double                minimumEndTime = System.currentTimeMillis() + 100;
+
     public PlantCoralCommand(CoralSubsystem coralSubsystem) {
         this.coralSubsystem = coralSubsystem;
 
@@ -37,13 +32,7 @@ public class PlantCoralCommand extends LoggingCommand {
     @Override
     public boolean isFinished() {
 
-        // FIXME: maybe stop .1 seconds after the coral is no longer
-        // detected to give it time to clear the wheels.
-        if (!coralSubsystem.isCoralDetected()) {
-            // FIXME: move to the end routine
-            // wheels should stop when the command ends
-            // stop the motors when coral is gone
-            coralSubsystem.setIntakeSpeed(0);
+        if (!coralSubsystem.isCoralDetected() && System.currentTimeMillis() > minimumEndTime) {
             return true;
         }
 
@@ -52,6 +41,7 @@ public class PlantCoralCommand extends LoggingCommand {
 
     @Override
     public void end(boolean interrupted) {
+        coralSubsystem.setIntakeSpeed(0);
         logCommandEnd(interrupted);
     }
 }

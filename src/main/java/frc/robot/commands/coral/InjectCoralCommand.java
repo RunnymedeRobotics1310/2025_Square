@@ -5,21 +5,12 @@ import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.CoralSubsystem;
 
 /**
- * This command is used to safely stop the robot in its current position, and to cancel any running
- * commands
+ * This comand runs the coral Intake motors forwards while button is held.
  */
 public class InjectCoralCommand extends LoggingCommand {
 
     private final CoralSubsystem coralSubsystem;
 
-    /**
-     * FIXME: javadoc
-     *
-     * Cancel the commands running on all subsystems.
-     *
-     * All subsystems must be passed to this command, and each subsystem should have a stop command
-     * that safely stops the robot from moving.
-     */
     public InjectCoralCommand(CoralSubsystem coralSubsystem) {
         this.coralSubsystem = coralSubsystem;
 
@@ -40,12 +31,15 @@ public class InjectCoralCommand extends LoggingCommand {
     @Override
     public boolean isFinished() {
 
-        // FIXME: How does this command finish?
         return false;
     }
 
     @Override
     public void end(boolean interrupted) {
+        // When inturrupted stop the motors.
+        // The command is called on a whileTrue in OI, so the intake will stop when the button is
+        // released
+        coralSubsystem.setIntakeSpeed(0);
         logCommandEnd(interrupted);
     }
 }

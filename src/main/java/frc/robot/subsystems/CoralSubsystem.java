@@ -1,29 +1,34 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.CoralConstants;
 
 public class CoralSubsystem extends SubsystemBase {
 
     private final LightsSubsystem lightsSubsystem;
 
     // Coral Subsystem Motors
-//    private final TalonSRX        elevatorMotor             = new TalonSRX(CoralConstants.ELEVATOR_MOTOR_CAN_ID);
-//    private final TalonSRX        armMotor                  = new TalonSRX(CoralConstants.ARM_MOTOR_CAN_ID);
-//    private final TalonSRX        intakeMotor               = new TalonSRX(CoralConstants.INTAKE_MOTOR_CAN_ID);
+    // private final TalonSRX elevatorMotor = new TalonSRX(CoralConstants.ELEVATOR_MOTOR_CAN_ID);
+    // private final TalonSRX armMotor = new TalonSRX(CoralConstants.ARM_MOTOR_CAN_ID);
+    // private final TalonSRX intakeMotor = new TalonSRX(CoralConstants.INTAKE_MOTOR_CAN_ID);
+    // Coral Subsystem Sensors
+    private final DigitalInput    coralDetector                       = new DigitalInput(
+        CoralConstants.INTAKE_CORAL_DETECTOR_DIO_PORT);
 
-    private double              elevatorSpeed                       = 0;
-    private double              armSpeed                            = 0;
-    private double              intakeSpeed                         = 0;
+    private double                elevatorSpeed                       = 0;
+    private double                armSpeed                            = 0;
+    private double                intakeSpeed                         = 0;
 
-    private double              elevatorEncoderOffset               = 0;
-    private double              elevatorEncoder                     = 0;
+    private double                elevatorEncoderOffset               = 0;
+    private double                elevatorEncoder                     = 0;
 
     // Simulation constants
     // Full speed up: the elevator will raise 60 inches in 2 seconds with a loop time of 20ms.
-    private static final double ELEVATOR_MAX_UP_DISTANCE_PER_LOOP   = 60 * .02 / 2;
+    private static final double   ELEVATOR_MAX_UP_DISTANCE_PER_LOOP   = 60 * .02 / 2;
     // Full speed down: the elevator will lower in 1.5 seconds.
-    private static final double ELEVATOR_MAX_DOWN_DISTANCE_PER_LOOP = 60 * .02 / 1.5;
+    private static final double   ELEVATOR_MAX_DOWN_DISTANCE_PER_LOOP = 60 * .02 / 1.5;
 
     public CoralSubsystem(LightsSubsystem lightsSubsystem) {
 
@@ -88,8 +93,6 @@ public class CoralSubsystem extends SubsystemBase {
 
     /*
      * Intake Routines
-     * FIXME: Make intake routines similar to the elevator routines
-     * NOTE: the intake will not have encoders or limit switches.
      */
     public void setIntakeSpeed(double speed) {
 
@@ -99,8 +102,9 @@ public class CoralSubsystem extends SubsystemBase {
     }
 
     public boolean isCoralDetected() {
-        // FIXME: how should the coral be detected?
-        return false;
+
+        // should this be !coralDetector.get(); ?
+        return coralDetector.get();
     }
 
 
