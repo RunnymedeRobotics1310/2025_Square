@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class CoralSubsystem extends SubsystemBase {
 
@@ -9,7 +11,7 @@ public class CoralSubsystem extends SubsystemBase {
 
     // Coral Subsystem Motors
 //    private final TalonSRX        elevatorMotor             = new TalonSRX(CoralConstants.ELEVATOR_MOTOR_CAN_ID);
-//    private final TalonSRX        armMotor                  = new TalonSRX(CoralConstants.ARM_MOTOR_CAN_ID);
+    private final TalonSRX armMotor                  = new TalonSRX(Constants.CoralConstants.ARM_MOTOR_CAN_ID);
 //    private final TalonSRX        intakeMotor               = new TalonSRX(CoralConstants.INTAKE_MOTOR_CAN_ID);
 
     private double              elevatorSpeed                       = 0;
@@ -18,6 +20,9 @@ public class CoralSubsystem extends SubsystemBase {
 
     private double              elevatorEncoderOffset               = 0;
     private double              elevatorEncoder                     = 0;
+
+    private double              armEncoderOffset                    = 0;
+    private double              armEncoder                          = 0;
 
     // Simulation constants
     // Full speed up: the elevator will raise 60 inches in 2 seconds with a loop time of 20ms.
@@ -80,12 +85,41 @@ public class CoralSubsystem extends SubsystemBase {
 
     /*
      * Arm Routines
-     * FIXME: Make arm routines similar to the elevator routines
      */
-    public void setArmSpeed() {
+    public void setArmSpeed(double speed) {
+        armSpeed = speed;
 
+        checkSafety();
     }
 
+    public boolean isArmAtLowerLimit() {
+        if (getArmEncoder() <= Constants.CoralConstants.armPositionLowerLimit) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isArmAtUpperLimit() {
+        if (getArmEncoder() >= Constants.CoralConstants.armPositionUpperLimit) {
+            return true;
+        }
+        return false;
+    }
+
+    public double getArmEncoder() {
+        return armEncoder + armEncoderOffset;
+    }
+
+
+    public void resetArmEncoder() {
+        setArmEncoderOffset(0);
+    }
+
+    public void setArmEncoderOffset(double encoderValue) {
+        armEncoderOffset = 0;
+        armEncoderOffset = -getArmEncoder() + encoderValue;
+
+    }
     /*
      * Intake Routines
      * FIXME: Make intake routines similar to the elevator routines
@@ -106,19 +140,23 @@ public class CoralSubsystem extends SubsystemBase {
         checkSafety();
 
         // FIXME: Add a call to the lights subsystem to show the current speed or height
-        // lightsSubsystem.setCoral..();
-
+//        lightsSubsystem.setArmMotorSpeeds(armSpeed);
+//        lightsSubsystem.setArmPosition(armEncoder);
+        lightsSubsystem.setArmMotorSpeedsAndPosition(armSpeed, armEncoderOffset);
         SmartDashboard.putNumber("Coral Elevator Motor", elevatorSpeed);
-        SmartDashboard.putNumber("Coral Arm Motor", armSpeed);
         SmartDashboard.putNumber("Coral Intake Motor", intakeSpeed);
 
         // FIXME: what else should we put on the SmartDashboard
+        SmartDashboard.putNumber("Coral Arm Motor", armSpeed);
+        SmartDashboard.putNumber("Coral Elevator Position", getElevatorEncoder());
+
     }
 
     private void simulate() {
 
         // This loop will be called every 20 ms, 50 times per second
-
+        armSpeed = 1;
+        armEncoder = 0;
         // Move the elevator up or down depending on the direction of the motor speed
         // The elevator will fall faster than it will lift.
         if (elevatorSpeed > 0) {
@@ -141,6 +179,19 @@ public class CoralSubsystem extends SubsystemBase {
             }
         }
 
+        if (isArmAtUpperLimit()){
+            // Do not know which way the motor will actually move, might need to be >
+            if (armSpeed < 0) {
+                armSpeed = 0;
+            }
+        }
+
+        if (isArmAtLowerLimit()){
+            // Do not know which way the motor will actually move, might need to be <
+            if (armSpeed > 0) {
+                armSpeed = 0;
+            }
+        }
         // FIXME: add an upper limit check
     }
 

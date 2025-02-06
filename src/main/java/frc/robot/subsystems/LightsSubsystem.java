@@ -19,6 +19,8 @@ public class LightsSubsystem extends SubsystemBase {
 
     private final AddressableLEDBufferView    leftSpeedBuffer  = new AddressableLEDBufferView(ledBuffer, 1, 28);
     private final AddressableLEDBufferView    rightSpeedBuffer = new AddressableLEDBufferView(ledBuffer, 31, 58).reversed();
+//    private final AddressableLEDBufferView armMotorSpeedBuffer = new AddressableLEDBufferView(ledBuffer, 1, 13);
+//    private final AddressableLEDBufferView armPositionBuffer = new AddressableLEDBufferView(ledBuffer, 14, );
 
     // RSL Flash
     private static final Color                RSL_COLOR        = new Color(255, 20, 0);
@@ -48,6 +50,24 @@ public class LightsSubsystem extends SubsystemBase {
         setSpeedPixel(leftSpeed, leftSpeedBuffer);
         setSpeedPixel(rightSpeed, rightSpeedBuffer);
 
+    }
+
+    public void setArmMotorSpeeds(double speed) {
+        LEDPattern.kOff.applyTo(leftSpeedBuffer);
+        setSpeedPixel(speed, leftSpeedBuffer);
+    }
+
+    public void setArmPosition(double position) {
+        LEDPattern.kOff.applyTo(rightSpeedBuffer);
+        setSpeedPixel(position, rightSpeedBuffer);
+    }
+
+    public void setArmMotorSpeedsAndPosition(double speed, double position) {
+        LEDPattern.kOff.applyTo(leftSpeedBuffer);
+        LEDPattern.kOff.applyTo(rightSpeedBuffer);
+
+        setSpeedPixel(speed, leftSpeedBuffer);
+        setSpeedPixel(position, rightSpeedBuffer);
     }
 
     private void setSpeedPixel(double speed, AddressableLEDBufferView speedBuffer) {

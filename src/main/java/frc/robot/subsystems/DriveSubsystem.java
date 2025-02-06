@@ -340,7 +340,7 @@ public class DriveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        lightsSubsystem.setDriveMotorSpeeds(leftSpeed, rightSpeed);
+//        lightsSubsystem.setDriveMotorSpeeds(leftSpeed, rightSpeed);
 
         SmartDashboard.putNumber("Right Motor", rightSpeed);
         SmartDashboard.putNumber("Left  Motor", leftSpeed);
