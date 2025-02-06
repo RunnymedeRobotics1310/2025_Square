@@ -41,14 +41,15 @@ public class CoralSubsystem extends SubsystemBase {
 
         this.elevatorSpeed = speed;
 
-
-
         checkSafety();
 
         // elevatorMotor.set(ControlMode.PercentOutput, elevatorSpeed);
     }
 
+    // FIXME: maybe name this routine getElevatorHeight to match what it is returning.
+    // There is no need to make up new names - this is not english class ! lol.
     public ElevatorHeight getElevatorState() {
+
         if (isElevatorAtLowerLimit()) {
             return ElevatorHeight.LEVEL_0;
         }

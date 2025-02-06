@@ -78,6 +78,10 @@ public class OperatorInput extends SubsystemBase {
                 driveSubsystem.resetEncoders();
             }));
 
+        // FIXME:
+        // Replace these button bindings with the elevator button bindings.
+        // ... new MoveToHeightCommand(ElevatorHeight.LEVEL_1, coralSubsystem)...
+
         // Configure the DPAD to drive one meter on a heading
         new Trigger(() -> driverController.getPOV() == 0)
             .onTrue(new DriveOnHeadingCommand(0, .5, 100, driveSubsystem));
