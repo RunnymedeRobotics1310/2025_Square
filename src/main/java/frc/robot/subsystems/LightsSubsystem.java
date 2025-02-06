@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.LightsConstants;
 import frc.robot.Robot;
 
@@ -17,8 +18,9 @@ public class LightsSubsystem extends SubsystemBase {
     private final AddressableLED              ledString        = new AddressableLED(LightsConstants.LED_STRING_PWM_PORT);
     private final AddressableLEDBuffer        ledBuffer        = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
 
-    private final AddressableLEDBufferView    leftSpeedBuffer  = new AddressableLEDBufferView(ledBuffer, 1, 28);
-    private final AddressableLEDBufferView    rightSpeedBuffer = new AddressableLEDBufferView(ledBuffer, 31, 58).reversed();
+    private final AddressableLEDBufferView    leftSpeedBuffer  = new AddressableLEDBufferView(ledBuffer, 1, /*28*/10);
+    private final AddressableLEDBufferView    rightSpeedBuffer = new AddressableLEDBufferView(ledBuffer, /*31*/48, 58).reversed();
+    private final AddressableLEDBufferView elevatorHeightBuffer = new AddressableLEDBufferView(ledBuffer, 11, 20);
 
     // RSL Flash
     private static final Color                RSL_COLOR        = new Color(255, 20, 0);
@@ -38,6 +40,14 @@ public class LightsSubsystem extends SubsystemBase {
         // Start the LED string
         ledString.setLength(LightsConstants.LED_STRING_LENGTH);
         ledString.start();
+    }
+
+    public void setElevatorHeight(Constants.CoralConstants.ElevatorHeight elevatorHeight) {
+        LEDPattern.kOff.applyTo(elevatorHeightBuffer);
+
+        for (int i = 0; i < elevatorHeight.compareTo(Constants.CoralConstants.ElevatorHeight.LEVEL_0); i++) {
+            elevatorHeightBuffer.setLED(i, Color.kAquamarine);
+        }
     }
 
     public void setDriveMotorSpeeds(double leftSpeed, double rightSpeed) {

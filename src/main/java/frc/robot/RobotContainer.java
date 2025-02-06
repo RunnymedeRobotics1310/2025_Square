@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.auto.AutoCommand;
 import frc.robot.commands.drive.DefaultDriveCommand;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LightsSubsystem;
 
@@ -26,7 +27,7 @@ public class RobotContainer {
     // constructors so that they can indicate status information on the lights
     private final LightsSubsystem lightsSubsystem = new LightsSubsystem();
     private final DriveSubsystem  driveSubsystem  = new DriveSubsystem(lightsSubsystem);
-    // FIXME: add the coral subsystem
+    private final CoralSubsystem coralSubsystem = new CoralSubsystem(lightsSubsystem);
 
     // Driver and operator controllers
     private final OperatorInput   operatorInput   = new OperatorInput();
@@ -40,7 +41,7 @@ public class RobotContainer {
 
         // Configure the button bindings - pass in all subsystems
         // FIXME: add the coral subsystem
-        operatorInput.configureButtonBindings(driveSubsystem);
+        operatorInput.configureButtonBindings(driveSubsystem, coralSubsystem);
 
         // Add a trigger to flash the LEDs in sync with the
         // RSL light for 5 flashes when the robot is enabled

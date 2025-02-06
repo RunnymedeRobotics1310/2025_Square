@@ -11,7 +11,9 @@ import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorInputConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.GameController;
+import frc.robot.commands.coral.MoveToHeightCommand;
 import frc.robot.commands.drive.DriveOnHeadingCommand;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
 /**
@@ -65,7 +67,7 @@ public class OperatorInput extends SubsystemBase {
      *
      * @param driveSubsystem
      */
-    public void configureButtonBindings(DriveSubsystem driveSubsystem) {
+    public void configureButtonBindings(DriveSubsystem driveSubsystem, CoralSubsystem coralSubsystem) {
 
         // Cancel Command - cancels all running commands on all subsystems
         new Trigger(() -> isCancel())
@@ -78,22 +80,22 @@ public class OperatorInput extends SubsystemBase {
                 driveSubsystem.resetEncoders();
             }));
 
-        // FIXME:
-        // Replace these button bindings with the elevator button bindings.
-        // ... new MoveToHeightCommand(ElevatorHeight.LEVEL_1, coralSubsystem)...
+        // FIXME: Replace these button bindings the ones provided in the controller map
 
-        // Configure the DPAD to drive one meter on a heading
+        // Configure the DPAD to set elevator height
         new Trigger(() -> driverController.getPOV() == 0)
-            .onTrue(new DriveOnHeadingCommand(0, .5, 100, driveSubsystem));
+            .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_1));
 
         new Trigger(() -> driverController.getPOV() == 90)
-            .onTrue(new DriveOnHeadingCommand(90, .5, 100, driveSubsystem));
+                .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_2));
 
         new Trigger(() -> driverController.getPOV() == 180)
-            .onTrue(new DriveOnHeadingCommand(180, .5, 100, driveSubsystem));
+                .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_3));
 
         new Trigger(() -> driverController.getPOV() == 270)
-            .onTrue(new DriveOnHeadingCommand(270, .5, 100, driveSubsystem));
+                .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_4));
+        new Trigger(() -> driverController.getXButton())
+                .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_0));
     }
 
     /*
