@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -11,7 +10,7 @@ public class CoralSubsystem extends SubsystemBase {
 
     // Coral Subsystem Motors
 //    private final TalonSRX        elevatorMotor             = new TalonSRX(CoralConstants.ELEVATOR_MOTOR_CAN_ID);
-    private final TalonSRX armMotor                  = new TalonSRX(Constants.CoralConstants.ARM_MOTOR_CAN_ID);
+//    private final TalonSRX        armMotor                            = new TalonSRX(CoralConstants.ARM_MOTOR_CAN_ID);
 //    private final TalonSRX        intakeMotor               = new TalonSRX(CoralConstants.INTAKE_MOTOR_CAN_ID);
 
     private double              elevatorSpeed                       = 0;
@@ -142,7 +141,9 @@ public class CoralSubsystem extends SubsystemBase {
         // FIXME: Add a call to the lights subsystem to show the current speed or height
 //        lightsSubsystem.setArmMotorSpeeds(armSpeed);
 //        lightsSubsystem.setArmPosition(armEncoder);
+        // FIXME: do not pass the arm encoder offset, pass getArmEncoder();
         lightsSubsystem.setArmMotorSpeedsAndPosition(armSpeed, armEncoderOffset);
+
         SmartDashboard.putNumber("Coral Elevator Motor", elevatorSpeed);
         SmartDashboard.putNumber("Coral Intake Motor", intakeSpeed);
 
@@ -155,8 +156,11 @@ public class CoralSubsystem extends SubsystemBase {
     private void simulate() {
 
         // This loop will be called every 20 ms, 50 times per second
-        armSpeed = 1;
-        armEncoder = 0;
+        // FIXME: why are we overriding the arm speed here to 1?
+        armSpeed    = 1;
+        // FIXME: should be armEncoder += armSpeed * MAX_ARM_DISTANCE_PER_LOOP;
+        armEncoder += 0;
+
         // Move the elevator up or down depending on the direction of the motor speed
         // The elevator will fall faster than it will lift.
         if (elevatorSpeed > 0) {
@@ -179,20 +183,26 @@ public class CoralSubsystem extends SubsystemBase {
             }
         }
 
-        if (isArmAtUpperLimit()){
+        // FIXME: by convention up is positive and down is negative.
+        if (isArmAtUpperLimit()) {
             // Do not know which way the motor will actually move, might need to be >
+            // FIXME: FALSE: we know because we will configure the motor controller properly, up
+            // will be positive.
+
+            // FIXME: is this if statement correct? At the top, we want to be able
+            // to drive down, but not up.
             if (armSpeed < 0) {
                 armSpeed = 0;
             }
         }
 
-        if (isArmAtLowerLimit()){
+        // FIXME: is this correct?
+        if (isArmAtLowerLimit()) {
             // Do not know which way the motor will actually move, might need to be <
             if (armSpeed > 0) {
                 armSpeed = 0;
             }
         }
-        // FIXME: add an upper limit check
     }
 
     @Override

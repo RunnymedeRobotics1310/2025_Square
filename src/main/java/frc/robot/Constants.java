@@ -58,9 +58,11 @@ public final class Constants {
 
     public static final class CoralConstants {
 
-        public static final int ELEVATOR_MOTOR_CAN_ID = 40;
-        public static final int ARM_MOTOR_CAN_ID      = 41;
-        public static final int INTAKE_MOTOR_CAN_ID   = 42;
+        public static final int    ELEVATOR_MOTOR_CAN_ID = 40;
+        public static final int    ARM_MOTOR_CAN_ID      = 41;
+        public static final int    INTAKE_MOTOR_CAN_ID   = 42;
+
+        // FIXME: all constants are upper case with underscores between words
         public static final double armPositionLowerLimit = 0;
         public static final double armPositionUpperLimit = 90;
     }
