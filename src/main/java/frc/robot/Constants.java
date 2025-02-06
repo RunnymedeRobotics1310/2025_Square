@@ -58,12 +58,29 @@ public final class Constants {
 
     public static final class CoralConstants {
 
+        public enum ElevatorHeight {
+            LEVEL_0,
+            LEVEL_0_5,
+            LEVEL_1,
+            LEVEL_1_5,
+            LEVEL_2,
+            LEVEL_2_5,
+            LEVEL_3,
+            LEVEL_3_5,
+            LEVEL_4,
+            LEVEL_4_5
+        }
+
         public static final int    ELEVATOR_MOTOR_CAN_ID = 30;
         public static final int    ARM_MOTOR_CAN_ID      = 31;
         public static final int    INTAKE_MOTOR_CAN_ID   = 32;
 
-        // placeholder value for height of elevator when scoring at lvl 4
+        // placeholder value for height of elevator when scoring at different lvls
         public static final int    LEVEL_FOUR_HEIGHT     = 20;
+        public static final int    LEVEL_THREE_HEIGHT    = 15;
+        public static final int    LEVEL_TWO_HEIGHT      = 10;
+        public static final int    LEVEL_ONE_HEIGHT      = 5;
+
 
         public static final int    ELEVATOR_TOLERANCE    = 1;
 

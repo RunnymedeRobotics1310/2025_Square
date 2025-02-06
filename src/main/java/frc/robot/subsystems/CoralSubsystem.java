@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.CoralConstants;
+import frc.robot.Constants.CoralConstants.ElevatorHeight;
 
 public class CoralSubsystem extends SubsystemBase {
 
@@ -12,19 +14,19 @@ public class CoralSubsystem extends SubsystemBase {
     // private final TalonSRX armMotor = new TalonSRX(CoralConstants.ARM_MOTOR_CAN_ID);
     // private final TalonSRX intakeMotor = new TalonSRX(CoralConstants.INTAKE_MOTOR_CAN_ID);
 
-    private double              elevatorSpeed                       = 0;
-    private double              armSpeed                            = 0;
-    private double              intakeSpeed                         = 0;
+    private double                elevatorSpeed                       = 0;
+    private double                armSpeed                            = 0;
+    private double                intakeSpeed                         = 0;
 
-    private double              elevatorEncoderOffset               = 0;
-    private double              elevatorEncoder                     = 0;
+    private double                elevatorEncoderOffset               = 0;
+    private double                elevatorEncoder                     = 0;
 
 
     // Simulation constants
     // Full speed up: the elevator will raise 60 inches in 2 seconds with a loop time of 20ms.
-    private static final double ELEVATOR_MAX_UP_DISTANCE_PER_LOOP   = 60 * .02 / 2;
+    private static final double   ELEVATOR_MAX_UP_DISTANCE_PER_LOOP   = 60 * .02 / 2;
     // Full speed down: the elevator will lower in 1.5 seconds.
-    private static final double ELEVATOR_MAX_DOWN_DISTANCE_PER_LOOP = 60 * .02 / 1.5;
+    private static final double   ELEVATOR_MAX_DOWN_DISTANCE_PER_LOOP = 60 * .02 / 1.5;
 
     public CoralSubsystem(LightsSubsystem lightsSubsystem) {
 
@@ -46,6 +48,38 @@ public class CoralSubsystem extends SubsystemBase {
         // elevatorMotor.set(ControlMode.PercentOutput, elevatorSpeed);
     }
 
+    public ElevatorHeight getElevatorState() {
+        if (isElevatorAtLowerLimit()) {
+            return ElevatorHeight.LEVEL_0;
+        }
+        else if (getElevatorEncoder() < CoralConstants.LEVEL_ONE_HEIGHT - CoralConstants.ELEVATOR_TOLERANCE) {
+            return ElevatorHeight.LEVEL_0_5;
+        }
+        else if (getElevatorEncoder() < CoralConstants.LEVEL_ONE_HEIGHT + CoralConstants.ELEVATOR_TOLERANCE) {
+            return ElevatorHeight.LEVEL_1;
+        }
+        else if (getElevatorEncoder() < CoralConstants.LEVEL_TWO_HEIGHT - CoralConstants.ELEVATOR_TOLERANCE) {
+            return ElevatorHeight.LEVEL_1_5;
+        }
+        else if (getElevatorEncoder() < CoralConstants.LEVEL_TWO_HEIGHT + CoralConstants.ELEVATOR_TOLERANCE) {
+            return ElevatorHeight.LEVEL_2;
+        }
+        else if (getElevatorEncoder() < CoralConstants.LEVEL_THREE_HEIGHT - CoralConstants.ELEVATOR_TOLERANCE) {
+            return ElevatorHeight.LEVEL_2_5;
+        }
+        else if (getElevatorEncoder() < CoralConstants.LEVEL_THREE_HEIGHT + CoralConstants.ELEVATOR_TOLERANCE) {
+            return ElevatorHeight.LEVEL_3;
+        }
+        else if (getElevatorEncoder() < CoralConstants.LEVEL_FOUR_HEIGHT - CoralConstants.ELEVATOR_TOLERANCE) {
+            return ElevatorHeight.LEVEL_3_5;
+        }
+        else if (getElevatorEncoder() < CoralConstants.LEVEL_FOUR_HEIGHT + CoralConstants.ELEVATOR_TOLERANCE) {
+            return ElevatorHeight.LEVEL_4;
+        }
+        else {
+            return ElevatorHeight.LEVEL_4_5;
+        }
+    }
 
     public boolean isElevatorAtLowerLimit() {
 
