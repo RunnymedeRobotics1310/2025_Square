@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,7 +15,8 @@ public class CoralSubsystem extends SubsystemBase {
     // Coral Subsystem Motors
     // private final TalonSRX elevatorMotor = new TalonSRX(CoralConstants.ELEVATOR_MOTOR_CAN_ID);
     // private final TalonSRX armMotor = new TalonSRX(CoralConstants.ARM_MOTOR_CAN_ID);
-    // private final TalonSRX intakeMotor = new TalonSRX(CoralConstants.INTAKE_MOTOR_CAN_ID);
+    private final SparkMax        intakeMotor                         = new SparkMax(CoralConstants.INTAKE_MOTOR_CAN_ID,
+        MotorType.kBrushless);
     // Coral Subsystem Sensors
     private final DigitalInput    coralDetector                       = new DigitalInput(
         CoralConstants.INTAKE_CORAL_DETECTOR_DIO_PORT);
@@ -105,6 +109,10 @@ public class CoralSubsystem extends SubsystemBase {
 
         // should this be !coralDetector.get(); ?
         return coralDetector.get();
+    }
+
+    public double getIntakeEncoder() {
+        return intakeMotor.getEncoder().getPosition();
     }
 
 

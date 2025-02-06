@@ -65,6 +65,9 @@ public final class Constants {
         public static final int    INTAKE_MOTOR_CAN_ID            = 32;
         public static final int    INTAKE_CORAL_DETECTOR_DIO_PORT = 50; // FIXME: What port is this
                                                                         // on?
+        public static final int    PLANT_ROTATIONS                = 10; // FIXME: How many rotations
+                                                                        // are needed to clear
+                                                                        // coral?
     }
 
     public static final class LightsConstants {
