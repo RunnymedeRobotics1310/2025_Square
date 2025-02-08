@@ -49,21 +49,11 @@ public class LightsSubsystem extends SubsystemBase {
 
         LEDPattern.kOff.applyTo(elevatorHeightBuffer);
 
-        // FIXME: Sometimes code is too fancy, this is an example.
-        // If it takes a senior coder time to understand what is going on, it is
-        // not really maintainable code.
-        // DO NOT USE THE ENUM .compare() METHOD TO CALCULATE THE END OF A FOR LOOP!
-        // While this code may work (for now), it is awful and can lead to unmaintainable side
-        // effects (ie. adding a levels without expanding the buffer will cause an out-of-bounds
-        // exceptions)
-        for (int i = 0; i < elevatorHeight.compareTo(Constants.CoralConstants.ElevatorHeight.LEVEL_0); i++) {
+        int lightCount = Math.min(elevatorHeight.ordinal(), elevatorHeightBuffer.getLength());
+        for (int i = 0; i < lightCount; i++) {
             elevatorHeightBuffer.setLED(i, Color.kAquamarine);
         }
-//
-//        int heightPixel = Math.min(elevatorHeightBuffer.getLength(), elevatorHeight.ordinal());
-//        for (int i = 0; i <heightPixel; i++) {
-//            ...
-//        }
+
     }
 
     public void setDriveMotorSpeeds(double leftSpeed, double rightSpeed) {
