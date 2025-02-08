@@ -49,7 +49,7 @@ public class LightsSubsystem extends SubsystemBase {
 
         LEDPattern.kOff.applyTo(elevatorHeightBuffer);
 
-        int lightCount = Math.min(elevatorHeight.ordinal(), elevatorHeightBuffer.getLength());
+        int lightCount = Math.min(elevatorHeight.ordinal(), elevatorHeightBuffer.getLength() - 1);
         for (int i = 0; i < lightCount; i++) {
             elevatorHeightBuffer.setLED(i, Color.kAquamarine);
         }
