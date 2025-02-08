@@ -1,9 +1,9 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.drive.RobotDriveBase.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CoralConstants;
@@ -176,6 +176,11 @@ public class CoralSubsystem extends SubsystemBase {
             .append(" height ").append(getElevatorEncoder()).append("in");
 
         return sb.toString();
+    }
+
+    public void stop() {
+        // TODO Auto-generated method stub
+
     }
 
 }

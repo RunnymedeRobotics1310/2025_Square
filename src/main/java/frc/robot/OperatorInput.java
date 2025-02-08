@@ -3,7 +3,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants.AutoPattern;
@@ -11,13 +10,7 @@ import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorInputConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.GameController;
-import frc.robot.commands.coral.EjectCoralCommand;
-import frc.robot.commands.coral.InjectCoralCommand;
-import frc.robot.commands.coral.IntakeCoralCommand;
-import frc.robot.commands.coral.PlantCoralCommand;
-import frc.robot.commands.drive.DriveOnHeadingCommand;
 import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
 
 /**
  * The DriverController exposes all driver functions
@@ -71,47 +64,12 @@ public class OperatorInput extends SubsystemBase {
      * @param driveSubsystem
      * @param coralSubsystem
      */
-    public void configureButtonBindings(DriveSubsystem driveSubsystem, CoralSubsystem coralSubsystem) {
+    public void configureButtonBindings(CoralSubsystem coralSubsystem) {
 
         // Cancel Command - cancels all running commands on all subsystems
         new Trigger(() -> isCancel())
-            .onTrue(new CancelCommand(this, driveSubsystem));
+            .onTrue(new CancelCommand(this, coralSubsystem));
 
-        // Gyro and Encoder Reset
-        new Trigger(() -> driverController.getBackButton())
-            .onTrue(new InstantCommand(() -> {
-                driveSubsystem.resetGyro();
-                driveSubsystem.resetEncoders();
-            }));
-
-        // Configure the DPAD to drive one meter on a heading
-        new Trigger(() -> driverController.getPOV() == 0)
-            .onTrue(new DriveOnHeadingCommand(0, .5, 100, driveSubsystem));
-
-        new Trigger(() -> driverController.getPOV() == 90)
-            .onTrue(new DriveOnHeadingCommand(90, .5, 100, driveSubsystem));
-
-        new Trigger(() -> driverController.getPOV() == 180)
-            .onTrue(new DriveOnHeadingCommand(180, .5, 100, driveSubsystem));
-
-        // new Trigger(() -> driverController.getPOV() == 270)
-        // .onTrue(new DriveOnHeadingCommand(270, .5, 100, driveSubsystem));
-
-        // Eject Coral
-        new Trigger(() -> driverController.getRightBumperButton() && driverController.getPOV() == 270)
-            .whileTrue(new EjectCoralCommand(coralSubsystem));
-
-        // Inject Coral
-        new Trigger(() -> driverController.getPOV() == 270)
-            .whileTrue(new InjectCoralCommand(coralSubsystem));
-
-        // Intake Coral
-        new Trigger(() -> driverController.getLeftTriggerAxis() > 0.5)
-            .onTrue(new IntakeCoralCommand(coralSubsystem));
-
-        // Plant Coral
-        new Trigger(() -> driverController.getRightTriggerAxis() > 0.5)
-            .onTrue(new PlantCoralCommand(coralSubsystem));
     }
 
     /*
@@ -197,4 +155,7 @@ public class OperatorInput extends SubsystemBase {
         SmartDashboard.putString("Driver Controller", driverController.toString());
     }
 
+    public GameController getDriverController() {
+        return driverController;
+    }
 }

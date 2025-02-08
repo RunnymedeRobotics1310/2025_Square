@@ -8,10 +8,7 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.auto.AutoCommand;
-import frc.robot.commands.drive.DefaultDriveCommand;
 import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LightsSubsystem;
 
 /**
@@ -26,7 +23,6 @@ public class RobotContainer {
     // Declarre the lighting subsystem first and pass it into the other subsystem
     // constructors so that they can indicate status information on the lights
     private final LightsSubsystem lightsSubsystem = new LightsSubsystem();
-    private final DriveSubsystem  driveSubsystem  = new DriveSubsystem(lightsSubsystem);
     private final CoralSubsystem  coralSubsystem  = new CoralSubsystem(lightsSubsystem);
     // FIXME: add lightsSubsystem to the coral subsystem
 
@@ -36,12 +32,8 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
-        // Initialize all Subsystem default commands.
-        driveSubsystem.setDefaultCommand(
-            new DefaultDriveCommand(operatorInput, driveSubsystem));
-
         // Configure the button bindings - pass in all subsystems
-        operatorInput.configureButtonBindings(driveSubsystem, coralSubsystem);
+        operatorInput.configureButtonBindings(coralSubsystem);
 
         // Add a trigger to flash the LEDs in sync with the
         // RSL light for 5 flashes when the robot is enabled
@@ -56,6 +48,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new AutoCommand(operatorInput, driveSubsystem);
+        return null;
     }
 }
