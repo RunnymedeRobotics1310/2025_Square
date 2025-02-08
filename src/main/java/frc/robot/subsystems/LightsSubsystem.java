@@ -15,21 +15,24 @@ import frc.robot.Robot;
 
 public class LightsSubsystem extends SubsystemBase {
 
-    private final AddressableLED              ledString        = new AddressableLED(LightsConstants.LED_STRING_PWM_PORT);
-    private final AddressableLEDBuffer        ledBuffer        = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
+    private final AddressableLED              ledString            = new AddressableLED(LightsConstants.LED_STRING_PWM_PORT);
+    private final AddressableLEDBuffer        ledBuffer            = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
 
-    private final AddressableLEDBufferView    leftSpeedBuffer  = new AddressableLEDBufferView(ledBuffer, 1, /*28*/10);
-    private final AddressableLEDBufferView    rightSpeedBuffer = new AddressableLEDBufferView(ledBuffer, /*31*/48, 58).reversed();
-    private final AddressableLEDBufferView elevatorHeightBuffer = new AddressableLEDBufferView(ledBuffer, 11, 20);
+    private final AddressableLEDBufferView    leftSpeedBuffer      = new AddressableLEDBufferView(ledBuffer, 1, /*
+                                                                                                                 * 28
+                                                                                                                 */10);
+    private final AddressableLEDBufferView    rightSpeedBuffer     = new AddressableLEDBufferView(ledBuffer,
+        /* 31 */48, 58).reversed();
+    private final AddressableLEDBufferView    elevatorHeightBuffer = new AddressableLEDBufferView(ledBuffer, 11, 20);
 
     // RSL Flash
-    private static final Color                RSL_COLOR        = new Color(255, 20, 0);
-    private static final AddressableLEDBuffer RSL_ON           = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
-    private static final AddressableLEDBuffer RSL_OFF          = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
-    private Timer                             simRslTimer      = new Timer();
-    private boolean                           simRslState      = false;
-    private int                               rslFlashCount    = -1;
-    private boolean                           previousRslState = false;
+    private static final Color                RSL_COLOR            = new Color(255, 20, 0);
+    private static final AddressableLEDBuffer RSL_ON               = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
+    private static final AddressableLEDBuffer RSL_OFF              = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
+    private Timer                             simRslTimer          = new Timer();
+    private boolean                           simRslState          = false;
+    private int                               rslFlashCount        = -1;
+    private boolean                           previousRslState     = false;
 
     public LightsSubsystem() {
 
@@ -43,11 +46,24 @@ public class LightsSubsystem extends SubsystemBase {
     }
 
     public void setElevatorHeight(Constants.CoralConstants.ElevatorHeight elevatorHeight) {
+
         LEDPattern.kOff.applyTo(elevatorHeightBuffer);
 
+        // FIXME: Sometimes code is too fancy, this is an example.
+        // If it takes a senior coder time to understand what is going on, it is
+        // not really maintainable code.
+        // DO NOT USE THE ENUM .compare() METHOD TO CALCULATE THE END OF A FOR LOOP!
+        // While this code may work (for now), it is awful and can lead to unmaintainable side
+        // effects (ie. adding a levels without expanding the buffer will cause an out-of-bounds
+        // exceptions)
         for (int i = 0; i < elevatorHeight.compareTo(Constants.CoralConstants.ElevatorHeight.LEVEL_0); i++) {
             elevatorHeightBuffer.setLED(i, Color.kAquamarine);
         }
+//
+//        int heightPixel = Math.min(elevatorHeightBuffer.getLength(), elevatorHeight.ordinal());
+//        for (int i = 0; i <heightPixel; i++) {
+//            ...
+//        }
     }
 
     public void setDriveMotorSpeeds(double leftSpeed, double rightSpeed) {
