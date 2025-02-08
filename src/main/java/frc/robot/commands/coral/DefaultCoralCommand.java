@@ -24,8 +24,13 @@ public class DefaultCoralCommand extends LoggingCommand {
     @Override
     public void execute() {
 
+        // FIXME: Don't make up new names
+        // is it elevatorStick or elevatorInput - what is the difference?
+
         double elevatorStick = oi.getElevatorInput();
 
+        // FIXME: by convention all inputs should be positive? why negate the stick?
+        // Does this need a comment?
         coralSubsystem.setElevatorSpeed(-elevatorStick * Constants.CoralConstants.ELEVATOR_OPERATOR_SCALE_FACTOR);
 
     }
