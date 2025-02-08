@@ -12,7 +12,6 @@ import frc.robot.Constants.OperatorInputConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.GameController;
 import frc.robot.commands.coral.MoveToHeightCommand;
-import frc.robot.commands.drive.DriveOnHeadingCommand;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -87,15 +86,15 @@ public class OperatorInput extends SubsystemBase {
             .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_1));
 
         new Trigger(() -> driverController.getPOV() == 90)
-                .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_2));
+            .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_2));
 
         new Trigger(() -> driverController.getPOV() == 180)
-                .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_3));
+            .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_3));
 
         new Trigger(() -> driverController.getPOV() == 270)
-                .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_4));
+            .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_4));
         new Trigger(() -> driverController.getXButton())
-                .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_0));
+            .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_0));
     }
 
     /*
@@ -143,6 +142,10 @@ public class OperatorInput extends SubsystemBase {
     }
 
     public double getRightSpeed() {
+        return driverController.getRightY();
+    }
+
+    public double getElevatorInput() {
         return driverController.getRightY();
     }
 

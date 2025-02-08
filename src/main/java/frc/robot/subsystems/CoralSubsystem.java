@@ -46,17 +46,24 @@ public class CoralSubsystem extends SubsystemBase {
         // elevatorMotor.set(ControlMode.PercentOutput, elevatorSpeed);
     }
 
+    public void stop() {
+        setElevatorSpeed(0);
+        // SetArmSpeed(0);
+        // SetPlanterSpeed(0);
+    }
+
 
     public boolean setElevatorHeight(ElevatorHeight height) {
 
-        if (getElevatorHeight().compareTo(height)==0) {
+        if (getElevatorHeight().compareTo(height) == 0) {
             setElevatorSpeed(0);
             return true;
         }
 
         if (getElevatorHeight().compareTo(height) < 0) {
             setElevatorSpeed(CoralConstants.ELEVATOR_SPEED);
-        } else {
+        }
+        else {
             setElevatorSpeed(-CoralConstants.ELEVATOR_SPEED);
         }
         return false;
@@ -161,7 +168,7 @@ public class CoralSubsystem extends SubsystemBase {
         checkSafety();
 
         // FIXME: Add a call to the lights subsystem to show the current speed
-         lightsSubsystem.setElevatorHeight(getElevatorHeight());
+        lightsSubsystem.setElevatorHeight(getElevatorHeight());
 
         SmartDashboard.putNumber("Coral Elevator Motor", elevatorSpeed);
         SmartDashboard.putNumber("Coral Arm Motor", armSpeed);

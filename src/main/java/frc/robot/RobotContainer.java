@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.auto.AutoCommand;
+import frc.robot.commands.coral.DefaultCoralCommand;
 import frc.robot.commands.drive.DefaultDriveCommand;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -27,7 +28,7 @@ public class RobotContainer {
     // constructors so that they can indicate status information on the lights
     private final LightsSubsystem lightsSubsystem = new LightsSubsystem();
     private final DriveSubsystem  driveSubsystem  = new DriveSubsystem(lightsSubsystem);
-    private final CoralSubsystem coralSubsystem = new CoralSubsystem(lightsSubsystem);
+    private final CoralSubsystem  coralSubsystem  = new CoralSubsystem(lightsSubsystem);
 
     // Driver and operator controllers
     private final OperatorInput   operatorInput   = new OperatorInput();
@@ -39,6 +40,7 @@ public class RobotContainer {
         driveSubsystem.setDefaultCommand(
             new DefaultDriveCommand(operatorInput, driveSubsystem));
 
+        coralSubsystem.setDefaultCommand(new DefaultCoralCommand(coralSubsystem, operatorInput));
         // Configure the button bindings - pass in all subsystems
         // FIXME: add the coral subsystem
         operatorInput.configureButtonBindings(driveSubsystem, coralSubsystem);
