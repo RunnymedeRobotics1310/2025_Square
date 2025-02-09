@@ -177,7 +177,7 @@ public class SystemTestCommand extends LoggingCommand {
             break;
 
         case CORAL_ARM:
-            coralSubsystem.setArmSpeed();
+            coralSubsystem.setArmSpeed(motorSpeed);
             break;
 
         case CORAL_INTAKE:
@@ -210,6 +210,9 @@ public class SystemTestCommand extends LoggingCommand {
     public void end(boolean interrupted) {
 
         stopAllMotors();
+        selectedMotor   = Motor.NONE;
+        testModeEnabled = false;
+
         updateDashboard();
         logCommandEnd(interrupted);
     }
@@ -223,6 +226,9 @@ public class SystemTestCommand extends LoggingCommand {
 
         SmartDashboard.putBoolean("Test Mode", testModeEnabled);
         SmartDashboard.putString("Test Motor Selected", selectedMotor.toString());
+        SmartDashboard.putBoolean("Test Coral Elevator", selectedMotor == Motor.CORAL_ELEVATOR);
+        SmartDashboard.putBoolean("Test Coral Arm", selectedMotor == Motor.CORAL_ARM);
+        SmartDashboard.putBoolean("Test Coral Intake", selectedMotor == Motor.CORAL_INTAKE);
         SmartDashboard.putNumber("Test Speed", motorSpeed);
     }
 

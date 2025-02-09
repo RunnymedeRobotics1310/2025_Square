@@ -57,17 +57,18 @@ public final class Constants {
     }
 
     public static final class CoralConstants {
-        public static final double CORAL_INTAKE_SPEED             = 0.5;
-        public static final double CORAL_OUTAKE_SPEED             = 0.8;
 
-        public static final int    ELEVATOR_MOTOR_CAN_ID          = 30;
-        public static final int    ARM_MOTOR_CAN_ID               = 31;
-        public static final int    INTAKE_MOTOR_CAN_ID            = 32;
-        public static final int    INTAKE_CORAL_DETECTOR_DIO_PORT = 50; // FIXME: What port is this
-                                                                        // on?
-        public static final int    PLANT_ROTATIONS                = 10; // FIXME: How many rotations
-                                                                        // are needed to clear
-                                                                        // coral?
+        public static final int     ELEVATOR_MOTOR_CAN_ID         = 30;
+        public static final int     ARM_MOTOR_CAN_ID              = 31;
+        public static final int     INTAKE_MOTOR_CAN_ID           = 32;
+
+        public static final boolean ELEVATOR_MOTOR_INVERTED       = false;
+        public static final boolean ARM_MOTOR_INVERTED            = false;
+        public static final boolean INTAKE_MOTOR_INVERTED         = false;
+
+        public static final boolean ARM_POSITION_ENCODER_INVERTED = false;
+        public static final double  ARM_LOWER_LIMIT_POSITION      = 0;
+        public static final double  ARM_UPPER_LIMIT_POSITION      = 180;
     }
 
     public static final class LightsConstants {

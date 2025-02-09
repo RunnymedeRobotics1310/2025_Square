@@ -10,6 +10,7 @@ import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorInputConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.GameController;
+import frc.robot.commands.test.SystemTestCommand;
 import frc.robot.subsystems.CoralSubsystem;
 
 /**
@@ -69,6 +70,9 @@ public class OperatorInput extends SubsystemBase {
         // Cancel Command - cancels all running commands on all subsystems
         new Trigger(() -> isCancel())
             .onTrue(new CancelCommand(this, coralSubsystem));
+
+        new Trigger(() -> driverController.getStartButton() && driverController.getBackButton())
+            .onTrue(new SystemTestCommand(this, coralSubsystem));
 
     }
 
