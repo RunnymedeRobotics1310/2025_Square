@@ -8,11 +8,11 @@ import frc.robot.subsystems.CoralSubsystem;
 public class DefaultCoralCommand extends LoggingCommand {
 
     private final CoralSubsystem coralSubsystem;
-    private final OperatorInput  oi;
+    private final OperatorInput  operatorInput;
 
-    public DefaultCoralCommand(CoralSubsystem coralSubsystem, OperatorInput oi) {
+    public DefaultCoralCommand(CoralSubsystem coralSubsystem, OperatorInput operatorInput) {
         this.coralSubsystem = coralSubsystem;
-        this.oi             = oi;
+        this.operatorInput  = operatorInput;
     }
 
 
@@ -27,11 +27,19 @@ public class DefaultCoralCommand extends LoggingCommand {
         // FIXME: Don't make up new names
         // is it elevatorStick or elevatorInput - what is the difference?
 
-        double elevatorStick = oi.getElevatorInput();
+        double elevatorStick = operatorInput.getElevatorInput();
 
         // FIXME: by convention all inputs should be positive? why negate the stick?
         // Does this need a comment?
         coralSubsystem.setElevatorSpeed(-elevatorStick * Constants.CoralConstants.ELEVATOR_OPERATOR_SCALE_FACTOR);
+
+        double armStick = operatorInput.getArmStick();
+        if (Math.abs(armStick) > 0) {
+            coralSubsystem.setArmSpeed(armStick * Constants.CoralConstants.ARM_TUNE_RATE);
+        }
+        else {
+            coralSubsystem.setArmSpeed(0);
+        }
 
     }
 

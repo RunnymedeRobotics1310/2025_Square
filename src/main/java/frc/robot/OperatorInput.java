@@ -11,6 +11,7 @@ import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorInputConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.GameController;
+import frc.robot.commands.coral.MoveArmToPosCommand;
 import frc.robot.commands.coral.MoveToHeightCommand;
 import frc.robot.commands.test.SystemTestCommand;
 import frc.robot.subsystems.CoralSubsystem;
@@ -23,6 +24,7 @@ import frc.robot.subsystems.CoralSubsystem;
 public class OperatorInput extends SubsystemBase {
 
     private final GameController driverController;
+    // private final GameController operatorController;
 
     // Auto Setup Choosers
     SendableChooser<AutoPattern> autoPatternChooser = new SendableChooser<>();
@@ -36,7 +38,7 @@ public class OperatorInput extends SubsystemBase {
     public OperatorInput() {
 
         driverController = new GameController(OperatorInputConstants.DRIVER_CONTROLLER_PORT,
-            OperatorInputConstants.DRIVER_CONTROLLER_DEADBAND);
+            OperatorInputConstants.CONTROLLER_DEADBAND);
 
         // Initialize the dashboard selectors
         autoPatternChooser.setDefaultOption("Do Nothing", AutoPattern.DO_NOTHING);
@@ -96,8 +98,20 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> driverController.getPOV() == 270)
             .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_4));
+
         new Trigger(() -> driverController.getXButton())
             .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_0));
+
+
+        // Configure the controller buttons X (resting), Y (delivery), A (intake) for arm position
+        new Trigger(() -> driverController.getXButton())
+            .onTrue(new MoveArmToPosCommand(0, coralSubsystem));
+
+        new Trigger(() -> driverController.getYButton())
+            .onTrue(new MoveArmToPosCommand(135, coralSubsystem));
+
+        new Trigger(() -> driverController.getAButton())
+            .onTrue(new MoveArmToPosCommand(135, coralSubsystem));
     }
 
     /*
@@ -126,48 +140,14 @@ public class OperatorInput extends SubsystemBase {
      * robot elements.
      */
     /*
-     * Drive Subsystem
+     * Default Coral Command
      */
-    public DriveMode getSelectedDriveMode() {
-        return driveModeChooser.getSelected();
-    }
-
-    public boolean isBoost() {
-        return driverController.getLeftBumperButton();
-    }
-
-    public boolean isSlowDown() {
-        return driverController.getRightBumperButton();
-    }
-
-    public double getLeftSpeed() {
-        return driverController.getLeftY();
-    }
-
-    public double getRightSpeed() {
-        return driverController.getRightY();
-    }
-
     public double getElevatorInput() {
         return driverController.getRightY();
     }
 
-    public double getSpeed() {
-
-        if (driveModeChooser.getSelected() == DriveMode.SINGLE_STICK_RIGHT) {
-            return driverController.getRightY();
-        }
-
+    public double getArmStick() {
         return driverController.getLeftY();
-    }
-
-    public double getTurn() {
-
-        if (driveModeChooser.getSelected() == DriveMode.SINGLE_STICK_LEFT) {
-            return driverController.getLeftX();
-        }
-
-        return driverController.getRightX();
     }
 
     /*

@@ -9,30 +9,27 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.CoralConstants.ElevatorHeight;
 import frc.robot.Constants.LightsConstants;
 import frc.robot.Robot;
 
 public class LightsSubsystem extends SubsystemBase {
 
-    private final AddressableLED              ledString            = new AddressableLED(LightsConstants.LED_STRING_PWM_PORT);
-    private final AddressableLEDBuffer        ledBuffer            = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
+    private final AddressableLED              ledString           = new AddressableLED(LightsConstants.LED_STRING_PWM_PORT);
+    private final AddressableLEDBuffer        ledBuffer           = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
 
-    private final AddressableLEDBufferView    leftSpeedBuffer      = new AddressableLEDBufferView(ledBuffer, 1, /*
-                                                                                                                 * 28
-                                                                                                                 */10);
-    private final AddressableLEDBufferView    rightSpeedBuffer     = new AddressableLEDBufferView(ledBuffer,
-        /* 31 */48, 58).reversed();
-    private final AddressableLEDBufferView    elevatorHeightBuffer = new AddressableLEDBufferView(ledBuffer, 11, 20);
+    private final AddressableLEDBufferView    coralArmBuffer      = new AddressableLEDBufferView(ledBuffer, 1, 10);
+    private final AddressableLEDBufferView    coralElevatorBuffer = new AddressableLEDBufferView(ledBuffer, 11, 20);
+    private final AddressableLEDBufferView    coralIntakeBuffer   = new AddressableLEDBufferView(ledBuffer, 21, 23);
 
     // RSL Flash
-    private static final Color                RSL_COLOR            = new Color(255, 20, 0);
-    private static final AddressableLEDBuffer RSL_ON               = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
-    private static final AddressableLEDBuffer RSL_OFF              = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
-    private Timer                             simRslTimer          = new Timer();
-    private boolean                           simRslState          = false;
-    private int                               rslFlashCount        = -1;
-    private boolean                           previousRslState     = false;
+    private static final Color                RSL_COLOR           = new Color(255, 20, 0);
+    private static final AddressableLEDBuffer RSL_ON              = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
+    private static final AddressableLEDBuffer RSL_OFF             = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
+    private Timer                             simRslTimer         = new Timer();
+    private boolean                           simRslState         = false;
+    private int                               rslFlashCount       = -1;
+    private boolean                           previousRslState    = false;
 
     public LightsSubsystem() {
 
@@ -45,52 +42,38 @@ public class LightsSubsystem extends SubsystemBase {
         ledString.start();
     }
 
-    public void setElevatorHeight(Constants.CoralConstants.ElevatorHeight elevatorHeight) {
+    public void setElevatorHeight(ElevatorHeight elevatorHeight) {
 
-        LEDPattern.kOff.applyTo(elevatorHeightBuffer);
+        LEDPattern.kOff.applyTo(coralElevatorBuffer);
 
-        int lightCount = Math.min(elevatorHeight.ordinal(), elevatorHeightBuffer.getLength() - 1);
+        int lightCount = Math.min(elevatorHeight.ordinal(), coralElevatorBuffer.getLength() - 1);
+
+        // light at least one light
+        if (lightCount == 0) {
+            lightCount = 1;
+        }
+
         for (int i = 0; i < lightCount; i++) {
-            elevatorHeightBuffer.setLED(i, Color.kAquamarine);
+            coralElevatorBuffer.setLED(i, Color.kAquamarine);
         }
-
     }
 
-    public void setDriveMotorSpeeds(double leftSpeed, double rightSpeed) {
+    public void setArmPosition(double armAngle) {
 
-        LEDPattern.kOff.applyTo(leftSpeedBuffer);
-        LEDPattern.kOff.applyTo(rightSpeedBuffer);
+        LEDPattern.kOff.applyTo(coralArmBuffer);
 
-        setSpeedPixel(leftSpeed, leftSpeedBuffer);
-        setSpeedPixel(rightSpeed, rightSpeedBuffer);
+        int lightCount = Math.min(
+            (int) (armAngle / 135 * coralArmBuffer.getLength()),
+            coralArmBuffer.getLength() - 1);
 
-    }
-
-    private void setSpeedPixel(double speed, AddressableLEDBufferView speedBuffer) {
-
-        int center     = speedBuffer.getLength() / 2;
-        int speedPixel = 0;
-
-        if (speed == 0) {
-
-            speedBuffer.setLED(center, Color.kBeige);
-
-        }
-        else if (speed > 0) {
-
-            speedPixel = center + (int) Math.round(center * speed + 0.5);
-            speedPixel = Math.min(speedBuffer.getLength() - 1, speedPixel);
-
-            speedBuffer.setLED(speedPixel, Color.kLawnGreen);
-        }
-        else {
-
-            speedPixel = center + (int) Math.round(center * speed - 0.5);
-            speedPixel = Math.max(0, speedPixel);
-
-            speedBuffer.setLED(speedPixel, Color.kFirstRed);
+        // Light at least one light
+        if (lightCount == 0) {
+            lightCount = 1;
         }
 
+        for (int i = 0; i < lightCount; i++) {
+            coralArmBuffer.setLED(i, Color.kAliceBlue);
+        }
     }
 
     public void setRSLFlashCount(int count) {

@@ -248,6 +248,7 @@ public class CoralSubsystem extends SubsystemBase {
 
         // FIXME: Add a call to the lights subsystem to show the current speed
         lightsSubsystem.setElevatorHeight(getElevatorHeight());
+        lightsSubsystem.setArmPosition(getArmPosition());
 
         SmartDashboard.putNumber("Coral/Elevator Speed", elevatorSpeed);
         SmartDashboard.putNumber("Coral/Elevator Position", getElevatorEncoder());
