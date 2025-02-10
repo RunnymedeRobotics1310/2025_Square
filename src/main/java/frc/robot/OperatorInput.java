@@ -12,8 +12,8 @@ import frc.robot.Constants.OperatorInputConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.GameController;
 import frc.robot.commands.coral.MoveToHeightCommand;
+import frc.robot.commands.test.SystemTestCommand;
 import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
 
 /**
  * The DriverController exposes all driver functions
@@ -66,17 +66,20 @@ public class OperatorInput extends SubsystemBase {
      *
      * @param driveSubsystem
      */
-    public void configureButtonBindings(DriveSubsystem driveSubsystem, CoralSubsystem coralSubsystem) {
+    public void configureButtonBindings(CoralSubsystem coralSubsystem) {
+
+        // System Test Command
+        new Trigger(() -> driverController.getStartButton() && driverController.getBackButton())
+            .onTrue(new SystemTestCommand(this, coralSubsystem));
 
         // Cancel Command - cancels all running commands on all subsystems
         new Trigger(() -> isCancel())
-            .onTrue(new CancelCommand(this, driveSubsystem));
+            .onTrue(new CancelCommand(this, coralSubsystem));
 
         // Gyro and Encoder Reset
         new Trigger(() -> driverController.getBackButton())
             .onTrue(new InstantCommand(() -> {
-                driveSubsystem.resetGyro();
-                driveSubsystem.resetEncoders();
+                // FIXME: reset encoders and gyro
             }));
 
         // FIXME: Replace these button bindings the ones provided in the controller map
@@ -184,4 +187,7 @@ public class OperatorInput extends SubsystemBase {
         SmartDashboard.putString("Driver Controller", driverController.toString());
     }
 
+    public GameController getDriverController() {
+        return driverController;
+    }
 }
