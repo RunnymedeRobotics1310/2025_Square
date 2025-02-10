@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants.AutoPattern;
@@ -107,15 +108,16 @@ public class OperatorInput extends SubsystemBase {
             .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_4));
 
         new Trigger(() -> driverController.getXButton())
-            .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_0));
+            .onTrue(new SequentialCommandGroup(
+                new MoveArmToPosCommand(0, coralSubsystem),
+                new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_0)));
 
 
         /*
          * Arm Buttons
          */
-        // Configure the controller buttons X (resting), Y (delivery), A (intake) for arm position
-        new Trigger(() -> driverController.getXButton())
-            .onTrue(new MoveArmToPosCommand(0, coralSubsystem));
+        // Configure the controller buttons X (resting, above^),
+        // Y (delivery), A (intake) for arm position
 
         new Trigger(() -> driverController.getYButton())
             .onTrue(new MoveArmToPosCommand(135, coralSubsystem));

@@ -13,6 +13,8 @@ public class DefaultCoralCommand extends LoggingCommand {
     public DefaultCoralCommand(CoralSubsystem coralSubsystem, OperatorInput operatorInput) {
         this.coralSubsystem = coralSubsystem;
         this.operatorInput  = operatorInput;
+
+        addRequirements(coralSubsystem);
     }
 
 

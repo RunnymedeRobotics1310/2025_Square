@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.CoralConstants.ElevatorHeight;
+import frc.robot.Robot;
 
 public class CoralSubsystem extends SubsystemBase {
 
@@ -66,6 +67,13 @@ public class CoralSubsystem extends SubsystemBase {
     public CoralSubsystem(LightsSubsystem lightsSubsystem) {
 
         this.lightsSubsystem = lightsSubsystem;
+
+        /*
+         * Simulation
+         */
+        if (Robot.isSimulation()) {
+            isSimulation = true;
+        }
     }
 
     /*
@@ -326,7 +334,31 @@ public class CoralSubsystem extends SubsystemBase {
             }
         }
 
-        // FIXME: add an upper limit check
+        if (isElevatorAtUpperLimit()) {
+
+            if (elevatorSpeed > 0) {
+                elevatorSpeed = 0;
+                // Directly set the motor speed, do not call the setter method (recursive loop)
+                // elevatorMotor.set(ControlMode.PercentOutput, 0);
+            }
+        }
+
+        /*
+         * Arm Safety
+         */
+        if (isArmAtLowerLimit()) {
+
+            if (armSpeed < 0) {
+                armSpeed = 0;
+            }
+        }
+
+        if (isArmAtUpperLimit()) {
+
+            if (armSpeed > 0) {
+                armSpeed = 0;
+            }
+        }
     }
 
     @Override

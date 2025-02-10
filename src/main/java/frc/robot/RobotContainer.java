@@ -36,7 +36,6 @@ public class RobotContainer {
         coralSubsystem.setDefaultCommand(new DefaultCoralCommand(coralSubsystem, operatorInput));
 
         // Configure the button bindings - pass in all subsystems
-        // FIXME: add the coral subsystem
         operatorInput.configureButtonBindings(coralSubsystem);
 
         // Add a trigger to flash the LEDs in sync with the
