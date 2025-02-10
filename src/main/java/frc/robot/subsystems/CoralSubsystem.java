@@ -1,5 +1,10 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.config.LimitSwitchConfig.Type;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -67,6 +72,53 @@ public class CoralSubsystem extends SubsystemBase {
     public CoralSubsystem(LightsSubsystem lightsSubsystem) {
 
         this.lightsSubsystem = lightsSubsystem;
+
+        /*
+         * Elevator Motor Config
+         */
+        SparkFlexConfig flexConfig = new SparkFlexConfig();
+
+        flexConfig.disableFollowerMode();
+        flexConfig.idleMode(IdleMode.kBrake);
+        flexConfig.inverted(CoralConstants.ELEVATOR_MOTOR_INVERTED);
+
+        // Upper and Lower Limit switches
+        flexConfig.limitSwitch.forwardLimitSwitchEnabled(false);
+        flexConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyOpen);
+
+        flexConfig.limitSwitch.reverseLimitSwitchEnabled(false);
+        flexConfig.limitSwitch.reverseLimitSwitchType(Type.kNormallyOpen);
+
+//        elevatorMotor.configure(flexConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+//
+//        elevatorEncoder.setPosition(0);
+
+        /*
+         * Arm Motor Config
+         */
+        SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
+
+        sparkMaxConfig.disableFollowerMode();
+        sparkMaxConfig.idleMode(IdleMode.kBrake);
+        sparkMaxConfig.inverted(CoralConstants.ARM_MOTOR_INVERTED);
+
+        sparkMaxConfig.absoluteEncoder.inverted(CoralConstants.ARM_POSITION_ENCODER_INVERTED);
+
+//        armMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        /*
+         * Intake Motor Config
+         */
+        sparkMaxConfig = new SparkMaxConfig();
+
+        sparkMaxConfig.disableFollowerMode();
+        sparkMaxConfig.idleMode(IdleMode.kBrake);
+        sparkMaxConfig.inverted(CoralConstants.INTAKE_MOTOR_INVERTED);
+
+        sparkMaxConfig.limitSwitch.forwardLimitSwitchEnabled(false);
+        sparkMaxConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyOpen);
+
+//        intakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         /*
          * Simulation
