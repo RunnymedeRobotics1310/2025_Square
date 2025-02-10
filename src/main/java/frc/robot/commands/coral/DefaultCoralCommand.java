@@ -26,14 +26,11 @@ public class DefaultCoralCommand extends LoggingCommand {
     @Override
     public void execute() {
 
-        // FIXME: Don't make up new names
-        // is it elevatorStick or elevatorInput - what is the difference?
 
-        double elevatorStick = operatorInput.getElevatorInput();
+        double elevatorInput = operatorInput.getElevatorInput();
 
-        // FIXME: by convention all inputs should be positive? why negate the stick?
-        // Does this need a comment?
-        coralSubsystem.setElevatorSpeed(-elevatorStick * Constants.CoralConstants.ELEVATOR_OPERATOR_SCALE_FACTOR);
+        // invery Y joystick to ensure +1 is up
+        coralSubsystem.setElevatorSpeed(-elevatorInput * Constants.CoralConstants.ELEVATOR_OPERATOR_SCALE_FACTOR);
 
         double armStick = operatorInput.getArmStick();
         if (Math.abs(armStick) > 0) {
