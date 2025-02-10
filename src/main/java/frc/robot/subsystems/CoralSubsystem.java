@@ -39,6 +39,8 @@ public class CoralSubsystem extends SubsystemBase {
 
     // Intake
 
+//  private RelativeEncoder       intakeEncoder                     = intakeMotor.getEncoder();
+//
 //    private SparkLimitSwitch      intakeCoralDetector                 = intakeMotor.getForwardLimitSwitch();
 
 
@@ -58,6 +60,7 @@ public class CoralSubsystem extends SubsystemBase {
     private Timer               simulationIntakeDetectTimer         = new Timer();
     private boolean             simulationIntakeDetector            = false;
     private double              simulationPreviousIntakeSpeed       = 0;
+    private int                 simulationIntakeEncoder             = 0;
 
 
     public CoralSubsystem(LightsSubsystem lightsSubsystem) {
@@ -228,6 +231,16 @@ public class CoralSubsystem extends SubsystemBase {
         return false; // intakeCoralDetector.isPressed();
     }
 
+    public double getIntakeEncoder() {
+
+        if (isSimulation) {
+            return simulationIntakeEncoder;
+        }
+
+        return 0; // intakeEncoder.getPosition();
+    }
+
+
     public void stop() {
         setElevatorSpeed(0);
         setArmSpeed(0);
@@ -277,7 +290,9 @@ public class CoralSubsystem extends SubsystemBase {
             simulationElevatorHeight += ELEVATOR_MAX_DOWN_DISTANCE_PER_LOOP * elevatorSpeed;
         }
 
-        simulationArmAngle += ARM_ANGLE_MAX_DEGREES_PER_LOOP * armSpeed;
+        simulationArmAngle      += ARM_ANGLE_MAX_DEGREES_PER_LOOP * armSpeed;
+
+        simulationIntakeEncoder += intakeSpeed;
 
         // Intake detection, change states if the timer is running for 3 seconds
         if (intakeSpeed != 0 && simulationPreviousIntakeSpeed == 0) {

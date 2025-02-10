@@ -11,8 +11,12 @@ import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorInputConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.GameController;
+import frc.robot.commands.coral.EjectCoralCommand;
+import frc.robot.commands.coral.InjectCoralCommand;
+import frc.robot.commands.coral.IntakeCoralCommand;
 import frc.robot.commands.coral.MoveArmToPosCommand;
 import frc.robot.commands.coral.MoveToHeightCommand;
+import frc.robot.commands.coral.PlantCoralCommand;
 import frc.robot.commands.test.SystemTestCommand;
 import frc.robot.subsystems.CoralSubsystem;
 
@@ -86,6 +90,9 @@ public class OperatorInput extends SubsystemBase {
 
         // FIXME: Replace these button bindings the ones provided in the controller map
 
+        /*
+         * Elevator Buttons
+         */
         // Configure the DPAD to set elevator height
         new Trigger(() -> driverController.getPOV() == 0)
             .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_1));
@@ -103,6 +110,9 @@ public class OperatorInput extends SubsystemBase {
             .onTrue(new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_0));
 
 
+        /*
+         * Arm Buttons
+         */
         // Configure the controller buttons X (resting), Y (delivery), A (intake) for arm position
         new Trigger(() -> driverController.getXButton())
             .onTrue(new MoveArmToPosCommand(0, coralSubsystem));
@@ -112,6 +122,25 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> driverController.getAButton())
             .onTrue(new MoveArmToPosCommand(135, coralSubsystem));
+
+        /*
+         * Coral Intake Buttons
+         */
+        // Eject Coral
+        new Trigger(() -> driverController.getRightBumperButton())
+            .whileTrue(new EjectCoralCommand(coralSubsystem));
+
+        // Inject Coral
+        new Trigger(() -> driverController.getLeftBumperButton())
+            .whileTrue(new InjectCoralCommand(coralSubsystem));
+
+        // Intake Coral
+        new Trigger(() -> driverController.getLeftTriggerAxis() > 0.5)
+            .onTrue(new IntakeCoralCommand(coralSubsystem));
+
+        // Plant Coral
+        new Trigger(() -> driverController.getRightTriggerAxis() > 0.5)
+            .onTrue(new PlantCoralCommand(coralSubsystem));
     }
 
     /*

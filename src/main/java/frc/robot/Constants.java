@@ -96,6 +96,12 @@ public final class Constants {
         public static final double  ARM_LOWER_LIMIT_POSITION       = 0;
         public static final double  ARM_UPPER_LIMIT_POSITION       = 180;
         public static final double  ARM_TUNE_RATE                  = 0.2;
+
+        public static final double  CORAL_INTAKE_SPEED             = 0.5;
+        public static final double  CORAL_OUTAKE_SPEED             = 0.8;
+        public static final int     PLANT_ROTATIONS                = 10;   // FIXME: How many
+                                                                           // rotations
+
     }
 
     public static final class LightsConstants {
