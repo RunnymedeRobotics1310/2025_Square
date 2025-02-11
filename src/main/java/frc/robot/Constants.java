@@ -84,9 +84,9 @@ public final class Constants {
         public static final double  ELEVATOR_SPEED                 = 0.5;
         public static final double  ELEVATOR_OPERATOR_SCALE_FACTOR = 0.1;
 
-        public static final int     ELEVATOR_MOTOR_CAN_ID          = 30;
-        public static final int     ARM_MOTOR_CAN_ID               = 31;
-        public static final int     INTAKE_MOTOR_CAN_ID            = 32;
+        public static final int     ELEVATOR_MOTOR_CAN_ID          = 40;
+        public static final int     ARM_MOTOR_CAN_ID               = 41;
+        public static final int     INTAKE_MOTOR_CAN_ID            = 42;
 
         public static final boolean ELEVATOR_MOTOR_INVERTED        = false;
         public static final boolean ARM_MOTOR_INVERTED             = false;
@@ -96,9 +96,25 @@ public final class Constants {
         // FIXME: what are the units of arm position?
         // What are the main positions for the arm?
         // Does an elevator height imply an arm position?
+
+        //arm positions are in degrees
         public static final double  ARM_LOWER_LIMIT_POSITION       = 0;
         public static final double  ARM_UPPER_LIMIT_POSITION       = 180;
-        public static final double  ARM_TUNE_RATE                  = 0.2;
+
+        public static final double ARM_POSITION_INTAKE             = 45;
+        public static final double ARM_POSITION_LEVEL_1            = 0;
+        public static final double ARM_POSITION_LEVEL_2            = 135;
+        public static final double ARM_POSITION_LEVEL_3            = 135;
+        public static final double ARM_POSITION_LEVEL_4            = 135;
+        public static final double ARM_POSITION_COMPACT            = 0;
+
+        public static final double ARM_TUNE_RATE                   = 0.2;
+
+        public static final double ARM_FAST_SPEED                  = 0.5;
+        public static final double ARM_SLOW_SPEED                  = 0.2;
+        public static final double ARM_TOLERANCE                   = 1.5;
+        public static final double ARM_SLOW_ZONE_THRESHOLD         = 20;
+
 
         public static final double  CORAL_INTAKE_SPEED             = 0.5;
         public static final double  CORAL_OUTAKE_SPEED             = 0.8;

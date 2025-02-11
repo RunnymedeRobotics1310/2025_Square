@@ -273,6 +273,28 @@ public class CoralSubsystem extends SubsystemBase {
 
     }
 
+    public boolean moveArmToPosition(double targetPosition) {
+        double currentPosition = getArmPosition();
+        double positionOffset =  targetPosition - currentPosition;
+        double desiredArmSpeed = CoralConstants.ARM_FAST_SPEED;
+
+        if (Math.abs(positionOffset) < CoralConstants.ARM_TOLERANCE){
+            armSpeed = 0;
+            return true;
+        }
+
+        if (Math.abs(positionOffset) < CoralConstants.ARM_SLOW_ZONE_THRESHOLD){
+            desiredArmSpeed = CoralConstants.ARM_SLOW_SPEED;
+        }
+
+        if (positionOffset < 0) {
+            desiredArmSpeed = -desiredArmSpeed;
+        }
+
+        armSpeed = desiredArmSpeed;
+        return false;
+    }
+
     /*
      * Intake Routines
      */
