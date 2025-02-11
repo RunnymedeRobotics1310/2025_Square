@@ -128,11 +128,14 @@ public class OperatorInput extends SubsystemBase {
         /*
          * Coral Intake Buttons
          */
+        // FIXME: what do these different commands do? Can we add some
+        // comments and javadoc?
         // Eject Coral
         new Trigger(() -> driverController.getRightBumperButton())
             .whileTrue(new EjectCoralCommand(coralSubsystem));
 
         // Inject Coral
+        // FIXME: what is the difference between inject and intake?
         new Trigger(() -> driverController.getLeftBumperButton())
             .whileTrue(new InjectCoralCommand(coralSubsystem));
 

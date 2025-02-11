@@ -12,6 +12,11 @@ public class PlantCoralCommand extends LoggingCommand {
     private final CoralSubsystem coralSubsystem;
     private double               intakeStartPos = 0;
 
+    /**
+     * FIXME: what does this command do? When should it be used?
+     *
+     * @param coralSubsystem
+     */
     public PlantCoralCommand(CoralSubsystem coralSubsystem) {
         this.coralSubsystem = coralSubsystem;
 
