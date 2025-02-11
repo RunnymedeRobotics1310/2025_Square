@@ -2,7 +2,7 @@ package frc.robot.commands.coral.elevator;
 
 import frc.robot.Constants.CoralConstants.ElevatorHeight;
 import frc.robot.commands.LoggingCommand;
-import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.coral.CoralSubsystem;
 
 // FIXME: can we rename this class to include the word 'elevator' somewhere?
 public class MoveToHeightCommand extends LoggingCommand {

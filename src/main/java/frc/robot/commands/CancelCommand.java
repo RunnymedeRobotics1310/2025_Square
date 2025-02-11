@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.OperatorInput;
-import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.coral.CoralSubsystem;
 
 /**
  * This command is used to safely stop the robot in its current position, and to cancel any running

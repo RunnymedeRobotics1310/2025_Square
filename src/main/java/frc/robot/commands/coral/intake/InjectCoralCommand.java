@@ -2,7 +2,7 @@ package frc.robot.commands.coral.intake;
 
 import frc.robot.Constants.CoralConstants;
 import frc.robot.commands.LoggingCommand;
-import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.coral.CoralSubsystem;
 
 /**
  * This comand runs the coral Intake motors forwards while button is held.
