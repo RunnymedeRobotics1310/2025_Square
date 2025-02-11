@@ -12,12 +12,12 @@ import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorInputConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.GameController;
-import frc.robot.commands.coral.EjectCoralCommand;
-import frc.robot.commands.coral.InjectCoralCommand;
-import frc.robot.commands.coral.IntakeCoralCommand;
-import frc.robot.commands.coral.MoveArmToPosCommand;
-import frc.robot.commands.coral.MoveToHeightCommand;
-import frc.robot.commands.coral.PlantCoralCommand;
+import frc.robot.commands.coral.arm.MoveArmToPosCommand;
+import frc.robot.commands.coral.elevator.MoveToHeightCommand;
+import frc.robot.commands.coral.intake.EjectCoralCommand;
+import frc.robot.commands.coral.intake.InjectCoralCommand;
+import frc.robot.commands.coral.intake.IntakeCoralCommand;
+import frc.robot.commands.coral.intake.PlantCoralCommand;
 import frc.robot.commands.test.SystemTestCommand;
 import frc.robot.subsystems.CoralSubsystem;
 

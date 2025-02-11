@@ -1,17 +1,18 @@
-package frc.robot.commands.coral;
+package frc.robot.commands.coral.intake;
 
 import frc.robot.Constants.CoralConstants;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.CoralSubsystem;
 
 /**
- * Pulls in coral until it is fully inside the arm, then stops the wheels.
+ * Pushes coral out of the arm, then stops the wheels when the coral is gone.
  */
-public class IntakeCoralCommand extends LoggingCommand {
+public class PlantCoralCommand extends LoggingCommand {
 
     private final CoralSubsystem coralSubsystem;
+    private double               intakeStartPos = 0;
 
-    public IntakeCoralCommand(CoralSubsystem coralSubsystem) {
+    public PlantCoralCommand(CoralSubsystem coralSubsystem) {
         this.coralSubsystem = coralSubsystem;
 
         addRequirements(coralSubsystem);
@@ -19,24 +20,24 @@ public class IntakeCoralCommand extends LoggingCommand {
 
     @Override
     public void initialize() {
+        intakeStartPos = coralSubsystem.getIntakeEncoder();
         logCommandStart();
     }
 
     @Override
     public void execute() {
-        coralSubsystem.setIntakeSpeed(CoralConstants.CORAL_INTAKE_SPEED);
+        coralSubsystem.setIntakeSpeed(CoralConstants.CORAL_OUTAKE_SPEED);
     }
 
     @Override
     public boolean isFinished() {
+        // ends the command after spinning the intake motor 10 times. Thi
+        if (intakeStartPos + CoralConstants.PLANT_ROTATIONS < coralSubsystem.getIntakeEncoder()
+            && !coralSubsystem.isCoralDetected()) {
 
-        if (coralSubsystem.isCoralDetected()) {
-            // stop the motors when coral is detected
-
-            // FIXME: need to test whether this is true
-            // we may need to wait a few MS for the coral to be in the middle.
             return true;
         }
+
         return false;
     }
 

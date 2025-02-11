@@ -1,17 +1,17 @@
-package frc.robot.commands.coral;
+package frc.robot.commands.coral.intake;
 
 import frc.robot.Constants.CoralConstants;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.CoralSubsystem;
 
 /**
- * This comand runs the coral Intake motors forwards while button is held.
+ * Pulls in coral until it is fully inside the arm, then stops the wheels.
  */
-public class InjectCoralCommand extends LoggingCommand {
+public class IntakeCoralCommand extends LoggingCommand {
 
     private final CoralSubsystem coralSubsystem;
 
-    public InjectCoralCommand(CoralSubsystem coralSubsystem) {
+    public IntakeCoralCommand(CoralSubsystem coralSubsystem) {
         this.coralSubsystem = coralSubsystem;
 
         addRequirements(coralSubsystem);
@@ -24,21 +24,24 @@ public class InjectCoralCommand extends LoggingCommand {
 
     @Override
     public void execute() {
-        // Sets the coral intake motor to intake speed
         coralSubsystem.setIntakeSpeed(CoralConstants.CORAL_INTAKE_SPEED);
     }
 
     @Override
     public boolean isFinished() {
 
+        if (coralSubsystem.isCoralDetected()) {
+            // stop the motors when coral is detected
+
+            // FIXME: need to test whether this is true
+            // we may need to wait a few MS for the coral to be in the middle.
+            return true;
+        }
         return false;
     }
 
     @Override
     public void end(boolean interrupted) {
-        // When inturrupted stop the motors.
-        // The command is called on a whileTrue in OI, so the intake will stop when the button is
-        // released
         coralSubsystem.setIntakeSpeed(0);
         logCommandEnd(interrupted);
     }

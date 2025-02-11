@@ -1,11 +1,10 @@
-package frc.robot.commands.coral;
+package frc.robot.commands.coral.elevator;
 
-import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.CoralConstants.ElevatorHeight;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.CoralSubsystem;
 
-
+// FIXME: can we rename this class to include the word 'elevator' somewhere?
 public class MoveToHeightCommand extends LoggingCommand {
 
     private final ElevatorHeight elevatorHeight;
@@ -13,7 +12,7 @@ public class MoveToHeightCommand extends LoggingCommand {
 
     public MoveToHeightCommand(CoralSubsystem coralSubsystem, ElevatorHeight elevatorHeight) {
 
-        this.elevatorHeight    = elevatorHeight;
+        this.elevatorHeight = elevatorHeight;
         this.coralSubsystem = coralSubsystem;
 
         addRequirements(coralSubsystem);
