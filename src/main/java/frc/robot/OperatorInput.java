@@ -126,8 +126,6 @@ public class OperatorInput extends SubsystemBase {
         /*
          * Coral Intake Buttons
          */
-        // FIXME: what do these different commands do? Can we add some
-        // comments and javadoc?
 
         // Intake Coral
         new Trigger(() -> driverController.getLeftTriggerAxis() > 0.5)
