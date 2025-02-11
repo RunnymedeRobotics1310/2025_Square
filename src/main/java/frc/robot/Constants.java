@@ -93,6 +93,9 @@ public final class Constants {
         public static final boolean INTAKE_MOTOR_INVERTED          = false;
 
         public static final boolean ARM_POSITION_ENCODER_INVERTED  = false;
+        // FIXME: what are the units of arm position?
+        // What are the main positions for the arm?
+        // Does an elevator height imply an arm position?
         public static final double  ARM_LOWER_LIMIT_POSITION       = 0;
         public static final double  ARM_UPPER_LIMIT_POSITION       = 180;
         public static final double  ARM_TUNE_RATE                  = 0.2;
