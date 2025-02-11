@@ -143,6 +143,8 @@ public class CoralSubsystem extends SubsystemBase {
 
     public boolean setElevatorHeight(ElevatorHeight height) {
 
+        // FIXME: this should be a PID - or at the very least, it should have a slow
+        // zone as it approaches the target.
         if (getElevatorHeight().compareTo(height) == 0) {
             setElevatorSpeed(0);
             return true;
