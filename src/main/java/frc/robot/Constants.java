@@ -99,8 +99,7 @@ public final class Constants {
 
         public static final double  CORAL_INTAKE_SPEED             = 0.5;
         public static final double  CORAL_OUTAKE_SPEED             = 0.8;
-        public static final int     PLANT_ROTATIONS                = 10;   // FIXME: How many
-                                                                           // rotations
+        public static final int     PLANT_ROTATIONS                = 15;
 
     }
 

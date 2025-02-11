@@ -1,6 +1,7 @@
 package frc.robot.commands.coral;
 
 import frc.robot.Constants;
+import frc.robot.Constants.CoralConstants;
 import frc.robot.OperatorInput;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.CoralSubsystem;
@@ -27,7 +28,11 @@ public class DefaultCoralCommand extends LoggingCommand {
     public void execute() {
 
 
-        double elevatorInput = operatorInput.getElevatorInput();
+        double  elevatorInput = operatorInput.getElevatorInput();
+        boolean ejectButton   = operatorInput.getEjectButton();
+        boolean injectButton  = operatorInput.getInjectButton();
+
+        // Elevator commands
 
         // invery Y joystick to ensure +1 is up
         coralSubsystem.setElevatorSpeed(-elevatorInput * Constants.CoralConstants.ELEVATOR_OPERATOR_SCALE_FACTOR);
@@ -38,6 +43,16 @@ public class DefaultCoralCommand extends LoggingCommand {
         }
         else {
             coralSubsystem.setArmSpeed(0);
+        }
+
+        // Intake commands
+
+        if (ejectButton) {
+            coralSubsystem.setIntakeSpeed(CoralConstants.CORAL_INTAKE_SPEED);
+        }
+        else if (injectButton) {
+
+            coralSubsystem.setIntakeSpeed(-CoralConstants.CORAL_INTAKE_SPEED);
         }
 
     }

@@ -6,6 +6,8 @@ import frc.robot.subsystems.CoralSubsystem;
 
 /**
  * Pulls in coral until it is fully inside the arm, then stops the wheels.
+ * 
+ * @param coralSubsystem
  */
 public class IntakeCoralCommand extends LoggingCommand {
 

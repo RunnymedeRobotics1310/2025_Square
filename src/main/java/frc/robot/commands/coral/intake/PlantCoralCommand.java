@@ -13,7 +13,8 @@ public class PlantCoralCommand extends LoggingCommand {
     private double               intakeStartPos = 0;
 
     /**
-     * FIXME: what does this command do? When should it be used?
+     * Plant coral runs the intake motor for a set number of rotations.
+     * Use it for autos.
      *
      * @param coralSubsystem
      */
