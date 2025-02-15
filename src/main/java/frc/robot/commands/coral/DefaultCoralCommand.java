@@ -54,6 +54,7 @@ public class DefaultCoralCommand extends LoggingCommand {
 
             coralSubsystem.setIntakeSpeed(-CoralConstants.CORAL_INTAKE_SPEED);
         }
+        // FIXME: This should stop if no buttons are pressed.
 
     }
 
