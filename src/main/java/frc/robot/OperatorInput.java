@@ -14,8 +14,6 @@ import frc.robot.commands.CancelCommand;
 import frc.robot.commands.GameController;
 import frc.robot.commands.coral.arm.MoveArmToPosCommand;
 import frc.robot.commands.coral.elevator.MoveToHeightCommand;
-import frc.robot.commands.coral.intake.EjectCoralCommand;
-import frc.robot.commands.coral.intake.InjectCoralCommand;
 import frc.robot.commands.coral.intake.IntakeCoralCommand;
 import frc.robot.commands.coral.intake.PlantCoralCommand;
 import frc.robot.commands.test.SystemTestCommand;
@@ -131,13 +129,6 @@ public class OperatorInput extends SubsystemBase {
         /*
          * Coral Intake Buttons
          */
-        // Eject Coral
-        new Trigger(() -> driverController.getRightBumperButton())
-            .whileTrue(new EjectCoralCommand(coralSubsystem));
-
-        // Inject Coral
-        new Trigger(() -> driverController.getLeftBumperButton())
-            .whileTrue(new InjectCoralCommand(coralSubsystem));
 
         // Intake Coral
         new Trigger(() -> driverController.getLeftTriggerAxis() > 0.5)
@@ -182,6 +173,14 @@ public class OperatorInput extends SubsystemBase {
 
     public double getArmStick() {
         return driverController.getLeftY();
+    }
+
+    public boolean getEjectButton() {
+        return driverController.getRightBumperButton();
+    }
+
+    public boolean getInjectButton() {
+        return driverController.getLeftBumperButton();
     }
 
     /*

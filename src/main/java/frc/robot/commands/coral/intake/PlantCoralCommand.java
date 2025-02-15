@@ -12,6 +12,12 @@ public class PlantCoralCommand extends LoggingCommand {
     private final CoralSubsystem coralSubsystem;
     private double               intakeStartPos = 0;
 
+    /**
+     * Plant coral runs the intake motor for a set number of rotations.
+     * Use it for autos.
+     *
+     * @param coralSubsystem
+     */
     public PlantCoralCommand(CoralSubsystem coralSubsystem) {
         this.coralSubsystem = coralSubsystem;
 
