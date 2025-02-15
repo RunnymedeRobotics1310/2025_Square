@@ -119,6 +119,9 @@ public class OperatorInput extends SubsystemBase {
         // Configure the controller buttons X (resting, above^),
         // Y (delivery), A (intake) for arm position
 
+        // FIXME: what are the units of position? Degrees?
+        // FIXME: add constants for the major arm positions and put the constants on these
+        // triggers/buttons
         new Trigger(() -> driverController.getYButton())
             .onTrue(new MoveArmToPosCommand(135, coralSubsystem));
 
