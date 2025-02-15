@@ -8,11 +8,11 @@ import frc.robot.subsystems.CoralSubsystem;
 public class DefaultCoralCommand extends LoggingCommand {
 
     private final CoralSubsystem coralSubsystem;
-    private final OperatorInput operatorInput;
+    private final OperatorInput  operatorInput;
 
     public DefaultCoralCommand(CoralSubsystem coralSubsystem, OperatorInput operatorInput) {
         this.coralSubsystem = coralSubsystem;
-        this.operatorInput = operatorInput;
+        this.operatorInput  = operatorInput;
 
         addRequirements(coralSubsystem);
     }
@@ -35,7 +35,8 @@ public class DefaultCoralCommand extends LoggingCommand {
         double armStick = operatorInput.getArmStick();
         if (Math.abs(armStick) > 0) {
             coralSubsystem.setArmSpeed(armStick * Constants.CoralConstants.ARM_TUNE_RATE);
-        } else {
+        }
+        else {
             coralSubsystem.setArmSpeed(0);
         }
 

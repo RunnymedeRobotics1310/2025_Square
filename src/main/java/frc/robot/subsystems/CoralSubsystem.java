@@ -1,5 +1,10 @@
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.CoralConstants.ElevatorHeight.LEVEL_1;
+import static frc.robot.Constants.CoralConstants.ElevatorHeight.LEVEL_2;
+import static frc.robot.Constants.CoralConstants.ElevatorHeight.LEVEL_3;
+import static frc.robot.Constants.CoralConstants.ElevatorHeight.LEVEL_4;
+
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
@@ -9,10 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CoralConstants;
-
-import static frc.robot.Constants.CoralConstants.*;
-import static frc.robot.Constants.CoralConstants.ElevatorHeight.*;
-
+import frc.robot.Constants.CoralConstants.ElevatorHeight;
 import frc.robot.Robot;
 
 public class CoralSubsystem extends SubsystemBase {
@@ -28,8 +30,8 @@ public class CoralSubsystem extends SubsystemBase {
 //        MotorType.kBrushless);
 
     private double elevatorSpeed = 0;
-    private double armSpeed = 0;
-    private double intakeSpeed = 0;
+    private double armSpeed      = 0;
+    private double intakeSpeed   = 0;
 
     // Elevator
 
@@ -54,22 +56,22 @@ public class CoralSubsystem extends SubsystemBase {
 
 
     // Simulation constants
-    private boolean isSimulation = false;
+    private boolean             isSimulation                        = false;
     // Elevator full speed up: the elevator will raise 60 inches in 2 seconds with a loop time of
     // 20ms.
-    private static final double ELEVATOR_MAX_UP_DISTANCE_PER_LOOP = 60 * .02 / 2;
+    private static final double ELEVATOR_MAX_UP_DISTANCE_PER_LOOP   = 60 * .02 / 2;
     // Elevator full speed down: the elevator will lower in 1.5 seconds.
     private static final double ELEVATOR_MAX_DOWN_DISTANCE_PER_LOOP = 60 * .02 / 1.5;
-    private double simulationElevatorHeight = 0;
+    private double              simulationElevatorHeight            = 0;
     // Arm full speed: the arm will raise 180 degrees in two secondsconds.
-    private static final double ARM_ANGLE_MAX_DEGREES_PER_LOOP = 180 * .02 / 2.0;
-    private double simulationArmAngle = 0;
+    private static final double ARM_ANGLE_MAX_DEGREES_PER_LOOP      = 180 * .02 / 2.0;
+    private double              simulationArmAngle                  = 0;
     // Intake detect time seconds.
-    private static final double INTAKE_DETECTION_TIME_SECONDS = 3;
-    private Timer simulationIntakeDetectTimer = new Timer();
-    private boolean simulationIntakeDetector = false;
-    private double simulationPreviousIntakeSpeed = 0;
-    private int simulationIntakeEncoder = 0;
+    private static final double INTAKE_DETECTION_TIME_SECONDS       = 3;
+    private Timer               simulationIntakeDetectTimer         = new Timer();
+    private boolean             simulationIntakeDetector            = false;
+    private double              simulationPreviousIntakeSpeed       = 0;
+    private int                 simulationIntakeEncoder             = 0;
 
 
     public CoralSubsystem(LightsSubsystem lightsSubsystem) {
@@ -159,23 +161,32 @@ public class CoralSubsystem extends SubsystemBase {
 
         if (isElevatorAtLowerLimit()) {
             return ElevatorHeight.LEVEL_0;
-        } else if (getElevatorEncoder() < LEVEL_1.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
+        }
+        else if (getElevatorEncoder() < LEVEL_1.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
             return ElevatorHeight.LEVEL_0_5;
-        } else if (getElevatorEncoder() < LEVEL_1.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
+        }
+        else if (getElevatorEncoder() < LEVEL_1.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
             return ElevatorHeight.LEVEL_1;
-        } else if (getElevatorEncoder() < LEVEL_2.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
+        }
+        else if (getElevatorEncoder() < LEVEL_2.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
             return ElevatorHeight.LEVEL_1_5;
-        } else if (getElevatorEncoder() < LEVEL_2.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
+        }
+        else if (getElevatorEncoder() < LEVEL_2.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
             return ElevatorHeight.LEVEL_2;
-        } else if (getElevatorEncoder() < LEVEL_3.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
+        }
+        else if (getElevatorEncoder() < LEVEL_3.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
             return ElevatorHeight.LEVEL_2_5;
-        } else if (getElevatorEncoder() < LEVEL_3.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
+        }
+        else if (getElevatorEncoder() < LEVEL_3.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
             return ElevatorHeight.LEVEL_3;
-        } else if (getElevatorEncoder() < LEVEL_4.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
+        }
+        else if (getElevatorEncoder() < LEVEL_4.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
             return ElevatorHeight.LEVEL_3_5;
-        } else if (getElevatorEncoder() < LEVEL_4.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
+        }
+        else if (getElevatorEncoder() < LEVEL_4.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
             return ElevatorHeight.LEVEL_4;
-        } else {
+        }
+        else {
             return ElevatorHeight.LEVEL_4_5;
         }
     }
@@ -185,7 +196,8 @@ public class CoralSubsystem extends SubsystemBase {
         if (isSimulation) {
             if (simulationElevatorHeight <= 0) {
                 return true;
-            } else {
+            }
+            else {
                 return false;
             }
         }
@@ -197,7 +209,8 @@ public class CoralSubsystem extends SubsystemBase {
         if (isSimulation) {
             if (simulationElevatorHeight >= 60) {
                 return true;
-            } else {
+            }
+            else {
                 return false;
             }
         }
@@ -336,7 +349,7 @@ public class CoralSubsystem extends SubsystemBase {
             simulationElevatorHeight += ELEVATOR_MAX_DOWN_DISTANCE_PER_LOOP * elevatorSpeed;
         }
 
-        simulationArmAngle += ARM_ANGLE_MAX_DEGREES_PER_LOOP * armSpeed;
+        simulationArmAngle      += ARM_ANGLE_MAX_DEGREES_PER_LOOP * armSpeed;
 
         simulationIntakeEncoder += intakeSpeed;
 
@@ -353,7 +366,8 @@ public class CoralSubsystem extends SubsystemBase {
                 simulationIntakeDetectTimer.reset();
                 simulationIntakeDetectTimer.stop();
             }
-        } else {
+        }
+        else {
             simulationIntakeDetectTimer.reset();
             simulationIntakeDetectTimer.stop();
         }
@@ -404,12 +418,12 @@ public class CoralSubsystem extends SubsystemBase {
         StringBuilder sb = new StringBuilder();
 
         sb.append(this.getClass().getSimpleName()).append(" : ")
-                .append("Elevator: speed ").append(elevatorSpeed)
-                .append(" height ").append(getElevatorEncoder()).append("in")
-                .append(",  Arm: speed ").append(armSpeed)
-                .append(" angle ").append(getArmPosition()).append(" deg")
-                .append(",  Intake: speed ").append(intakeSpeed)
-                .append(" coral detect: ").append(isCoralDetected());
+            .append("Elevator: speed ").append(elevatorSpeed)
+            .append(" height ").append(getElevatorEncoder()).append("in")
+            .append(",  Arm: speed ").append(armSpeed)
+            .append(" angle ").append(getArmPosition()).append(" deg")
+            .append(",  Intake: speed ").append(intakeSpeed)
+            .append(" coral detect: ").append(isCoralDetected());
 
         return sb.toString();
     }
