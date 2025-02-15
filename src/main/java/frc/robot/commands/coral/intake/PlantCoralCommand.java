@@ -10,7 +10,7 @@ import frc.robot.subsystems.CoralSubsystem;
 public class PlantCoralCommand extends LoggingCommand {
 
     private final CoralSubsystem coralSubsystem;
-    private double               intakeStartPos = 0;
+    private double intakeStartPos = 0;
 
     /**
      * Plant coral runs the intake motor for a set number of rotations.
@@ -37,13 +37,10 @@ public class PlantCoralCommand extends LoggingCommand {
 
     @Override
     public boolean isFinished() {
-        // ends the command after spinning the intake motor 10 times.
-        // FIXME: what is the direction convention for intake? (maybe use Math.abs() to look for a
-        // net change in encoder counts without worrying about the +/- convention of the direction).
+        // ends the command after spinning the intake motor PLANT_ROTATIONS times.
 
-        if (intakeStartPos + CoralConstants.PLANT_ROTATIONS < coralSubsystem.getIntakeEncoder()
-            && !coralSubsystem.isCoralDetected()) {
-
+        if (Math.abs(intakeStartPos - coralSubsystem.getIntakeEncoder()) <= CoralConstants.PLANT_ROTATIONS &&
+                !coralSubsystem.isCoralDetected()) {
             return true;
         }
 
