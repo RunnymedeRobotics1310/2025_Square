@@ -49,12 +49,11 @@ public class DefaultCoralCommand extends LoggingCommand {
         }
 
         // Intake commands
-
+        // FIXME: should one of these be the intake speed and one be the outtake speed?
         if (ejectButton) {
             coralSubsystem.setIntakeSpeed(CoralConstants.CORAL_INTAKE_SPEED);
         }
         else if (injectButton) {
-
             coralSubsystem.setIntakeSpeed(-CoralConstants.CORAL_INTAKE_SPEED);
         }
         // FIXME: This should stop if no buttons are pressed.

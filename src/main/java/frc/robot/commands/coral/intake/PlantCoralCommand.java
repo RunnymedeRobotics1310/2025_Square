@@ -37,7 +37,10 @@ public class PlantCoralCommand extends LoggingCommand {
 
     @Override
     public boolean isFinished() {
-        // ends the command after spinning the intake motor 10 times. Thi
+        // ends the command after spinning the intake motor 10 times.
+        // FIXME: what is the direction convention for intake? (maybe use Math.abs() to look for a
+        // net change in encoder counts without worrying about the +/- convention of the direction).
+
         if (intakeStartPos + CoralConstants.PLANT_ROTATIONS < coralSubsystem.getIntakeEncoder()
             && !coralSubsystem.isCoralDetected()) {
 

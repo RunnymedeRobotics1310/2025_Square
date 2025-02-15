@@ -6,7 +6,7 @@ import frc.robot.subsystems.CoralSubsystem;
 
 /**
  * Pulls in coral until it is fully inside the arm, then stops the wheels.
- * 
+ *
  * @param coralSubsystem
  */
 public class IntakeCoralCommand extends LoggingCommand {
@@ -35,8 +35,7 @@ public class IntakeCoralCommand extends LoggingCommand {
         if (coralSubsystem.isCoralDetected()) {
             // stop the motors when coral is detected
 
-            // FIXME: need to test whether this is true
-            // we may need to wait a few MS for the coral to be in the middle.
+            // FIXME: delay 0.25 seconds after the coral is detected.
             return true;
         }
         return false;
