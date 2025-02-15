@@ -78,6 +78,20 @@ public final class Constants {
             }
         }
 
+        // FIXME: what are the coral poses.
+        public enum CoralPose {
+
+            INTAKE(ElevatorHeight.LEVEL_0, ARM_POSITION_INTAKE);
+
+            public final ElevatorHeight elevatorHeight;
+            public final double         armPosition;
+
+            CoralPose(ElevatorHeight elevatorHeight, double armPosition) {
+                this.elevatorHeight = elevatorHeight;
+                this.armPosition    = armPosition;
+            }
+        }
+
         public static final double  ELEVATOR_TOLERANCE             = 2.5;
         public static final double  ELEVATOR_P                     = 0.05;
 
