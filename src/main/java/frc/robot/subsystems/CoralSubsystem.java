@@ -275,6 +275,11 @@ public class CoralSubsystem extends SubsystemBase {
 
     public boolean moveArmToPosition(double targetPosition) {
         double currentPosition = getArmPosition();
+        // FIXME: In PIDS, what is called the positionOffset here
+        // would be called the error.  positionError  
+        // Error = Setpoint - Current
+        // The idea of a PID is to drive the error to zero.
+        
         double positionOffset =  targetPosition - currentPosition;
         double desiredArmSpeed = CoralConstants.ARM_FAST_SPEED;
 
