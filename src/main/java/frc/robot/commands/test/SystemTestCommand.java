@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OperatorInput;
 import frc.robot.commands.GameController;
 import frc.robot.commands.LoggingCommand;
-import frc.robot.subsystems.coral.CoralSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 
 public class SystemTestCommand extends LoggingCommand {
 

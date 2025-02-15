@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.coral.DefaultCoralCommand;
-import frc.robot.subsystems.coral.CoralSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.LightsSubsystem;
 
 /**

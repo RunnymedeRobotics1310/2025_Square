@@ -2,7 +2,7 @@ package frc.robot.commands.coral.intake;
 
 import frc.robot.Constants.CoralConstants;
 import frc.robot.commands.LoggingCommand;
-import frc.robot.subsystems.coral.CoralSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 
 /**
  * Pushes coral out of the arm, then stops the wheels when the coral is gone.

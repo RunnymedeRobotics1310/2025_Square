@@ -19,7 +19,7 @@ import frc.robot.commands.coral.intake.InjectCoralCommand;
 import frc.robot.commands.coral.intake.IntakeCoralCommand;
 import frc.robot.commands.coral.intake.PlantCoralCommand;
 import frc.robot.commands.test.SystemTestCommand;
-import frc.robot.subsystems.coral.CoralSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 
 /**
  * The DriverController exposes all driver functions

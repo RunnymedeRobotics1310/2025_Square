@@ -1,7 +1,7 @@
 package frc.robot.commands.coral.arm;
 
 import frc.robot.commands.LoggingCommand;
-import frc.robot.subsystems.coral.CoralSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 
 public class MoveArmToPosCommand extends LoggingCommand {
 

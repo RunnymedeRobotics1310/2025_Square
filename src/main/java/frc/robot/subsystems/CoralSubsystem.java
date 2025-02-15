@@ -1,4 +1,4 @@
-package frc.robot.subsystems.coral;
+package frc.robot.subsystems;
 
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -14,7 +14,6 @@ import static frc.robot.Constants.CoralConstants.*;
 import static frc.robot.Constants.CoralConstants.ElevatorHeight.*;
 
 import frc.robot.Robot;
-import frc.robot.subsystems.LightsSubsystem;
 
 public class CoralSubsystem extends SubsystemBase {
 

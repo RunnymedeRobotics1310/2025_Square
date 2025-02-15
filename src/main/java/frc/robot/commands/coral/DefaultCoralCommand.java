@@ -3,7 +3,7 @@ package frc.robot.commands.coral;
 import frc.robot.Constants;
 import frc.robot.OperatorInput;
 import frc.robot.commands.LoggingCommand;
-import frc.robot.subsystems.coral.CoralSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 
 public class DefaultCoralCommand extends LoggingCommand {
 
