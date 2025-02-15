@@ -107,7 +107,7 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> driverController.getXButton())
             .onTrue(new SequentialCommandGroup(
-                new MoveArmToPosCommand(0, coralSubsystem),
+                new MoveArmToPosCommand(Constants.CoralConstants.ARM_POSITION_COMPACT, coralSubsystem),
                 new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_0)));
 
 
@@ -117,14 +117,13 @@ public class OperatorInput extends SubsystemBase {
         // Configure the controller buttons X (resting, above^),
         // Y (delivery), A (intake) for arm position
 
-        // FIXME: what are the units of position? Degrees?
-        // FIXME: add constants for the major arm positions and put the constants on these
+
         // triggers/buttons
         new Trigger(() -> driverController.getYButton())
-            .onTrue(new MoveArmToPosCommand(135, coralSubsystem));
+            .onTrue(new MoveArmToPosCommand(Constants.CoralConstants.ARM_POSITION_LEVEL_2, coralSubsystem));
 
         new Trigger(() -> driverController.getAButton())
-            .onTrue(new MoveArmToPosCommand(135, coralSubsystem));
+            .onTrue(new MoveArmToPosCommand(Constants.CoralConstants.ARM_POSITION_INTAKE, coralSubsystem));
 
         /*
          * Coral Intake Buttons
