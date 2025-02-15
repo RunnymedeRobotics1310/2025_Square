@@ -29,7 +29,7 @@ public class MoveElevatorToHeightCommand extends LoggingCommand {
 
     @Override
     public boolean isFinished() {
-        return coralSubsystem.getElevatorHeight() == elevatorHeight;
+        return coralSubsystem.isAtElevatorHeight(elevatorHeight);
     }
 
     @Override

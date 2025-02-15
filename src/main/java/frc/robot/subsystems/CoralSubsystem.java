@@ -148,7 +148,7 @@ public class CoralSubsystem extends SubsystemBase {
 
     public boolean setElevatorHeight(ElevatorHeight targetHeight) {
 
-        if ((getElevatorHeight().compareTo(targetHeight)) == 0) {
+        if (isAtElevatorHeight(targetHeight)) {
             setElevatorSpeed(0);
             return true;
         }
@@ -159,29 +159,10 @@ public class CoralSubsystem extends SubsystemBase {
         return false;
     }
 
-    public ElevatorHeight getElevatorHeight() {
+    public boolean isAtElevatorHeight(ElevatorHeight height) {
 
-        if (isElevatorAtLowerLimit()) {
-            return ElevatorHeight.LEVEL_0;
-        } else if (getElevatorEncoder() < LEVEL_1.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_0_5;
-        } else if (getElevatorEncoder() < LEVEL_1.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_1;
-        } else if (getElevatorEncoder() < LEVEL_2.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_1_5;
-        } else if (getElevatorEncoder() < LEVEL_2.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_2;
-        } else if (getElevatorEncoder() < LEVEL_3.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_2_5;
-        } else if (getElevatorEncoder() < LEVEL_3.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_3;
-        } else if (getElevatorEncoder() < LEVEL_4.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_3_5;
-        } else if (getElevatorEncoder() < LEVEL_4.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_4;
-        } else {
-            return ElevatorHeight.LEVEL_4_5;
-        }
+        return (Math.abs(height.encoderCount - getElevatorEncoder()) <= CoralConstants.ELEVATOR_TOLERANCE);
+
     }
 
     public boolean isElevatorAtLowerLimit() {
@@ -333,7 +314,7 @@ public class CoralSubsystem extends SubsystemBase {
         checkSafety();
 
         // FIXME: Add a call to the lights subsystem to show the current speed
-        lightsSubsystem.setElevatorHeight(getElevatorHeight());
+        lightsSubsystem.setElevatorHeight(getElevatorEncoder());
         lightsSubsystem.setArmPosition(getArmPosition());
 
         SmartDashboard.putNumber("Coral/Elevator Speed", elevatorSpeed);

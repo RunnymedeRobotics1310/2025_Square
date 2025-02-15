@@ -108,7 +108,7 @@ public class OperatorInput extends SubsystemBase {
         new Trigger(() -> driverController.getXButton())
                 .onTrue(new SequentialCommandGroup(
                         new MoveArmToPosCommand(0, coralSubsystem),
-                        new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_0)));
+                        new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.COPACT)));
 
 
         /*

@@ -62,16 +62,14 @@ public final class Constants {
     public static final class CoralConstants {
 
         public enum ElevatorHeight {
-            LEVEL_0(0),
-            LEVEL_0_5(-1), // Transit phase, no encoder count
+            COPACT(0),
+            INTAKE(0),
             LEVEL_1(5),
-            LEVEL_1_5(-1), // Transit phase, no encoder count
             LEVEL_2(10),
-            LEVEL_2_5(-1), // Transit phase, no encoder count
             LEVEL_3(15),
-            LEVEL_3_5(-1), // Transit phase, no encoder count
             LEVEL_4(20),
-            LEVEL_4_5(-1); // Transit phase, no encoder count
+            REMOVE_LOW_ALGAE(12),
+            REMOVE_HIGH_ALGAE(17);
 
             public final double encoderCount;
 
@@ -82,13 +80,14 @@ public final class Constants {
 
         public enum CoralPose {
 
-            COMPACT(ElevatorHeight.LEVEL_0, ARM_POSITION_COMPACT),
-            INTAKE(ElevatorHeight.LEVEL_0, ARM_POSITION_INTAKE),
+            COMPACT(ElevatorHeight.COPACT, ARM_POSITION_COMPACT),
+            INTAKE(ElevatorHeight.INTAKE, ARM_POSITION_INTAKE),
             SCORE_L1(ElevatorHeight.LEVEL_1, ARM_POSITION_LEVEL_1),
             SCORE_L2(ElevatorHeight.LEVEL_2, ARM_POSITION_LEVEL_2),
             SCORE_L3(ElevatorHeight.LEVEL_3, ARM_POSITION_LEVEL_3),
             SCORE_L4(ElevatorHeight.LEVEL_4, ARM_POSITION_LEVEL_4),
-            REMOVE_ALGAE(ElevatorHeight.LEVEL_3, ARM_POSITION_REMOVE_ALGAE);
+            REMOVE_LOW_ALGAE(ElevatorHeight.REMOVE_LOW_ALGAE, ARM_POSITION_REMOVE_ALGAE),
+            REMOVE_HIGH_ALGAE(ElevatorHeight.REMOVE_HIGH_ALGAE, ARM_POSITION_REMOVE_ALGAE);
 
             public final ElevatorHeight elevatorHeight;
             public final double armPosition;
@@ -105,6 +104,7 @@ public final class Constants {
         // placeholder value for speed of elevator
         public static final double ELEVATOR_MAX_SPEED = 0.5;
         public static final double ELEVATOR_TUNE_MAX_SPEED = 0.1;
+        public static final double ELEVATOR_MAX_HEIGHT = 25;
 
         // placeholder value for speed of elevator
         public static final double ELEVATOR_SPEED = 0.5;
