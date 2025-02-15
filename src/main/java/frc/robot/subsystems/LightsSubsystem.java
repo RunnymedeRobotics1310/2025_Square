@@ -9,27 +9,28 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.CoralConstants.ElevatorHeight;
 import frc.robot.Constants.LightsConstants;
 import frc.robot.Robot;
 
 public class LightsSubsystem extends SubsystemBase {
 
-    private final AddressableLED              ledString           = new AddressableLED(LightsConstants.LED_STRING_PWM_PORT);
-    private final AddressableLEDBuffer        ledBuffer           = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
+    private final AddressableLED ledString = new AddressableLED(LightsConstants.LED_STRING_PWM_PORT);
+    private final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
 
-    private final AddressableLEDBufferView    coralArmBuffer      = new AddressableLEDBufferView(ledBuffer, 1, 10);
-    private final AddressableLEDBufferView    coralElevatorBuffer = new AddressableLEDBufferView(ledBuffer, 11, 20);
-    private final AddressableLEDBufferView    coralIntakeBuffer   = new AddressableLEDBufferView(ledBuffer, 21, 23);
+    private final AddressableLEDBufferView coralArmBuffer = new AddressableLEDBufferView(ledBuffer, 1, 10);
+    private final AddressableLEDBufferView coralElevatorBuffer = new AddressableLEDBufferView(ledBuffer, 11, 20);
+    private final AddressableLEDBufferView coralIntakeBuffer = new AddressableLEDBufferView(ledBuffer, 21, 23);
 
     // RSL Flash
-    private static final Color                RSL_COLOR           = new Color(255, 20, 0);
-    private static final AddressableLEDBuffer RSL_ON              = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
-    private static final AddressableLEDBuffer RSL_OFF             = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
-    private Timer                             simRslTimer         = new Timer();
-    private boolean                           simRslState         = false;
-    private int                               rslFlashCount       = -1;
-    private boolean                           previousRslState    = false;
+    private static final Color RSL_COLOR = new Color(255, 20, 0);
+    private static final AddressableLEDBuffer RSL_ON = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
+    private static final AddressableLEDBuffer RSL_OFF = new AddressableLEDBuffer(LightsConstants.LED_STRING_LENGTH);
+    private Timer simRslTimer = new Timer();
+    private boolean simRslState = false;
+    private int rslFlashCount = -1;
+    private boolean previousRslState = false;
 
     public LightsSubsystem() {
 
@@ -42,11 +43,12 @@ public class LightsSubsystem extends SubsystemBase {
         ledString.start();
     }
 
-    public void setElevatorHeight(ElevatorHeight elevatorHeight) {
+    public void setElevatorHeight(double elevatorHeight) {
 
         LEDPattern.kOff.applyTo(coralElevatorBuffer);
 
-        int lightCount = Math.min(elevatorHeight.ordinal(), coralElevatorBuffer.getLength() - 1);
+        // light percentage of lights based on encoders
+        int lightCount = (int) (elevatorHeight / Constants.CoralConstants.ELEVATOR_MAX_HEIGHT * coralElevatorBuffer.getLength());
 
         // light at least one light
         if (lightCount == 0) {
@@ -63,8 +65,8 @@ public class LightsSubsystem extends SubsystemBase {
         LEDPattern.kOff.applyTo(coralArmBuffer);
 
         int lightCount = Math.min(
-            (int) (armAngle / 135 * coralArmBuffer.getLength()),
-            coralArmBuffer.getLength() - 1);
+                (int) (armAngle / 135 * coralArmBuffer.getLength()),
+                coralArmBuffer.getLength() - 1);
 
         // Light at least one light
         if (lightCount == 0) {
@@ -85,8 +87,7 @@ public class LightsSubsystem extends SubsystemBase {
 
         if (rslFlashCount > 0) {
             flashRSL();
-        }
-        else {
+        } else {
 
             // Update the LEDs on the corners to flash the RSL color
             if (getRSLState()) {
@@ -94,8 +95,7 @@ public class LightsSubsystem extends SubsystemBase {
                 ledBuffer.setLED(29, RSL_COLOR);
                 ledBuffer.setLED(30, RSL_COLOR);
                 ledBuffer.setLED(59, RSL_COLOR);
-            }
-            else {
+            } else {
                 ledBuffer.setLED(0, Color.kBlack);
                 ledBuffer.setLED(29, Color.kBlack);
                 ledBuffer.setLED(30, Color.kBlack);
@@ -117,8 +117,7 @@ public class LightsSubsystem extends SubsystemBase {
                 simRslState = !simRslState; // toggle the state ever .5 sec
                 simRslTimer.restart();
             }
-        }
-        else {
+        } else {
             // Solid on when not enabled
             simRslState = true;
         }
@@ -148,8 +147,7 @@ public class LightsSubsystem extends SubsystemBase {
 
         if (rslState) {
             ledString.setData(RSL_ON);
-        }
-        else {
+        } else {
             ledString.setData(RSL_OFF);
         }
     }
