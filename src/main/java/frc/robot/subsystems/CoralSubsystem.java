@@ -5,6 +5,14 @@ import static frc.robot.Constants.CoralConstants.ElevatorHeight.LEVEL_2;
 import static frc.robot.Constants.CoralConstants.ElevatorHeight.LEVEL_3;
 import static frc.robot.Constants.CoralConstants.ElevatorHeight.LEVEL_4;
 
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLimitSwitch;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
@@ -39,59 +47,59 @@ public class CoralSubsystem extends SubsystemBase {
     private final LightsSubsystem lightsSubsystem;
 
     // Coral Subsystem Motors
-//    private final SparkFlex       elevatorMotor                       = new SparkFlex(CoralConstants.ELEVATOR_MOTOR_CAN_ID,
-//        MotorType.kBrushed);
-//    private final SparkMax        armMotor                            = new SparkMax(CoralConstants.ARM_MOTOR_CAN_ID,
-//        MotorType.kBrushless);
-//    private final SparkMax        intakeMotor                         = new SparkMax(CoralConstants.INTAKE_MOTOR_CAN_ID,
-//        MotorType.kBrushless);
+    private final SparkFlex       elevatorMotor                       = new SparkFlex(CoralConstants.ELEVATOR_MOTOR_CAN_ID,
+        MotorType.kBrushed);
+    private final SparkMax        armMotor                            = new SparkMax(CoralConstants.ARM_MOTOR_CAN_ID,
+        MotorType.kBrushless);
+    private final SparkMax        intakeMotor                         = new SparkMax(CoralConstants.INTAKE_MOTOR_CAN_ID,
+        MotorType.kBrushless);
 
-    private double elevatorSpeed = 0;
-    private double armSpeed      = 0;
-    private double intakeSpeed   = 0;
+    private double                elevatorSpeed                       = 0;
+    private double                armSpeed                            = 0;
+    private double                intakeSpeed                         = 0;
 
     // Elevator
 
-//    private RelativeEncoder       elevatorEncoder                     = elevatorMotor.getEncoder();
-//
-//    private SparkLimitSwitch      elevatorLowerLimitSwitch            = elevatorMotor.getReverseLimitSwitch();
-//    private SparkLimitSwitch      elevatorUpperLimitSwitch            = elevatorMotor.getForwardLimitSwitch();
+    private RelativeEncoder       elevatorEncoder                     = elevatorMotor.getEncoder();
 
-    private double elevatorEncoderOffset = 0;
+    private SparkLimitSwitch      elevatorLowerLimitSwitch            = elevatorMotor.getReverseLimitSwitch();
+    private SparkLimitSwitch      elevatorUpperLimitSwitch            = elevatorMotor.getForwardLimitSwitch();
+
+    private double                elevatorEncoderOffset               = 0;
 
     // Arm
 
-//    private RelativeEncoder       armEncoder                          = armMotor.getEncoder();
-//    private SparkAbsoluteEncoder  armAngleEncoder                     = armMotor.getAbsoluteEncoder();
+    private RelativeEncoder       armEncoder                          = armMotor.getEncoder();
+    private SparkAbsoluteEncoder  armAngleEncoder                     = armMotor.getAbsoluteEncoder();
 
-    private double armEncoderOffset = 0;
+    private double                armEncoderOffset                    = 0;
 
     // Intake
 
-//    private RelativeEncoder       intakeEncoder                       = intakeMotor.getEncoder();
-//
-//    private SparkLimitSwitch      intakeCoralDetector                 = intakeMotor.getForwardLimitSwitch();
+    private RelativeEncoder       intakeEncoder                       = intakeMotor.getEncoder();
+
+    private SparkLimitSwitch      intakeCoralDetector                 = intakeMotor.getForwardLimitSwitch();
 
     // Sensor Cache
-    private final SensorCache   sensorCache                         = new SensorCache();
+    private final SensorCache     sensorCache                         = new SensorCache();
 
     // Simulation constants
-    private boolean             isSimulation                        = false;
+    private boolean               isSimulation                        = false;
     // Elevator full speed up: the elevator will raise 60 inches in 2 seconds with a loop time of
     // 20ms.
-    private static final double ELEVATOR_MAX_UP_DISTANCE_PER_LOOP   = 60 * .02 / 2;
+    private static final double   ELEVATOR_MAX_UP_DISTANCE_PER_LOOP   = 60 * .02 / 2;
     // Elevator full speed down: the elevator will lower in 1.5 seconds.
-    private static final double ELEVATOR_MAX_DOWN_DISTANCE_PER_LOOP = 60 * .02 / 1.5;
-    private double              simulationElevatorHeight            = 0;
+    private static final double   ELEVATOR_MAX_DOWN_DISTANCE_PER_LOOP = 60 * .02 / 1.5;
+    private double                simulationElevatorHeight            = 0;
     // Arm full speed: the arm will raise 180 degrees in two secondsconds.
-    private static final double ARM_ANGLE_MAX_DEGREES_PER_LOOP      = 180 * .02 / 2.0;
-    private double              simulationArmAngle                  = 0;
+    private static final double   ARM_ANGLE_MAX_DEGREES_PER_LOOP      = 180 * .02 / 2.0;
+    private double                simulationArmAngle                  = 0;
     // Intake detect time seconds.
-    private static final double INTAKE_DETECTION_TIME_SECONDS       = 3;
-    private Timer               simulationIntakeDetectTimer         = new Timer();
-    private boolean             simulationIntakeDetector            = false;
-    private double              simulationPreviousIntakeSpeed       = 0;
-    private int                 simulationIntakeEncoder             = 0;
+    private static final double   INTAKE_DETECTION_TIME_SECONDS       = 3;
+    private Timer                 simulationIntakeDetectTimer         = new Timer();
+    private boolean               simulationIntakeDetector            = false;
+    private double                simulationPreviousIntakeSpeed       = 0;
+    private int                   simulationIntakeEncoder             = 0;
 
 
     public CoralSubsystem(LightsSubsystem lightsSubsystem) {
@@ -114,9 +122,9 @@ public class CoralSubsystem extends SubsystemBase {
         flexConfig.limitSwitch.reverseLimitSwitchEnabled(false);
         flexConfig.limitSwitch.reverseLimitSwitchType(Type.kNormallyOpen);
 
-//        elevatorMotor.configure(flexConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-//
-//        elevatorEncoder.setPosition(0);
+        elevatorMotor.configure(flexConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        elevatorEncoder.setPosition(0);
 
         /*
          * Arm Motor Config
@@ -129,7 +137,7 @@ public class CoralSubsystem extends SubsystemBase {
 
         sparkMaxConfig.absoluteEncoder.inverted(CoralConstants.ARM_POSITION_ENCODER_INVERTED);
 
-//        armMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        armMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         /*
          * Intake Motor Config
@@ -143,7 +151,7 @@ public class CoralSubsystem extends SubsystemBase {
         sparkMaxConfig.limitSwitch.forwardLimitSwitchEnabled(false);
         sparkMaxConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyOpen);
 
-//        intakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        intakeMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         /*
          * Simulation
@@ -162,33 +170,33 @@ public class CoralSubsystem extends SubsystemBase {
      */
     public void updateSensorCache() {
 
-//        /*
-//         * Elevator
-//         */
-//        sensorCache.elevatorEncoderSpeed      = elevatorEncoder.getVelocity();
-//        sensorCache.elevatorEncoderPosition   = elevatorEncoder.getPosition();
-//
-//        sensorCache.elevatorLowerLimitReached = elevatorLowerLimitSwitch.isPressed();
-//        sensorCache.elevatorUpperLimitReached = elevatorUpperLimitSwitch.isPressed();
-//
-//        /*
-//         * Arm
-//         */
-//        sensorCache.armEncoderSpeed           = armEncoder.getVelocity();
-//        sensorCache.armEncoderAngle           = armAngleEncoder.getPosition();
-//
-//        /*
-//         * Intake
-//         */
-//        sensorCache.intakeEncoderPosition     = intakeEncoder.getPosition();
-//        sensorCache.intakeEncoderSpeed        = intakeEncoder.getVelocity();
-//        sensorCache.coralDetected             = intakeCoralDetector.isPressed();
+        /*
+         * Elevator
+         */
+        sensorCache.elevatorEncoderSpeed      = elevatorEncoder.getVelocity();
+        sensorCache.elevatorEncoderPosition   = elevatorEncoder.getPosition();
+
+        sensorCache.elevatorLowerLimitReached = elevatorLowerLimitSwitch.isPressed();
+        sensorCache.elevatorUpperLimitReached = elevatorUpperLimitSwitch.isPressed();
+
+        /*
+         * Arm
+         */
+        sensorCache.armEncoderSpeed           = armEncoder.getVelocity();
+        sensorCache.armEncoderAngle           = armAngleEncoder.getPosition();
+
+        /*
+         * Intake
+         */
+        sensorCache.intakeEncoderPosition     = intakeEncoder.getPosition();
+        sensorCache.intakeEncoderSpeed        = intakeEncoder.getVelocity();
+        sensorCache.coralDetected             = intakeCoralDetector.isPressed();
 
     }
+
     /*
      * Elevator Routines
      */
-
     public void setElevatorSpeed(double speed) {
 
         this.elevatorSpeed = speed;
@@ -466,7 +474,7 @@ public class CoralSubsystem extends SubsystemBase {
             if (elevatorSpeed < 0) {
                 elevatorSpeed = 0;
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                // elevatorMotor.set(ControlMode.PercentOutput, 0);
+                elevatorMotor.set(0);
                 resetElevatorEncoder();
             }
         }
@@ -475,7 +483,7 @@ public class CoralSubsystem extends SubsystemBase {
             if (elevatorSpeed > 0) {
                 elevatorSpeed = 0;
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                // elevatorMotor.set(ControlMode.PercentOutput, 0);
+                elevatorMotor.set(0);
             }
         }
         else { // Elevator is not at a limit
@@ -484,7 +492,7 @@ public class CoralSubsystem extends SubsystemBase {
             if (Math.abs(elevatorSpeed) > CoralConstants.ELEVATOR_MAX_SPEED) {
                 elevatorSpeed = CoralConstants.ELEVATOR_MAX_SPEED * Math.signum(elevatorSpeed);
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                // elevatorMotor.set(ControlMode.PercentOutput, elevatorSpeed);
+                elevatorMotor.set(elevatorSpeed);
             }
         }
 
@@ -496,18 +504,16 @@ public class CoralSubsystem extends SubsystemBase {
 
             if (armSpeed < 0) {
                 armSpeed = 0;
-
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                // armMotor.set(ControlMode.PercentOutput, 0);
+                armMotor.set(0);
             }
         }
-
-        if (isArmAtUpperLimit()) {
+        else if (isArmAtUpperLimit()) {
 
             if (armSpeed > 0) {
                 armSpeed = 0;
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                // armMotor.set(ControlMode.PercentOutput, 0);
+                armMotor.set(0);
             }
         }
     }
