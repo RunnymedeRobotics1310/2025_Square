@@ -153,12 +153,16 @@ public class CoralSubsystem extends SubsystemBase {
             return true;
         }
 
-        double error = targetHeight.encoderCount - getElevatorEncoder();
-        // FIXME: There should be some maximum speed
-        // A pid calculation can set the motor to full speed if the error is large enough.
-        setElevatorSpeed(error * CoralConstants.ELEVATOR_P * CoralConstants.ELEVATOR_MAX_SPEED);
+        double error         = targetHeight.encoderCount - getElevatorEncoder();
 
-        return false;
+        double elevatorSpeed = error * CoralConstants.ELEVATOR_P;
+
+        // Limit to the max elevator speed
+        elevatorSpeed = Math.min(CoralConstants.ELEVATOR_MAX_SPEED, Math.abs(elevatorSpeed)) * Math.signum(elevatorSpeed);
+
+        setElevatorSpeed(elevatorSpeed);
+
+        return getElevatorHeight() == targetHeight;
     }
 
     public ElevatorHeight getElevatorHeight() {
@@ -405,6 +409,9 @@ public class CoralSubsystem extends SubsystemBase {
     }
 
     private void checkSafety() {
+
+        // Limit the elevator speed
+        elevatorSpeed = Math.min(elevatorSpeed, CoralConstants.ELEVATOR_MAX_SPEED) * Math.signum(elevatorSpeed);
 
         if (isElevatorAtLowerLimit()) {
 

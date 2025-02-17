@@ -82,7 +82,7 @@ public final class Constants {
         public static final double  ELEVATOR_P                     = 0.05;
 
         // placeholder value for speed of elevator
-        public static final double  ELEVATOR_MAX_SPEED             = 0.5;
+        public static final double  ELEVATOR_MAX_SPEED             = 0.3;
         public static final double  ELEVATOR_TUNE_MAX_SPEED        = 0.1;
 
         // placeholder value for speed of elevator
