@@ -112,7 +112,7 @@ public final class Constants {
 
         public static final double  ARM_FAST_SPEED                 = 0.5;
         public static final double  ARM_SLOW_SPEED                 = 0.2;
-        public static final double  ARM_TOLERANCE                  = 1.5;
+        public static final double  ARM_ANGLE_TOLERANCE                  = 1.5;
         public static final double  ARM_SLOW_ZONE_THRESHOLD        = 20;
 
 

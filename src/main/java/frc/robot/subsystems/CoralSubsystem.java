@@ -19,9 +19,26 @@ import frc.robot.Robot;
 
 public class CoralSubsystem extends SubsystemBase {
 
+    private class SensorCache {
+
+        double  elevatorEncoderSpeed      = 0;
+        double  elevatorEncoderPosition   = 0;
+
+        boolean elevatorUpperLimitReached = false;
+        boolean elevatorLowerLimitReached = false;
+
+        double  armEncoderSpeed           = 0;
+        double  armEncoderAngle           = 0;
+
+        double  intakeEncoderSpeed        = 0;
+        double  intakeEncoderPosition     = 0;
+
+        boolean coralDetected             = false;
+    }
+
     private final LightsSubsystem lightsSubsystem;
 
-//    // Coral Subsystem Motors
+    // Coral Subsystem Motors
 //    private final SparkFlex       elevatorMotor                       = new SparkFlex(CoralConstants.ELEVATOR_MOTOR_CAN_ID,
 //        MotorType.kBrushed);
 //    private final SparkMax        armMotor                            = new SparkMax(CoralConstants.ARM_MOTOR_CAN_ID,
@@ -44,16 +61,19 @@ public class CoralSubsystem extends SubsystemBase {
 
     // Arm
 
-//    private SparkAbsoluteEncoder  armPositionEncoder                  = armMotor.getAbsoluteEncoder();
+//    private RelativeEncoder       armEncoder                          = armMotor.getEncoder();
+//    private SparkAbsoluteEncoder  armAngleEncoder                     = armMotor.getAbsoluteEncoder();
 
     private double armEncoderOffset = 0;
 
     // Intake
 
-//  private RelativeEncoder       intakeEncoder                     = intakeMotor.getEncoder();
+//    private RelativeEncoder       intakeEncoder                       = intakeMotor.getEncoder();
 //
 //    private SparkLimitSwitch      intakeCoralDetector                 = intakeMotor.getForwardLimitSwitch();
 
+    // Sensor Cache
+    private final SensorCache   sensorCache                         = new SensorCache();
 
     // Simulation constants
     private boolean             isSimulation                        = false;
@@ -134,6 +154,38 @@ public class CoralSubsystem extends SubsystemBase {
     }
 
     /*
+     * Sensor Cache
+     *
+     * A sensor cache is used to avoid reading sensors multiple times in a loop.
+     * The sensors are read once at the beginning of each loop and cache can be used
+     * by the subsystem and the co
+     */
+    public void updateSensorCache() {
+
+//        /*
+//         * Elevator
+//         */
+//        sensorCache.elevatorEncoderSpeed      = elevatorEncoder.getVelocity();
+//        sensorCache.elevatorEncoderPosition   = elevatorEncoder.getPosition();
+//
+//        sensorCache.elevatorLowerLimitReached = elevatorLowerLimitSwitch.isPressed();
+//        sensorCache.elevatorUpperLimitReached = elevatorUpperLimitSwitch.isPressed();
+//
+//        /*
+//         * Arm
+//         */
+//        sensorCache.armEncoderSpeed           = armEncoder.getVelocity();
+//        sensorCache.armEncoderAngle           = armAngleEncoder.getPosition();
+//
+//        /*
+//         * Intake
+//         */
+//        sensorCache.intakeEncoderPosition     = intakeEncoder.getPosition();
+//        sensorCache.intakeEncoderSpeed        = intakeEncoder.getVelocity();
+//        sensorCache.coralDetected             = intakeCoralDetector.isPressed();
+
+    }
+    /*
      * Elevator Routines
      */
 
@@ -209,7 +261,7 @@ public class CoralSubsystem extends SubsystemBase {
                 return false;
             }
         }
-        return false;// elevatorLowerLimitSwitch.isPressed();
+        return sensorCache.elevatorLowerLimitReached;
     }
 
     public boolean isElevatorAtUpperLimit() {
@@ -222,7 +274,7 @@ public class CoralSubsystem extends SubsystemBase {
                 return false;
             }
         }
-        return false; // elevatorUpperLimitSwitch.isPressed();
+        return sensorCache.elevatorUpperLimitReached;
     }
 
     public double getElevatorEncoder() {
@@ -230,7 +282,7 @@ public class CoralSubsystem extends SubsystemBase {
         if (isSimulation) {
             return simulationElevatorHeight + elevatorEncoderOffset;
         }
-        return 0; // elevatorEncoder.getPosition() + elevatorEncoderOffset;
+        return sensorCache.elevatorEncoderPosition;
     }
 
     public void resetElevatorEncoder() {
@@ -254,21 +306,21 @@ public class CoralSubsystem extends SubsystemBase {
 
     public boolean isArmAtLowerLimit() {
 
-        return getArmPosition() <= CoralConstants.ARM_LOWER_LIMIT_POSITION;
+        return getArmAngle() <= CoralConstants.ARM_LOWER_LIMIT_POSITION;
     }
 
     public boolean isArmAtUpperLimit() {
 
-        return getArmPosition() >= CoralConstants.ARM_UPPER_LIMIT_POSITION;
+        return getArmAngle() >= CoralConstants.ARM_UPPER_LIMIT_POSITION;
     }
 
-    public double getArmPosition() {
+    public double getArmAngle() {
 
         if (isSimulation) {
             return simulationArmAngle + armEncoderOffset;
         }
 
-        return 0; // armPositionEncoder.getPosition() + armEncoderOffset;
+        return sensorCache.armEncoderAngle;
     }
 
     public void resetArmEncoder() {
@@ -277,30 +329,31 @@ public class CoralSubsystem extends SubsystemBase {
 
     public void setArmEncoderPostion(double encoderValue) {
         armEncoderOffset = 0;
-        armEncoderOffset = -getArmPosition() + encoderValue;
+        armEncoderOffset = -getArmAngle() + encoderValue;
 
     }
 
-    public boolean moveArmToPosition(double targetPosition) {
-        double currentPosition = getArmPosition();
+    public boolean moveArmToAngle(double targetAngle) {
+
+        double currentAngle    = getArmAngle();
         // FIXME: In PIDS, what is called the positionOffset here
         // would be called the error. positionError
         // Error = Setpoint - Current
         // The idea of a PID is to drive the error to zero.
 
-        double positionOffset  = targetPosition - currentPosition;
+        double angleError      = targetAngle - currentAngle;
         double desiredArmSpeed = CoralConstants.ARM_FAST_SPEED;
 
-        if (Math.abs(positionOffset) < CoralConstants.ARM_TOLERANCE) {
+        if (Math.abs(angleError) < CoralConstants.ARM_ANGLE_TOLERANCE) {
             armSpeed = 0;
             return true;
         }
 
-        if (Math.abs(positionOffset) < CoralConstants.ARM_SLOW_ZONE_THRESHOLD) {
+        if (Math.abs(angleError) < CoralConstants.ARM_SLOW_ZONE_THRESHOLD) {
             desiredArmSpeed = CoralConstants.ARM_SLOW_SPEED;
         }
 
-        if (positionOffset < 0) {
+        if (angleError < 0) {
             desiredArmSpeed = -desiredArmSpeed;
         }
 
@@ -323,7 +376,7 @@ public class CoralSubsystem extends SubsystemBase {
         if (isSimulation) {
             return simulationIntakeDetector;
         }
-        return false; // intakeCoralDetector.isPressed();
+        return sensorCache.coralDetected;
     }
 
     public double getIntakeEncoder() {
@@ -332,7 +385,7 @@ public class CoralSubsystem extends SubsystemBase {
             return simulationIntakeEncoder;
         }
 
-        return 0; // intakeEncoder.getPosition();
+        return sensorCache.intakeEncoderPosition;
     }
 
     public void stop() {
@@ -348,6 +401,8 @@ public class CoralSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
+        updateSensorCache();
+
         // FIXME: replace the simulation when the robot is ready.
         simulate();
 
@@ -355,7 +410,7 @@ public class CoralSubsystem extends SubsystemBase {
 
         // FIXME: Add a call to the lights subsystem to show the current speed
         lightsSubsystem.setElevatorHeight(getElevatorHeight());
-        lightsSubsystem.setArmPosition(getArmPosition());
+        lightsSubsystem.setArmPosition(getArmAngle());
 
         SmartDashboard.putNumber("Coral/Elevator Speed", elevatorSpeed);
         SmartDashboard.putNumber("Coral/Elevator Position", getElevatorEncoder());
@@ -363,7 +418,7 @@ public class CoralSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Coral/Elevator Lower Limit", isElevatorAtLowerLimit());
 
         SmartDashboard.putNumber("Coral/Arm Speed", armSpeed);
-        SmartDashboard.putNumber("Coral/Arm Position", getArmPosition());
+        SmartDashboard.putNumber("Coral/Arm Position", getArmAngle());
         SmartDashboard.putBoolean("Coral/Arm Upper Limit", isArmAtUpperLimit());
         SmartDashboard.putBoolean("Coral/Arm Lower Limit", isArmAtLowerLimit());
 
@@ -410,9 +465,6 @@ public class CoralSubsystem extends SubsystemBase {
 
     private void checkSafety() {
 
-        // Limit the elevator speed
-        elevatorSpeed = Math.min(elevatorSpeed, CoralConstants.ELEVATOR_MAX_SPEED) * Math.signum(elevatorSpeed);
-
         if (isElevatorAtLowerLimit()) {
 
             if (elevatorSpeed < 0) {
@@ -422,8 +474,7 @@ public class CoralSubsystem extends SubsystemBase {
                 resetElevatorEncoder();
             }
         }
-
-        if (isElevatorAtUpperLimit()) {
+        else if (isElevatorAtUpperLimit()) {
 
             if (elevatorSpeed > 0) {
                 elevatorSpeed = 0;
@@ -431,6 +482,16 @@ public class CoralSubsystem extends SubsystemBase {
                 // elevatorMotor.set(ControlMode.PercentOutput, 0);
             }
         }
+        else { // Elevator is not at a limit
+
+            // Limit the elevator speed
+            if (Math.abs(elevatorSpeed) > CoralConstants.ELEVATOR_MAX_SPEED) {
+                elevatorSpeed = CoralConstants.ELEVATOR_MAX_SPEED * Math.signum(elevatorSpeed);
+                // Directly set the motor speed, do not call the setter method (recursive loop)
+                // elevatorMotor.set(ControlMode.PercentOutput, elevatorSpeed);
+            }
+        }
+
 
         /*
          * Arm Safety
@@ -439,6 +500,9 @@ public class CoralSubsystem extends SubsystemBase {
 
             if (armSpeed < 0) {
                 armSpeed = 0;
+
+                // Directly set the motor speed, do not call the setter method (recursive loop)
+                // armMotor.set(ControlMode.PercentOutput, 0);
             }
         }
 
@@ -446,6 +510,8 @@ public class CoralSubsystem extends SubsystemBase {
 
             if (armSpeed > 0) {
                 armSpeed = 0;
+                // Directly set the motor speed, do not call the setter method (recursive loop)
+                // armMotor.set(ControlMode.PercentOutput, 0);
             }
         }
     }
@@ -459,7 +525,7 @@ public class CoralSubsystem extends SubsystemBase {
             .append("Elevator: speed ").append(elevatorSpeed)
             .append(" height ").append(getElevatorEncoder()).append("in")
             .append(",  Arm: speed ").append(armSpeed)
-            .append(" angle ").append(getArmPosition()).append(" deg")
+            .append(" angle ").append(getArmAngle()).append(" deg")
             .append(",  Intake: speed ").append(intakeSpeed)
             .append(" coral detect: ").append(isCoralDetected());
 
