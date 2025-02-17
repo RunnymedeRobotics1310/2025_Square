@@ -3,18 +3,18 @@ package frc.robot.commands.coral.arm;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.CoralSubsystem;
 
-public class MoveArmToPosCommand extends LoggingCommand {
+public class MoveArmToAngleCommand extends LoggingCommand {
 
     private final CoralSubsystem coralSubsystem;
 
-    private final double         position;
+    private final double         angle;
 
-    private boolean atPosition = false;
+    private boolean              atAngle = false;
 
-    public MoveArmToPosCommand(double position, CoralSubsystem coralSubsystem) {
+    public MoveArmToAngleCommand(double angle, CoralSubsystem coralSubsystem) {
 
         this.coralSubsystem = coralSubsystem;
-        this.position          = position;
+        this.angle          = angle;
 
         addRequirements(coralSubsystem);
     }
@@ -29,7 +29,7 @@ public class MoveArmToPosCommand extends LoggingCommand {
     public void execute() {
 
 
-        atPosition = coralSubsystem.moveArmToPosition(position);
+        atAngle = coralSubsystem.moveArmToAngle(angle);
 
 
     }
@@ -37,12 +37,8 @@ public class MoveArmToPosCommand extends LoggingCommand {
     @Override
     public boolean isFinished() {
 
-        if (hasElapsed(1)) {
-            return true;
-        }
-
         // Check if the arm is at the requested position.
-        if (atPosition) {
+        if (atAngle) {
             return true;
         }
         return false;

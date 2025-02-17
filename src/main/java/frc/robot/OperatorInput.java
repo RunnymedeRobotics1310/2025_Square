@@ -12,7 +12,7 @@ import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorInputConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.GameController;
-import frc.robot.commands.coral.arm.MoveArmToPosCommand;
+import frc.robot.commands.coral.arm.MoveArmToAngleCommand;
 import frc.robot.commands.coral.elevator.MoveToHeightCommand;
 import frc.robot.commands.coral.intake.IntakeCoralCommand;
 import frc.robot.commands.coral.intake.PlantCoralCommand;
@@ -107,7 +107,7 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> driverController.getXButton())
             .onTrue(new SequentialCommandGroup(
-                new MoveArmToPosCommand(Constants.CoralConstants.ARM_POSITION_COMPACT, coralSubsystem),
+                new MoveArmToAngleCommand(Constants.CoralConstants.ARM_POSITION_COMPACT, coralSubsystem),
                 new MoveToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_0)));
 
 
@@ -120,10 +120,10 @@ public class OperatorInput extends SubsystemBase {
 
         // triggers/buttons
         new Trigger(() -> driverController.getYButton())
-            .onTrue(new MoveArmToPosCommand(Constants.CoralConstants.ARM_POSITION_LEVEL_2, coralSubsystem));
+            .onTrue(new MoveArmToAngleCommand(Constants.CoralConstants.ARM_POSITION_LEVEL_2, coralSubsystem));
 
         new Trigger(() -> driverController.getAButton())
-            .onTrue(new MoveArmToPosCommand(Constants.CoralConstants.ARM_POSITION_INTAKE, coralSubsystem));
+            .onTrue(new MoveArmToAngleCommand(Constants.CoralConstants.ARM_POSITION_INTAKE, coralSubsystem));
 
         /*
          * Coral Intake Buttons
