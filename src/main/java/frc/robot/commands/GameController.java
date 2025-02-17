@@ -19,7 +19,7 @@ public class GameController extends XboxController {
 
     public static final double DEFAULT_GAME_CONTROLLER_AXIS_DEADBAND = .2;
 
-    private double             axisDeadband                          = DEFAULT_GAME_CONTROLLER_AXIS_DEADBAND;
+    private double axisDeadband = DEFAULT_GAME_CONTROLLER_AXIS_DEADBAND;
 
     /**
      * Construct a TorontoCodingCollectiveGameController on the specified port
@@ -35,22 +35,21 @@ public class GameController extends XboxController {
     /**
      * Construct a TorontoCodingCollective TccGameController on the specified port with the specified deadband
      *
-     * @param port on the driver station which the joystick is plugged into
+     * @param port         on the driver station which the joystick is plugged into
      * @param axisDeadband (0 - 0.4) to use for all axis values on this controller. When the
-     * axis value from the hardware is less than the specified value, then the axis will return
-     * zero. Setting the axisDeadbanding to zero turns off all deadbanding.
-     * Values < 0 or > 0.4 are ignored, and
-     * the {@link #DEFAULT_GAME_CONTROLLER_AXIS_DEADBAND} value is used.
+     *                     axis value from the hardware is less than the specified value, then the axis will return
+     *                     zero. Setting the axisDeadbanding to zero turns off all deadbanding.
+     *                     Values < 0 or > 0.4 are ignored, and
+     *                     the {@link #DEFAULT_GAME_CONTROLLER_AXIS_DEADBAND} value is used.
      */
     public GameController(int port, final double axisDeadband) {
         super(port);
 
         if (axisDeadband < 0 || axisDeadband > 0.4) {
             System.out.println("Invalid axis deadband(" + axisDeadband + ") must be between 0 - 0.4. Overriding value to "
-                + DEFAULT_GAME_CONTROLLER_AXIS_DEADBAND);
+                    + DEFAULT_GAME_CONTROLLER_AXIS_DEADBAND);
             setAxisDeadband(DEFAULT_GAME_CONTROLLER_AXIS_DEADBAND);
-        }
-        else {
+        } else {
             setAxisDeadband(axisDeadband);
         }
     }
@@ -75,21 +74,20 @@ public class GameController extends XboxController {
 
         if (Math.abs(axisValue) < axisDeadband) {
             axisValue = 0;
-        }
-        else {
+        } else {
             // Subtract the deadband (take the absolute value in order to remove
             // the deadband amount whether it is positive or negative.
             double value = Math.abs(axisValue) - axisDeadband;
 
             // Scale the value to the full range of 0-1.0 after the deadband amount
             // is removed
-            value      = value / (1.0 - axisDeadband);
+            value = value / (1.0 - axisDeadband);
 
             // multiply by 1.0 or -1.0 in order to put the sign back
             // on the end result based on the original axis value.
-            value     *= Math.signum(axisValue);
+            value *= Math.signum(axisValue);
 
-            axisValue  = value;
+            axisValue = value;
         }
 
         // The Y axis values should be inverted in order to make the direction away from the driver positive.
@@ -103,7 +101,7 @@ public class GameController extends XboxController {
     /**
      * Set the current axis deadband on the stick and trigger axes of this gameController
      * <p>
-     * Use the method {@link #getRawHardwareAxisValue(int)} to get the hardware value
+     * Use the method {@link #getRawAxis(int)} to get the hardware value
      * coming off the game controller axis before deadbanding.
      *
      * @returns axisDeadband used for all axis values on this controller.
@@ -122,18 +120,18 @@ public class GameController extends XboxController {
      * the stick axis when they are released. A released controller axis will not
      * always return to zero.
      * <p>
-     * Use the method {@link #getRawHardwareAxisValue(int)} to get the hardware value
+     * Use the method {@link #getRawAxis(int)} to get the hardware value
      * coming off the game controller axis before deadbanding.
      *
      * @param axisDeadband (0 - 0.4) to use for all axis values on this controller. When the
-     * axis value from the hardware is less than the specified value, then the axis will return
-     * zero. Setting the axisDeadbanding to zero turns off all deadbanding.
+     *                     axis value from the hardware is less than the specified value, then the axis will return
+     *                     zero. Setting the axisDeadbanding to zero turns off all deadbanding.
      */
     public void setAxisDeadband(double axisDeadband) {
 
         if (axisDeadband < 0 || axisDeadband > 0.4) {
             System.out.println("Invalid axis deadband(" + axisDeadband
-                + ") must be between 0 - 0.4. Axis deadband value not changed.  Currently " + this.axisDeadband);
+                    + ") must be between 0 - 0.4. Axis deadband value not changed.  Currently " + this.axisDeadband);
             return;
         }
 
@@ -159,15 +157,15 @@ public class GameController extends XboxController {
          */
         // Left stick
         sb.append('(').append(Math.round(getLeftX() * 100d) / 100d).append(',')
-            .append(Math.round(getLeftY() * 100d) / 100d).append(')');
+                .append(Math.round(getLeftY() * 100d) / 100d).append(')');
 
         // Right stick
         sb.append('(').append(Math.round(getRightX() * 100d) / 100d).append(',')
-            .append(Math.round(getRightY() * 100d) / 100d).append(')');
+                .append(Math.round(getRightY() * 100d) / 100d).append(')');
 
         // Triggers
         sb.append('[').append(Math.round(getLeftTriggerAxis() * 100d) / 100d).append(',')
-            .append(Math.round(getRightTriggerAxis() * 100d) / 100d).append("] ");
+                .append(Math.round(getRightTriggerAxis() * 100d) / 100d).append("] ");
 
         /*
          * POV
@@ -179,10 +177,10 @@ public class GameController extends XboxController {
         /*
          * Buttons
          */
-        if (getLeftBumperButton()) {
+        if (getLeftBumper()) {
             sb.append("LB ");
         }
-        if (getRightBumperButton()) {
+        if (getRightBumper()) {
             sb.append("RB ");
         }
         if (getAButton()) {

@@ -69,7 +69,7 @@ public class OperatorInput extends SubsystemBase {
      * <p>
      * NOTE: This routine must only be called once from the RobotContainer
      *
-     * @param driveSubsystem
+     * @param coralSubsystem
      */
     public void configureButtonBindings(CoralSubsystem coralSubsystem) {
 
@@ -176,11 +176,11 @@ public class OperatorInput extends SubsystemBase {
     }
 
     public boolean getEjectButton() {
-        return driverController.getRightBumperButton();
+        return driverController.getRightBumper();
     }
 
     public boolean getInjectButton() {
-        return driverController.getLeftBumperButton();
+        return driverController.getLeftBumper();
     }
 
     /*
