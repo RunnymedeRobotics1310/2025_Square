@@ -107,6 +107,9 @@ public class CoralSubsystem extends SubsystemBase {
         flexConfig.idleMode(IdleMode.kBrake);
         flexConfig.inverted(CoralConstants.ELEVATOR_MOTOR_INVERTED);
 
+        // Limit the current to 20A max
+        flexConfig.smartCurrentLimit(20);
+
         // Upper and Lower Limit switches
         flexConfig.limitSwitch.forwardLimitSwitchEnabled(false);
         flexConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyOpen);
@@ -127,7 +130,10 @@ public class CoralSubsystem extends SubsystemBase {
         sparkMaxConfig.idleMode(IdleMode.kBrake);
         sparkMaxConfig.inverted(CoralConstants.ARM_MOTOR_INVERTED);
 
-        sparkMaxConfig.absoluteEncoder.inverted(CoralConstants.ARM_POSITION_ENCODER_INVERTED);
+        // Limit the current to 20A max
+        flexConfig.smartCurrentLimit(20);
+
+        sparkMaxConfig.absoluteEncoder.inverted(CoralConstants.ARM_ANGLE_ENCODER_INVERTED);
 
 //        armMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -139,6 +145,9 @@ public class CoralSubsystem extends SubsystemBase {
         sparkMaxConfig.disableFollowerMode();
         sparkMaxConfig.idleMode(IdleMode.kBrake);
         sparkMaxConfig.inverted(CoralConstants.INTAKE_MOTOR_INVERTED);
+
+        // Limit the current to 20A max
+        flexConfig.smartCurrentLimit(20);
 
         sparkMaxConfig.limitSwitch.forwardLimitSwitchEnabled(false);
         sparkMaxConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyOpen);
@@ -302,6 +311,8 @@ public class CoralSubsystem extends SubsystemBase {
         armSpeed = speed;
 
         checkSafety();
+
+        //armMotor.set(armSpeed);
     }
 
     public boolean isArmAtLowerLimit() {
@@ -365,6 +376,8 @@ public class CoralSubsystem extends SubsystemBase {
         this.intakeSpeed = speed;
 
         checkSafety();
+
+        //intakeMotor.set(intakeSpeed);
     }
 
     public boolean isCoralDetected() {
@@ -399,12 +412,12 @@ public class CoralSubsystem extends SubsystemBase {
 
         updateSensorCache();
 
-        // FIXME: replace the simulation when the robot is ready.
-        simulate();
+        if (isSimulation) {
+            simulate();
+        }
 
         checkSafety();
 
-        // FIXME: Add a call to the lights subsystem to show the current speed
         lightsSubsystem.setElevatorHeight(getElevatorHeight());
         lightsSubsystem.setArmPosition(getArmAngle());
 
@@ -466,25 +479,28 @@ public class CoralSubsystem extends SubsystemBase {
             if (elevatorSpeed < 0) {
                 elevatorSpeed = 0;
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                // elevatorMotor.set(ControlMode.PercentOutput, 0);
+                //elevatorMotor.set(0);
                 resetElevatorEncoder();
             }
         }
-        else if (isElevatorAtUpperLimit()) {
+
+        if (isElevatorAtUpperLimit()) {
 
             if (elevatorSpeed > 0) {
                 elevatorSpeed = 0;
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                // elevatorMotor.set(ControlMode.PercentOutput, 0);
+                //elevatorMotor.set(0);
             }
         }
-        else { // Elevator is not at a limit
+
+        // If not at either limit, then limit the speed.
+        if (!isElevatorAtLowerLimit() && !isElevatorAtUpperLimit()) {
 
             // Limit the elevator speed
             if (Math.abs(elevatorSpeed) > CoralConstants.ELEVATOR_MAX_SPEED) {
                 elevatorSpeed = CoralConstants.ELEVATOR_MAX_SPEED * Math.signum(elevatorSpeed);
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                // elevatorMotor.set(ControlMode.PercentOutput, elevatorSpeed);
+                //elevatorMotor.set(elevatorSpeed);
             }
         }
 
@@ -498,7 +514,7 @@ public class CoralSubsystem extends SubsystemBase {
                 armSpeed = 0;
 
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                // armMotor.set(ControlMode.PercentOutput, 0);
+                //armMotor.set(0);
             }
         }
 
@@ -507,7 +523,18 @@ public class CoralSubsystem extends SubsystemBase {
             if (armSpeed > 0) {
                 armSpeed = 0;
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                // armMotor.set(ControlMode.PercentOutput, 0);
+                //armMotor.set(0);
+            }
+        }
+
+        // If not at either limit, then limit the arm speed
+        if (!isArmAtLowerLimit() && !isArmAtUpperLimit()) {
+
+            // Limit the elevator speed
+            if (Math.abs(armSpeed) > CoralConstants.ARM_MAX_SPEED) {
+                armSpeed = CoralConstants.ARM_MAX_SPEED * Math.signum(armSpeed);
+                // Directly set the motor speed, do not call the setter method (recursive loop)
+                //armMotor.set(armSpeed);
             }
         }
     }

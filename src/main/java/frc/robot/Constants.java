@@ -93,11 +93,12 @@ public final class Constants {
         public static final int     ARM_MOTOR_CAN_ID               = 41;
         public static final int     INTAKE_MOTOR_CAN_ID            = 42;
 
-        public static final boolean ELEVATOR_MOTOR_INVERTED        = false;
-        public static final boolean ARM_MOTOR_INVERTED             = false;
+        public static final boolean ELEVATOR_MOTOR_INVERTED        = true;
+        public static final boolean ARM_MOTOR_INVERTED             = true;
         public static final boolean INTAKE_MOTOR_INVERTED          = false;
 
-        public static final boolean ARM_POSITION_ENCODER_INVERTED  = false;
+        public static final double  ARM_MAX_SPEED                  = 0.3;
+        public static final boolean ARM_ANGLE_ENCODER_INVERTED     = false;
         public static final double  ARM_LOWER_LIMIT_POSITION       = 0;
         public static final double  ARM_UPPER_LIMIT_POSITION       = 180;
 
@@ -112,7 +113,7 @@ public final class Constants {
 
         public static final double  ARM_FAST_SPEED                 = 0.5;
         public static final double  ARM_SLOW_SPEED                 = 0.2;
-        public static final double  ARM_ANGLE_TOLERANCE                  = 1.5;
+        public static final double  ARM_ANGLE_TOLERANCE            = 1.5;
         public static final double  ARM_SLOW_ZONE_THRESHOLD        = 20;
 
 
