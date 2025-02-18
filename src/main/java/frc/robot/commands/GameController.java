@@ -33,7 +33,8 @@ public class GameController extends XboxController {
     }
 
     /**
-     * Construct a TorontoCodingCollective TccGameController on the specified port with the specified deadband
+     * Construct a TorontoCodingCollective TccGameController on the specified port with the
+     * specified deadband
      *
      * @param port         on the driver station which the joystick is plugged into
      * @param axisDeadband (0 - 0.4) to use for all axis values on this controller. When the
@@ -90,7 +91,8 @@ public class GameController extends XboxController {
             axisValue = value;
         }
 
-        // The Y axis values should be inverted in order to make the direction away from the driver positive.
+        // The Y axis values should be inverted in order to make the direction away from the driver
+        // positive.
         if (axis == XboxController.Axis.kLeftY.value || axis == XboxController.Axis.kRightY.value) {
             axisValue *= -1.0;
         }

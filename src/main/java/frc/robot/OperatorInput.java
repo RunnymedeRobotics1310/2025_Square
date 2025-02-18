@@ -12,7 +12,7 @@ import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorInputConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.GameController;
-import frc.robot.commands.coral.arm.MoveArmToPosCommand;
+import frc.robot.commands.coral.arm.MoveArmToAngleCommand;
 import frc.robot.commands.coral.elevator.MoveElevatorToHeightCommand;
 import frc.robot.commands.coral.intake.IntakeCoralCommand;
 import frc.robot.commands.coral.intake.PlantCoralCommand;
@@ -31,8 +31,8 @@ public class OperatorInput extends SubsystemBase {
 
     // Auto Setup Choosers
     SendableChooser<AutoPattern> autoPatternChooser = new SendableChooser<>();
-    SendableChooser<Integer> waitTimeChooser = new SendableChooser<>();
-    SendableChooser<DriveMode> driveModeChooser = new SendableChooser<>();
+    SendableChooser<Integer>     waitTimeChooser    = new SendableChooser<>();
+    SendableChooser<DriveMode>   driveModeChooser   = new SendableChooser<>();
 
     /**
      * Construct an OperatorInput class that is fed by a DriverController and optionally an
@@ -41,7 +41,7 @@ public class OperatorInput extends SubsystemBase {
     public OperatorInput() {
 
         driverController = new GameController(OperatorInputConstants.DRIVER_CONTROLLER_PORT,
-                OperatorInputConstants.CONTROLLER_DEADBAND);
+            OperatorInputConstants.CONTROLLER_DEADBAND);
 
         // Initialize the dashboard selectors
         autoPatternChooser.setDefaultOption("Do Nothing", AutoPattern.DO_NOTHING);
@@ -69,23 +69,23 @@ public class OperatorInput extends SubsystemBase {
      * <p>
      * NOTE: This routine must only be called once from the RobotContainer
      *
-     * @param coralSubsystem
+     * @param driveSubsystem
      */
     public void configureButtonBindings(CoralSubsystem coralSubsystem) {
 
         // System Test Command
         new Trigger(() -> driverController.getStartButton() && driverController.getBackButton())
-                .onTrue(new SystemTestCommand(this, coralSubsystem));
+            .onTrue(new SystemTestCommand(this, coralSubsystem));
 
         // Cancel Command - cancels all running commands on all subsystems
         new Trigger(() -> isCancel())
-                .onTrue(new CancelCommand(this, coralSubsystem));
+            .onTrue(new CancelCommand(this, coralSubsystem));
 
         // Gyro and Encoder Reset
         new Trigger(() -> driverController.getBackButton())
-                .onTrue(new InstantCommand(() -> {
-                    // FIXME: reset encoders and gyro
-                }));
+            .onTrue(new InstantCommand(() -> {
+                // FIXME: reset encoders and gyro
+            }));
 
         // FIXME: Replace these button bindings the ones provided in the controller map
 
@@ -94,21 +94,21 @@ public class OperatorInput extends SubsystemBase {
          */
         // Configure the DPAD to set elevator height
         new Trigger(() -> driverController.getPOV() == 0)
-                .onTrue(new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_1));
+            .onTrue(new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_1));
 
         new Trigger(() -> driverController.getPOV() == 90)
-                .onTrue(new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_2));
+            .onTrue(new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_2));
 
         new Trigger(() -> driverController.getPOV() == 180)
-                .onTrue(new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_3));
+            .onTrue(new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_3));
 
         new Trigger(() -> driverController.getPOV() == 270)
-                .onTrue(new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_4));
+            .onTrue(new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_4));
 
         new Trigger(() -> driverController.getXButton())
-                .onTrue(new SequentialCommandGroup(
-                        new MoveArmToPosCommand(0, coralSubsystem),
-                        new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.COPACT)));
+            .onTrue(new SequentialCommandGroup(
+                new MoveArmToAngleCommand(0, coralSubsystem),
+                new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.COPACT)));
 
 
         /*
@@ -117,14 +117,13 @@ public class OperatorInput extends SubsystemBase {
         // Configure the controller buttons X (resting, above^),
         // Y (delivery), A (intake) for arm position
 
-        // FIXME: what are the units of position? Degrees?
-        // FIXME: add constants for the major arm positions and put the constants on these
+
         // triggers/buttons
         new Trigger(() -> driverController.getYButton())
-                .onTrue(new MoveArmToPosCommand(135, coralSubsystem));
+            .onTrue(new MoveArmToAngleCommand(Constants.CoralConstants.ARM_ANGLE_LEVEL_2, coralSubsystem));
 
         new Trigger(() -> driverController.getAButton())
-                .onTrue(new MoveArmToPosCommand(135, coralSubsystem));
+            .onTrue(new MoveArmToAngleCommand(Constants.CoralConstants.ARM_ANGLE_INTAKE, coralSubsystem));
 
         /*
          * Coral Intake Buttons
@@ -132,11 +131,11 @@ public class OperatorInput extends SubsystemBase {
 
         // Intake Coral
         new Trigger(() -> driverController.getLeftTriggerAxis() > 0.5)
-                .onTrue(new IntakeCoralCommand(coralSubsystem));
+            .onTrue(new IntakeCoralCommand(coralSubsystem));
 
         // Plant Coral
         new Trigger(() -> driverController.getRightTriggerAxis() > 0.5)
-                .onTrue(new PlantCoralCommand(coralSubsystem));
+            .onTrue(new PlantCoralCommand(coralSubsystem));
     }
 
     /*
@@ -176,11 +175,11 @@ public class OperatorInput extends SubsystemBase {
     }
 
     public boolean getEjectButton() {
-        return driverController.getRightBumper();
+        return driverController.getRightBumperButton();
     }
 
     public boolean getInjectButton() {
-        return driverController.getLeftBumper();
+        return driverController.getLeftBumperButton();
     }
 
     /*
