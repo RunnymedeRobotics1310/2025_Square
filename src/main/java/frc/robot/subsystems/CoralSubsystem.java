@@ -16,19 +16,19 @@ public class CoralSubsystem extends SubsystemBase {
 
     private class SensorCache {
 
-        double  elevatorEncoderSpeed      = 0;
-        double  elevatorEncoderPosition   = 0;
+        double elevatorEncoderSpeed = 0;
+        double elevatorEncoderPosition = 0;
 
         boolean elevatorUpperLimitReached = false;
         boolean elevatorLowerLimitReached = false;
 
-        double  armEncoderSpeed           = 0;
-        double  armEncoderAngle           = 0;
+        double armEncoderSpeed = 0;
+        double armEncoderAngle = 0;
 
-        double  intakeEncoderSpeed        = 0;
-        double  intakeEncoderPosition     = 0;
+        double intakeEncoderSpeed = 0;
+        double intakeEncoderPosition = 0;
 
-        boolean coralDetected             = false;
+        boolean coralDetected = false;
     }
 
     private final LightsSubsystem lightsSubsystem;
@@ -42,8 +42,8 @@ public class CoralSubsystem extends SubsystemBase {
 //        MotorType.kBrushless);
 
     private double elevatorSpeed = 0;
-    private double armSpeed      = 0;
-    private double intakeSpeed   = 0;
+    private double armSpeed = 0;
+    private double intakeSpeed = 0;
 
     // Elevator
 
@@ -68,25 +68,25 @@ public class CoralSubsystem extends SubsystemBase {
 //    private SparkLimitSwitch      intakeCoralDetector                 = intakeMotor.getForwardLimitSwitch();
 
     // Sensor Cache
-    private final SensorCache   sensorCache                         = new SensorCache();
+    private final SensorCache sensorCache = new SensorCache();
 
     // Simulation constants
-    private boolean             isSimulation                        = false;
+    private boolean isSimulation = false;
     // Elevator full speed up: the elevator will raise 60 inches in 2 seconds with a loop time of
     // 20ms.
-    private static final double ELEVATOR_MAX_UP_DISTANCE_PER_LOOP   = 60 * .02 / 2;
+    private static final double ELEVATOR_MAX_UP_DISTANCE_PER_LOOP = 60 * .02 / 2;
     // Elevator full speed down: the elevator will lower in 1.5 seconds.
     private static final double ELEVATOR_MAX_DOWN_DISTANCE_PER_LOOP = 60 * .02 / 1.5;
-    private double              simulationElevatorHeight            = 0;
+    private double simulationElevatorHeight = 0;
     // Arm full speed: the arm will raise 180 degrees in two secondsconds.
-    private static final double ARM_ANGLE_MAX_DEGREES_PER_LOOP      = 180 * .02 / 2.0;
-    private double              simulationArmAngle                  = 0;
+    private static final double ARM_ANGLE_MAX_DEGREES_PER_LOOP = 180 * .02 / 2.0;
+    private double simulationArmAngle = 0;
     // Intake detect time seconds.
-    private static final double INTAKE_DETECTION_TIME_SECONDS       = 3;
-    private Timer               simulationIntakeDetectTimer         = new Timer();
-    private boolean             simulationIntakeDetector            = false;
-    private double              simulationPreviousIntakeSpeed       = 0;
-    private int                 simulationIntakeEncoder             = 0;
+    private static final double INTAKE_DETECTION_TIME_SECONDS = 3;
+    private Timer simulationIntakeDetectTimer = new Timer();
+    private boolean simulationIntakeDetector = false;
+    private double simulationPreviousIntakeSpeed = 0;
+    private int simulationIntakeEncoder = 0;
 
 
     public CoralSubsystem(LightsSubsystem lightsSubsystem) {
@@ -217,8 +217,7 @@ public class CoralSubsystem extends SubsystemBase {
         if (isSimulation) {
             if (simulationElevatorHeight <= 0) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -230,8 +229,7 @@ public class CoralSubsystem extends SubsystemBase {
         if (isSimulation) {
             if (simulationElevatorHeight >= 60) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -296,9 +294,9 @@ public class CoralSubsystem extends SubsystemBase {
 
     public boolean moveArmToAngle(double targetAngle) {
 
-        double currentAngle    = getArmAngle();
+        double currentAngle = getArmAngle();
 
-        double angleError      = targetAngle - currentAngle;
+        double angleError = targetAngle - currentAngle;
         double desiredArmSpeed = CoralConstants.ARM_FAST_SPEED;
 
         if (Math.abs(angleError) < CoralConstants.ARM_ANGLE_TOLERANCE) {
@@ -396,7 +394,7 @@ public class CoralSubsystem extends SubsystemBase {
             simulationElevatorHeight += ELEVATOR_MAX_DOWN_DISTANCE_PER_LOOP * elevatorSpeed;
         }
 
-        simulationArmAngle      += ARM_ANGLE_MAX_DEGREES_PER_LOOP * armSpeed;
+        simulationArmAngle += ARM_ANGLE_MAX_DEGREES_PER_LOOP * armSpeed;
 
         simulationIntakeEncoder += intakeSpeed;
 
@@ -413,8 +411,7 @@ public class CoralSubsystem extends SubsystemBase {
                 simulationIntakeDetectTimer.reset();
                 simulationIntakeDetectTimer.stop();
             }
-        }
-        else {
+        } else {
             simulationIntakeDetectTimer.reset();
             simulationIntakeDetectTimer.stop();
         }
@@ -430,8 +427,7 @@ public class CoralSubsystem extends SubsystemBase {
                 // elevatorMotor.set(ControlMode.PercentOutput, 0);
                 resetElevatorEncoder();
             }
-        }
-        else if (isElevatorAtUpperLimit()) {
+        } else if (isElevatorAtUpperLimit()) {
 
             if (elevatorSpeed > 0) {
                 elevatorSpeed = 0;
@@ -439,7 +435,17 @@ public class CoralSubsystem extends SubsystemBase {
                 // elevatorMotor.set(ControlMode.PercentOutput, 0);
             }
         }
-        else { // Elevator is not at a limit
+        // Elevator is in the lower slow zone
+        else if (getElevatorEncoder() <= CoralConstants.ELEVATOR_SLOW_ZONE) {
+            if (elevatorSpeed < -CoralConstants.ELEVATOR_SLOW_ZONE_SPEED) {
+                elevatorSpeed = -CoralConstants.ELEVATOR_SLOW_ZONE_SPEED;
+            }
+            // Elevator is in the upper slow zone
+        } else if (getElevatorEncoder() >= CoralConstants.ELEVATOR_MAX_HEIGHT - CoralConstants.ELEVATOR_SLOW_ZONE) {
+            if (elevatorSpeed > CoralConstants.ELEVATOR_SLOW_ZONE_SPEED) {
+                elevatorSpeed = CoralConstants.ELEVATOR_SLOW_ZONE_SPEED;
+            }
+        } else { // Elevator is not at a limit
 
             // Limit the elevator speed
             if (Math.abs(elevatorSpeed) > CoralConstants.ELEVATOR_MAX_SPEED) {
@@ -479,12 +485,12 @@ public class CoralSubsystem extends SubsystemBase {
         StringBuilder sb = new StringBuilder();
 
         sb.append(this.getClass().getSimpleName()).append(" : ")
-            .append("Elevator: speed ").append(elevatorSpeed)
-            .append(" height ").append(getElevatorEncoder()).append("in")
-            .append(",  Arm: speed ").append(armSpeed)
-            .append(" angle ").append(getArmAngle()).append(" deg")
-            .append(",  Intake: speed ").append(intakeSpeed)
-            .append(" coral detect: ").append(isCoralDetected());
+                .append("Elevator: speed ").append(elevatorSpeed)
+                .append(" height ").append(getElevatorEncoder()).append("in")
+                .append(",  Arm: speed ").append(armSpeed)
+                .append(" angle ").append(getArmAngle()).append(" deg")
+                .append(",  Intake: speed ").append(intakeSpeed)
+                .append(" coral detect: ").append(isCoralDetected());
 
         return sb.toString();
     }

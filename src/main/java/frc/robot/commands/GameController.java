@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.XboxController;
  * This class adds deadbanding to the axes values (X,Y) of the
  * left and right joysticks on the XBox controller, as well as the Triggers
  * <p>
- * Deadbanding of the axis values is is intended to prevent 'drift' or movement of the robot
+ * Deadbanding of the axis values is intended to prevent 'drift' or movement of the robot
  * when the operators are not touching the controls.
  * <p>
  * Since the TccGameController overrides the {@link XboxController#getRawAxis} method,
@@ -179,10 +179,10 @@ public class GameController extends XboxController {
         /*
          * Buttons
          */
-        if (getLeftBumper()) {
+        if (getLeftBumperButton()) {
             sb.append("LB ");
         }
-        if (getRightBumper()) {
+        if (getRightBumperButton()) {
             sb.append("RB ");
         }
         if (getAButton()) {
