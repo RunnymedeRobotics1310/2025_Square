@@ -1,10 +1,5 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.CoralConstants.ElevatorHeight.LEVEL_1;
-import static frc.robot.Constants.CoralConstants.ElevatorHeight.LEVEL_2;
-import static frc.robot.Constants.CoralConstants.ElevatorHeight.LEVEL_3;
-import static frc.robot.Constants.CoralConstants.ElevatorHeight.LEVEL_4;
-
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
@@ -209,7 +204,7 @@ public class CoralSubsystem extends SubsystemBase {
 
     public boolean setElevatorHeight(ElevatorHeight targetHeight) {
 
-        if ((getElevatorHeight().compareTo(targetHeight)) == 0) {
+        if (isAtElevatorHeight(targetHeight)) {
             setElevatorSpeed(0);
             return true;
         }
@@ -223,41 +218,12 @@ public class CoralSubsystem extends SubsystemBase {
 
         setElevatorSpeed(elevatorSpeed);
 
-        return getElevatorHeight() == targetHeight;
+        return false;
     }
 
-    public ElevatorHeight getElevatorHeight() {
+    public boolean isAtElevatorHeight(ElevatorHeight height) {
 
-        if (isElevatorAtLowerLimit()) {
-            return ElevatorHeight.LEVEL_0;
-        }
-        else if (getElevatorEncoder() < LEVEL_1.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_0_5;
-        }
-        else if (getElevatorEncoder() < LEVEL_1.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_1;
-        }
-        else if (getElevatorEncoder() < LEVEL_2.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_1_5;
-        }
-        else if (getElevatorEncoder() < LEVEL_2.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_2;
-        }
-        else if (getElevatorEncoder() < LEVEL_3.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_2_5;
-        }
-        else if (getElevatorEncoder() < LEVEL_3.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_3;
-        }
-        else if (getElevatorEncoder() < LEVEL_4.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_3_5;
-        }
-        else if (getElevatorEncoder() < LEVEL_4.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_4;
-        }
-        else {
-            return ElevatorHeight.LEVEL_4_5;
-        }
+        return (Math.abs(height.encoderCount - getElevatorEncoder()) <= CoralConstants.ELEVATOR_TOLERANCE);
     }
 
     public boolean isElevatorAtLowerLimit() {
@@ -312,7 +278,7 @@ public class CoralSubsystem extends SubsystemBase {
 
         checkSafety();
 
-        //armMotor.set(armSpeed);
+        // armMotor.set(armSpeed);
     }
 
     public boolean isArmAtLowerLimit() {
@@ -364,7 +330,7 @@ public class CoralSubsystem extends SubsystemBase {
             desiredArmSpeed = -desiredArmSpeed;
         }
 
-        armSpeed = desiredArmSpeed;
+        setArmSpeed(desiredArmSpeed);
         return false;
     }
 
@@ -377,7 +343,7 @@ public class CoralSubsystem extends SubsystemBase {
 
         checkSafety();
 
-        //intakeMotor.set(intakeSpeed);
+        // intakeMotor.set(intakeSpeed);
     }
 
     public boolean isCoralDetected() {
@@ -418,7 +384,7 @@ public class CoralSubsystem extends SubsystemBase {
 
         checkSafety();
 
-        lightsSubsystem.setElevatorHeight(getElevatorHeight());
+        lightsSubsystem.setElevatorHeight(getElevatorEncoder());
         lightsSubsystem.setArmPosition(getArmAngle());
 
         SmartDashboard.putNumber("Coral/Elevator Speed", elevatorSpeed);
@@ -427,7 +393,7 @@ public class CoralSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Coral/Elevator Lower Limit", isElevatorAtLowerLimit());
 
         SmartDashboard.putNumber("Coral/Arm Speed", armSpeed);
-        SmartDashboard.putNumber("Coral/Arm Position", getArmAngle());
+        SmartDashboard.putNumber("Coral/Arm Angle", getArmAngle());
         SmartDashboard.putBoolean("Coral/Arm Upper Limit", isArmAtUpperLimit());
         SmartDashboard.putBoolean("Coral/Arm Lower Limit", isArmAtLowerLimit());
 
@@ -479,7 +445,7 @@ public class CoralSubsystem extends SubsystemBase {
             if (elevatorSpeed < 0) {
                 elevatorSpeed = 0;
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                //elevatorMotor.set(0);
+                // elevatorMotor.set(0);
                 resetElevatorEncoder();
             }
         }
@@ -489,7 +455,7 @@ public class CoralSubsystem extends SubsystemBase {
             if (elevatorSpeed > 0) {
                 elevatorSpeed = 0;
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                //elevatorMotor.set(0);
+                // elevatorMotor.set(0);
             }
         }
 
@@ -500,7 +466,7 @@ public class CoralSubsystem extends SubsystemBase {
             if (Math.abs(elevatorSpeed) > CoralConstants.ELEVATOR_MAX_SPEED) {
                 elevatorSpeed = CoralConstants.ELEVATOR_MAX_SPEED * Math.signum(elevatorSpeed);
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                //elevatorMotor.set(elevatorSpeed);
+                // elevatorMotor.set(elevatorSpeed);
             }
         }
 
@@ -514,7 +480,7 @@ public class CoralSubsystem extends SubsystemBase {
                 armSpeed = 0;
 
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                //armMotor.set(0);
+                // armMotor.set(0);
             }
         }
 
@@ -523,7 +489,7 @@ public class CoralSubsystem extends SubsystemBase {
             if (armSpeed > 0) {
                 armSpeed = 0;
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                //armMotor.set(0);
+                // armMotor.set(0);
             }
         }
 
@@ -534,7 +500,7 @@ public class CoralSubsystem extends SubsystemBase {
             if (Math.abs(armSpeed) > CoralConstants.ARM_MAX_SPEED) {
                 armSpeed = CoralConstants.ARM_MAX_SPEED * Math.signum(armSpeed);
                 // Directly set the motor speed, do not call the setter method (recursive loop)
-                //armMotor.set(armSpeed);
+                // armMotor.set(armSpeed);
             }
         }
     }

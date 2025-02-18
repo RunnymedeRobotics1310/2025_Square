@@ -4,13 +4,12 @@ import frc.robot.Constants.CoralConstants.ElevatorHeight;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.CoralSubsystem;
 
-// FIXME: can we rename this class to include the word 'elevator' somewhere?
-public class MoveToHeightCommand extends LoggingCommand {
+public class MoveElevatorToHeightCommand extends LoggingCommand {
 
     private final ElevatorHeight elevatorHeight;
     private final CoralSubsystem coralSubsystem;
 
-    public MoveToHeightCommand(CoralSubsystem coralSubsystem, ElevatorHeight elevatorHeight) {
+    public MoveElevatorToHeightCommand(CoralSubsystem coralSubsystem, ElevatorHeight elevatorHeight) {
 
         this.elevatorHeight = elevatorHeight;
         this.coralSubsystem = coralSubsystem;
@@ -30,7 +29,7 @@ public class MoveToHeightCommand extends LoggingCommand {
 
     @Override
     public boolean isFinished() {
-        return coralSubsystem.getElevatorHeight() == elevatorHeight;
+        return coralSubsystem.isAtElevatorHeight(elevatorHeight);
     }
 
     @Override
