@@ -15,7 +15,6 @@ import frc.robot.commands.GameController;
 import frc.robot.commands.coral.arm.MoveArmToAngleCommand;
 import frc.robot.commands.coral.elevator.MoveToHeightCommand;
 import frc.robot.commands.coral.intake.IntakeCoralCommand;
-import frc.robot.commands.coral.intake.PlantCoralCommand;
 import frc.robot.commands.test.SystemTestCommand;
 import frc.robot.subsystems.CoralSubsystem;
 
@@ -134,8 +133,8 @@ public class OperatorInput extends SubsystemBase {
             .onTrue(new IntakeCoralCommand(coralSubsystem));
 
         // Plant Coral
-        new Trigger(() -> driverController.getRightTriggerAxis() > 0.5)
-            .onTrue(new PlantCoralCommand(coralSubsystem));
+        // new Trigger(() -> driverController.getRightTriggerAxis() > 0.5)
+        // .onTrue(new PlantCoralCommand(coralSubsystem));
     }
 
     /*
@@ -154,7 +153,7 @@ public class OperatorInput extends SubsystemBase {
      * Do not end the command while the button is pressed
      */
     public boolean isCancel() {
-        return driverController.getStartButton();
+        return driverController.getStartButton() && !driverController.getBackButton();
     }
 
     /*

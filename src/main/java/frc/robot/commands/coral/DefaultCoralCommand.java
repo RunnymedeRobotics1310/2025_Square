@@ -38,7 +38,7 @@ public class DefaultCoralCommand extends LoggingCommand {
         // FIXME: Inversion of the elevatorInput should not be done here.
         // (OI should return + for up and - for down)
         // The GameController class returns Y positive.
-        coralSubsystem.setElevatorSpeed(-elevatorInput * Constants.CoralConstants.ELEVATOR_TUNE_MAX_SPEED);
+        coralSubsystem.setElevatorSpeed(elevatorInput * Constants.CoralConstants.ELEVATOR_TUNE_MAX_SPEED);
 
         double armStick = operatorInput.getArmStick();
         if (Math.abs(armStick) > 0) {

@@ -82,7 +82,7 @@ public final class Constants {
         public static final double  ELEVATOR_P                     = 0.05;
 
         // placeholder value for speed of elevator
-        public static final double  ELEVATOR_MAX_SPEED             = 0.3;
+        public static final double  ELEVATOR_MAX_SPEED             = 0.7;
         public static final double  ELEVATOR_TUNE_MAX_SPEED        = 0.1;
 
         // placeholder value for speed of elevator
@@ -94,25 +94,25 @@ public final class Constants {
         public static final int     INTAKE_MOTOR_CAN_ID            = 42;
 
         public static final boolean ELEVATOR_MOTOR_INVERTED        = true;
-        public static final boolean ARM_MOTOR_INVERTED             = true;
+        public static final boolean ARM_MOTOR_INVERTED             = false;
         public static final boolean INTAKE_MOTOR_INVERTED          = false;
 
         public static final double  ARM_MAX_SPEED                  = 0.3;
         public static final boolean ARM_ANGLE_ENCODER_INVERTED     = false;
         public static final double  ARM_LOWER_LIMIT_POSITION       = 0;
-        public static final double  ARM_UPPER_LIMIT_POSITION       = 180;
+        public static final double  ARM_UPPER_LIMIT_POSITION       = 126;
 
-        public static final double  ARM_POSITION_INTAKE            = 45;
+        public static final double  ARM_POSITION_INTAKE            = 37;
         public static final double  ARM_POSITION_LEVEL_1           = 0;
-        public static final double  ARM_POSITION_LEVEL_2           = 135;
-        public static final double  ARM_POSITION_LEVEL_3           = 135;
-        public static final double  ARM_POSITION_LEVEL_4           = 135;
+        public static final double  ARM_POSITION_LEVEL_2           = 120;
+        public static final double  ARM_POSITION_LEVEL_3           = 120;
+        public static final double  ARM_POSITION_LEVEL_4           = 100;
         public static final double  ARM_POSITION_COMPACT           = 0;
 
         public static final double  ARM_TUNE_RATE                  = 0.2;
 
-        public static final double  ARM_FAST_SPEED                 = 0.5;
-        public static final double  ARM_SLOW_SPEED                 = 0.2;
+        public static final double  ARM_FAST_SPEED                 = 0.3;
+        public static final double  ARM_SLOW_SPEED                 = 0.1;
         public static final double  ARM_ANGLE_TOLERANCE            = 1.5;
         public static final double  ARM_SLOW_ZONE_THRESHOLD        = 20;
 

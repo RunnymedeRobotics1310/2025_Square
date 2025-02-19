@@ -48,7 +48,7 @@ public class CoralSubsystem extends SubsystemBase {
 
     // Coral Subsystem Motors
     private final SparkFlex       elevatorMotor                       = new SparkFlex(CoralConstants.ELEVATOR_MOTOR_CAN_ID,
-        MotorType.kBrushed);
+        MotorType.kBrushless);
     private final SparkMax        armMotor                            = new SparkMax(CoralConstants.ARM_MOTOR_CAN_ID,
         MotorType.kBrushless);
     private final SparkMax        intakeMotor                         = new SparkMax(CoralConstants.INTAKE_MOTOR_CAN_ID,
@@ -116,7 +116,7 @@ public class CoralSubsystem extends SubsystemBase {
         flexConfig.inverted(CoralConstants.ELEVATOR_MOTOR_INVERTED);
 
         // Limit the current to 20A max
-        flexConfig.smartCurrentLimit(20);
+        // flexConfig.smartCurrentLimit(20);
 
         // Upper and Lower Limit switches
         flexConfig.limitSwitch.forwardLimitSwitchEnabled(false);
@@ -139,9 +139,10 @@ public class CoralSubsystem extends SubsystemBase {
         sparkMaxConfig.inverted(CoralConstants.ARM_MOTOR_INVERTED);
 
         // Limit the current to 20A max
-        flexConfig.smartCurrentLimit(20);
+        // flexConfig.smartCurrentLimit(20);
 
         sparkMaxConfig.absoluteEncoder.inverted(CoralConstants.ARM_ANGLE_ENCODER_INVERTED);
+        sparkMaxConfig.absoluteEncoder.zeroOffset(0.0316152);
 
         armMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -155,7 +156,7 @@ public class CoralSubsystem extends SubsystemBase {
         sparkMaxConfig.inverted(CoralConstants.INTAKE_MOTOR_INVERTED);
 
         // Limit the current to 20A max
-        flexConfig.smartCurrentLimit(20);
+        // flexConfig.smartCurrentLimit(20);
 
         sparkMaxConfig.limitSwitch.forwardLimitSwitchEnabled(false);
         sparkMaxConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyOpen);
@@ -338,7 +339,7 @@ public class CoralSubsystem extends SubsystemBase {
             return simulationArmAngle + armEncoderOffset;
         }
 
-        return sensorCache.armEncoderAngle;
+        return (sensorCache.armEncoderAngle - 0.1) * 360;
     }
 
     public void resetArmEncoder() {
@@ -360,6 +361,7 @@ public class CoralSubsystem extends SubsystemBase {
 
         if (Math.abs(angleError) < CoralConstants.ARM_ANGLE_TOLERANCE) {
             armSpeed = 0;
+            setArmSpeed(0);
             return true;
         }
 
@@ -372,6 +374,7 @@ public class CoralSubsystem extends SubsystemBase {
         }
 
         armSpeed = desiredArmSpeed;
+        setArmSpeed(desiredArmSpeed);
         return false;
     }
 
