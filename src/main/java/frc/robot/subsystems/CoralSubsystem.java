@@ -29,19 +29,19 @@ public class CoralSubsystem extends SubsystemBase {
 
     private class SensorCache {
 
-        double  elevatorEncoderSpeed      = 0;
-        double  elevatorEncoderPosition   = 0;
+        double elevatorEncoderSpeed = 0;
+        double elevatorEncoderPosition = 0;
 
         boolean elevatorUpperLimitReached = false;
         boolean elevatorLowerLimitReached = false;
 
-        double  armEncoderSpeed           = 0;
-        double  armEncoderAngle           = 0;
+        double armEncoderSpeed = 0;
+        double armEncoderAngle = 0;
 
-        double  intakeEncoderSpeed        = 0;
-        double  intakeEncoderPosition     = 0;
+        double intakeEncoderSpeed = 0;
+        double intakeEncoderPosition = 0;
 
-        boolean coralDetected             = false;
+        boolean coralDetected = false;
     }
 
     private final LightsSubsystem lightsSubsystem;
@@ -217,55 +217,21 @@ public class CoralSubsystem extends SubsystemBase {
 
     public boolean setElevatorHeight(ElevatorHeight targetHeight) {
 
-        if ((getElevatorHeight().compareTo(targetHeight)) == 0) {
+        if (isAtElevatorHeight(targetHeight)) {
             setElevatorSpeed(0);
             return true;
         }
 
-        double error         = targetHeight.encoderCount - getElevatorEncoder();
+        double error = targetHeight.encoderCount - getElevatorEncoder();
+        setElevatorSpeed(error * CoralConstants.ELEVATOR_P * CoralConstants.ELEVATOR_MAX_SPEED);
 
-        double elevatorSpeed = error * CoralConstants.ELEVATOR_P;
-
-        // Limit to the max elevator speed
-        elevatorSpeed = Math.min(CoralConstants.ELEVATOR_MAX_SPEED, Math.abs(elevatorSpeed)) * Math.signum(elevatorSpeed);
-
-        setElevatorSpeed(elevatorSpeed);
-
-        return getElevatorHeight() == targetHeight;
+        return false;
     }
 
-    public ElevatorHeight getElevatorHeight() {
+    public boolean isAtElevatorHeight(ElevatorHeight height) {
 
-        if (isElevatorAtLowerLimit()) {
-            return ElevatorHeight.LEVEL_0;
-        }
-        else if (getElevatorEncoder() < LEVEL_1.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_0_5;
-        }
-        else if (getElevatorEncoder() < LEVEL_1.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_1;
-        }
-        else if (getElevatorEncoder() < LEVEL_2.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_1_5;
-        }
-        else if (getElevatorEncoder() < LEVEL_2.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_2;
-        }
-        else if (getElevatorEncoder() < LEVEL_3.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_2_5;
-        }
-        else if (getElevatorEncoder() < LEVEL_3.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_3;
-        }
-        else if (getElevatorEncoder() < LEVEL_4.encoderCount - CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_3_5;
-        }
-        else if (getElevatorEncoder() < LEVEL_4.encoderCount + CoralConstants.ELEVATOR_TOLERANCE) {
-            return ElevatorHeight.LEVEL_4;
-        }
-        else {
-            return ElevatorHeight.LEVEL_4_5;
-        }
+        return (Math.abs(height.encoderCount - getElevatorEncoder()) <= CoralConstants.ELEVATOR_TOLERANCE);
+
     }
 
     public boolean isElevatorAtLowerLimit() {
@@ -273,8 +239,7 @@ public class CoralSubsystem extends SubsystemBase {
         if (isSimulation) {
             if (simulationElevatorHeight <= 0) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -286,8 +251,7 @@ public class CoralSubsystem extends SubsystemBase {
         if (isSimulation) {
             if (simulationElevatorHeight >= 60) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -354,9 +318,9 @@ public class CoralSubsystem extends SubsystemBase {
 
     public boolean moveArmToAngle(double targetAngle) {
 
-        double currentAngle    = getArmAngle();
+        double currentAngle = getArmAngle();
 
-        double angleError      = targetAngle - currentAngle;
+        double angleError = targetAngle - currentAngle;
         double desiredArmSpeed = CoralConstants.ARM_FAST_SPEED;
 
         if (Math.abs(angleError) < CoralConstants.ARM_ANGLE_TOLERANCE) {
@@ -428,7 +392,7 @@ public class CoralSubsystem extends SubsystemBase {
 
         checkSafety();
 
-        lightsSubsystem.setElevatorHeight(getElevatorHeight());
+        lightsSubsystem.setElevatorHeight(getElevatorEncoder());
         lightsSubsystem.setArmPosition(getArmAngle());
 
         SmartDashboard.putNumber("Coral/Elevator Speed", elevatorSpeed);
@@ -437,7 +401,7 @@ public class CoralSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Coral/Elevator Lower Limit", isElevatorAtLowerLimit());
 
         SmartDashboard.putNumber("Coral/Arm Speed", armSpeed);
-        SmartDashboard.putNumber("Coral/Arm Position", getArmAngle());
+        SmartDashboard.putNumber("Coral/Arm Angle", getArmAngle());
         SmartDashboard.putBoolean("Coral/Arm Upper Limit", isArmAtUpperLimit());
         SmartDashboard.putBoolean("Coral/Arm Lower Limit", isArmAtLowerLimit());
 
@@ -458,7 +422,7 @@ public class CoralSubsystem extends SubsystemBase {
             simulationElevatorHeight += ELEVATOR_MAX_DOWN_DISTANCE_PER_LOOP * elevatorSpeed;
         }
 
-        simulationArmAngle      += ARM_ANGLE_MAX_DEGREES_PER_LOOP * armSpeed;
+        simulationArmAngle += ARM_ANGLE_MAX_DEGREES_PER_LOOP * armSpeed;
 
         simulationIntakeEncoder += intakeSpeed;
 
@@ -475,8 +439,7 @@ public class CoralSubsystem extends SubsystemBase {
                 simulationIntakeDetectTimer.reset();
                 simulationIntakeDetectTimer.stop();
             }
-        }
-        else {
+        } else {
             simulationIntakeDetectTimer.reset();
             simulationIntakeDetectTimer.stop();
         }
@@ -511,7 +474,29 @@ public class CoralSubsystem extends SubsystemBase {
                 elevatorSpeed = CoralConstants.ELEVATOR_MAX_SPEED * Math.signum(elevatorSpeed);
                 // Directly set the motor speed, do not call the setter method (recursive loop)
                 elevatorMotor.set(elevatorSpeed);
+                
+                
             }
+            // Elevator is in the lower slow zone
+            else if (getElevatorEncoder() <= CoralConstants.ELEVATOR_SLOW_ZONE) {
+                if (elevatorSpeed < -CoralConstants.ELEVATOR_SLOW_ZONE_SPEED) {
+                    elevatorSpeed = -CoralConstants.ELEVATOR_SLOW_ZONE_SPEED;
+                }
+                // Elevator is in the upper slow zone
+            } else if (getElevatorEncoder() >= CoralConstants.ELEVATOR_MAX_HEIGHT - CoralConstants.ELEVATOR_SLOW_ZONE) {
+                if (elevatorSpeed > CoralConstants.ELEVATOR_SLOW_ZONE_SPEED) {
+                    elevatorSpeed = CoralConstants.ELEVATOR_SLOW_ZONE_SPEED;
+                }
+            } else { // Elevator is not at a limit
+
+                // Limit the elevator speed
+                if (Math.abs(elevatorSpeed) > CoralConstants.ELEVATOR_MAX_SPEED) {
+                    elevatorSpeed = CoralConstants.ELEVATOR_MAX_SPEED * Math.signum(elevatorSpeed);
+                    // Directly set the motor speed, do not call the setter method (recursive loop)
+                    // elevatorMotor.set(ControlMode.PercentOutput, elevatorSpeed);
+                }
+            }
+
         }
 
 
@@ -554,12 +539,12 @@ public class CoralSubsystem extends SubsystemBase {
         StringBuilder sb = new StringBuilder();
 
         sb.append(this.getClass().getSimpleName()).append(" : ")
-            .append("Elevator: speed ").append(elevatorSpeed)
-            .append(" height ").append(getElevatorEncoder()).append("in")
-            .append(",  Arm: speed ").append(armSpeed)
-            .append(" angle ").append(getArmAngle()).append(" deg")
-            .append(",  Intake: speed ").append(intakeSpeed)
-            .append(" coral detect: ").append(isCoralDetected());
+                .append("Elevator: speed ").append(elevatorSpeed)
+                .append(" height ").append(getElevatorEncoder()).append("in")
+                .append(",  Arm: speed ").append(armSpeed)
+                .append(" angle ").append(getArmAngle()).append(" deg")
+                .append(",  Intake: speed ").append(intakeSpeed)
+                .append(" coral detect: ").append(isCoralDetected());
 
         return sb.toString();
     }

@@ -6,12 +6,12 @@ import frc.robot.subsystems.CoralSubsystem;
 
 /**
  * Pulls in coral until it is fully inside the arm, then stops the wheels.
- *
- * @param coralSubsystem
  */
 public class IntakeCoralCommand extends LoggingCommand {
 
     private final CoralSubsystem coralSubsystem;
+    private boolean firstDetect = true;
+    private double encoderOnFirstDetect;
 
     public IntakeCoralCommand(CoralSubsystem coralSubsystem) {
         this.coralSubsystem = coralSubsystem;
@@ -32,10 +32,13 @@ public class IntakeCoralCommand extends LoggingCommand {
     @Override
     public boolean isFinished() {
 
-        if (coralSubsystem.isCoralDetected()) {
+        if (coralSubsystem.isCoralDetected() && firstDetect) {
             // stop the motors when coral is detected
+            encoderOnFirstDetect = coralSubsystem.getIntakeEncoder();
+        }
 
-            // FIXME: delay 0.25 seconds after the coral is detected.
+        if (!firstDetect &&
+                (Math.abs(encoderOnFirstDetect - coralSubsystem.getIntakeEncoder())) <= CoralConstants.INTAKE_ROTATIONS) {
             return true;
         }
         return false;
