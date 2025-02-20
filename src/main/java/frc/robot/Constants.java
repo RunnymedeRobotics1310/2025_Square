@@ -65,12 +65,12 @@ public final class Constants {
         public enum ElevatorHeight {
             COMPACT(0),
             INTAKE(0),
-            LEVEL_1(5),
-            LEVEL_2(10),
-            LEVEL_3(15),
-            LEVEL_4(20),
-            REMOVE_LOW_ALGAE(12),
-            REMOVE_HIGH_ALGAE(17);
+            LEVEL_1(20),
+            LEVEL_2(80),
+            LEVEL_3(120),
+            LEVEL_4(160),
+            REMOVE_LOW_ALGAE(60),
+            REMOVE_HIGH_ALGAE(130);
 
             public final double encoderCount;
 
