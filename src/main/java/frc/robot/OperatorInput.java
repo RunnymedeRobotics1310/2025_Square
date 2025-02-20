@@ -4,14 +4,17 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants.AutoPattern;
+import frc.robot.Constants.CoralConstants.ArmAngle;
+import frc.robot.Constants.CoralConstants.CoralPose;
+import frc.robot.Constants.CoralConstants.ElevatorHeight;
 import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.Constants.OperatorInputConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.GameController;
+import frc.robot.commands.coral.MoveToCoralPoseCommand;
 import frc.robot.commands.coral.arm.MoveArmToAngleCommand;
 import frc.robot.commands.coral.elevator.MoveElevatorToHeightCommand;
 import frc.robot.commands.coral.intake.IntakeCoralCommand;
@@ -93,21 +96,19 @@ public class OperatorInput extends SubsystemBase {
          */
         // Configure the DPAD to set elevator height
         new Trigger(() -> driverController.getPOV() == 0)
-            .onTrue(new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_1));
+            .onTrue(new MoveElevatorToHeightCommand(ElevatorHeight.LEVEL_1, coralSubsystem));
 
         new Trigger(() -> driverController.getPOV() == 90)
-            .onTrue(new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_2));
+            .onTrue(new MoveElevatorToHeightCommand(ElevatorHeight.LEVEL_2, coralSubsystem));
 
         new Trigger(() -> driverController.getPOV() == 180)
-            .onTrue(new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_3));
+            .onTrue(new MoveElevatorToHeightCommand(ElevatorHeight.LEVEL_3, coralSubsystem));
 
         new Trigger(() -> driverController.getPOV() == 270)
-            .onTrue(new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.LEVEL_4));
+            .onTrue(new MoveElevatorToHeightCommand(ElevatorHeight.LEVEL_4, coralSubsystem));
 
         new Trigger(() -> driverController.getXButton())
-            .onTrue(new SequentialCommandGroup(
-                new MoveArmToAngleCommand(0, coralSubsystem),
-                new MoveElevatorToHeightCommand(coralSubsystem, Constants.CoralConstants.ElevatorHeight.COPACT)));
+            .onTrue(new MoveToCoralPoseCommand(CoralPose.COMPACT, coralSubsystem));
 
 
         /*
@@ -119,10 +120,10 @@ public class OperatorInput extends SubsystemBase {
 
         // triggers/buttons
         new Trigger(() -> driverController.getYButton())
-            .onTrue(new MoveArmToAngleCommand(Constants.CoralConstants.ARM_ANGLE_LEVEL_2, coralSubsystem));
+            .onTrue(new MoveArmToAngleCommand(ArmAngle.LEVEL_2, coralSubsystem));
 
         new Trigger(() -> driverController.getAButton())
-            .onTrue(new MoveArmToAngleCommand(Constants.CoralConstants.ARM_ANGLE_INTAKE, coralSubsystem));
+            .onTrue(new MoveArmToAngleCommand(ArmAngle.INTAKE, coralSubsystem));
 
         /*
          * Coral Intake Buttons

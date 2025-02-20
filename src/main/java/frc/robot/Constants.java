@@ -61,8 +61,9 @@ public final class Constants {
 
     public static final class CoralConstants {
 
+        // Elevator Heights in encoder counts
         public enum ElevatorHeight {
-            COPACT(0),
+            COMPACT(0),
             INTAKE(0),
             LEVEL_1(5),
             LEVEL_2(10),
@@ -78,73 +79,101 @@ public final class Constants {
             }
         }
 
+        // Arm Angles in degrees
+        public enum ArmAngle {
+            COMPACT(0),
+            INTAKE(37),
+            LEVEL_1(0),
+            LEVEL_2(120),
+            LEVEL_3(120),
+            LEVEL_4(100),
+            REMOVE_ALGAE(40);
+
+            public final double angle;
+
+            ArmAngle(double angle) {
+                this.angle = angle;
+            }
+        }
+
         public enum CoralPose {
 
-            COMPACT(ElevatorHeight.COPACT, ARM_ANGLE_COMPACT),
-            INTAKE(ElevatorHeight.INTAKE, ARM_ANGLE_INTAKE),
-            SCORE_L1(ElevatorHeight.LEVEL_1, ARM_ANGLE_LEVEL_1),
-            SCORE_L2(ElevatorHeight.LEVEL_2, ARM_ANGLE_LEVEL_2),
-            SCORE_L3(ElevatorHeight.LEVEL_3, ARM_ANGLE_LEVEL_3),
-            SCORE_L4(ElevatorHeight.LEVEL_4, ARM_ANGLE_LEVEL_4),
-            REMOVE_LOW_ALGAE(ElevatorHeight.REMOVE_LOW_ALGAE, ARM_ANGLE_REMOVE_ALGAE),
-            REMOVE_HIGH_ALGAE(ElevatorHeight.REMOVE_HIGH_ALGAE, ARM_ANGLE_REMOVE_ALGAE);
+            COMPACT(ElevatorHeight.COMPACT, ArmAngle.COMPACT),
+            INTAKE(ElevatorHeight.INTAKE, ArmAngle.INTAKE),
+            SCORE_L1(ElevatorHeight.LEVEL_1, ArmAngle.LEVEL_1),
+            SCORE_L2(ElevatorHeight.LEVEL_2, ArmAngle.LEVEL_2),
+            SCORE_L3(ElevatorHeight.LEVEL_3, ArmAngle.LEVEL_3),
+            SCORE_L4(ElevatorHeight.LEVEL_4, ArmAngle.LEVEL_4),
+            REMOVE_LOW_ALGAE(ElevatorHeight.REMOVE_LOW_ALGAE, ArmAngle.REMOVE_ALGAE),
+            REMOVE_HIGH_ALGAE(ElevatorHeight.REMOVE_HIGH_ALGAE, ArmAngle.REMOVE_ALGAE);
 
             public final ElevatorHeight elevatorHeight;
-            public final double         armAngle;
+            public final ArmAngle       armAngle;
 
-            CoralPose(ElevatorHeight elevatorHeight, double armAngle) {
+            CoralPose(ElevatorHeight elevatorHeight, ArmAngle armAngle) {
                 this.elevatorHeight = elevatorHeight;
                 this.armAngle       = armAngle;
             }
         }
 
-        public static final double  ELEVATOR_TOLERANCE             = 2.5;
-        public static final double  ELEVATOR_P                     = 0.05;
+        /*
+         * Motor CAN IDs and inversions
+         */
+        public static final int     ELEVATOR_MOTOR_CAN_ID      = 40;
+        public static final int     ARM_MOTOR_CAN_ID           = 41;
+        public static final int     INTAKE_MOTOR_CAN_ID        = 42;
 
-        // placeholder value for speed of elevator
-        public static final double  ELEVATOR_MAX_SPEED             = 0.7;
-        public static final double  ELEVATOR_TUNE_MAX_SPEED        = 0.1;
-        public static final double  ELEVATOR_MAX_HEIGHT            = 180;
-        public static final double  ELEVATOR_SLOW_ZONE             = 10;   // encoder counts
-        public static final double  ELEVATOR_SLOW_ZONE_SPEED       = 0.05;
+        public static final boolean ELEVATOR_MOTOR_INVERTED    = true;
+        public static final boolean ARM_MOTOR_INVERTED         = false;
+        public static final boolean INTAKE_MOTOR_INVERTED      = false;
 
-        // placeholder value for speed of elevator
-        public static final double  ELEVATOR_SPEED                 = 0.5;
-        public static final double  ELEVATOR_OPERATOR_SCALE_FACTOR = 0.1;
+        /*
+         * Elevator Constants
+         */
+        public static final double  ELEVATOR_MAX_SPEED         = 0.7;
+        public static final double  ELEVATOR_MAX_HEIGHT        = 180;
 
-        public static final int     ELEVATOR_MOTOR_CAN_ID          = 40;
-        public static final int     ARM_MOTOR_CAN_ID               = 41;
-        public static final int     INTAKE_MOTOR_CAN_ID            = 42;
+        public static final double  ELEVATOR_TOLERANCE         = 2.5;
+        public static final double  ELEVATOR_P                 = 0.05;
 
-        public static final boolean ELEVATOR_MOTOR_INVERTED        = true;
-        public static final boolean ARM_MOTOR_INVERTED             = false;
-        public static final boolean INTAKE_MOTOR_INVERTED          = false;
+        // Maximum manual tuning speed
+        public static final double  ELEVATOR_TUNE_MAX_SPEED    = 0.2;
 
-        public static final double  ARM_MAX_SPEED                  = 0.6;
-        public static final boolean ARM_ANGLE_ENCODER_INVERTED     = false;
-        public static final double  ARM_LOWER_LIMIT_POSITION       = 0;
-        public static final double  ARM_UPPER_LIMIT_POSITION       = 126;
+        // Safety constants near the limits
+        public static final double  ELEVATOR_SLOW_ZONE_SPEED   = 0.05;
+        public static final double  ELEVATOR_SLOW_ZONE         = 10;       // encoder counts
 
-        public static final double  ARM_ANGLE_COMPACT              = 0;
-        public static final double  ARM_ANGLE_INTAKE               = 37;
-        public static final double  ARM_ANGLE_LEVEL_1              = 0;
-        public static final double  ARM_ANGLE_LEVEL_2              = 120;
-        public static final double  ARM_ANGLE_LEVEL_3              = 120;
-        public static final double  ARM_ANGLE_LEVEL_4              = 100;
-        public static final double  ARM_ANGLE_REMOVE_ALGAE         = 40;
+        /*
+         * Arm Constants
+         */
+        public static final double  ARM_MAX_SPEED              = 0.6;
 
-        public static final double  ARM_TUNE_RATE                  = 0.2;
+        public static final double  ARM_LOWER_LIMIT_POSITION   = 0;
+        public static final double  ARM_UPPER_LIMIT_POSITION   = 126;
 
-        public static final double  ARM_FAST_SPEED                 = 0.4;
-        public static final double  ARM_SLOW_SPEED                 = 0.15;
-        public static final double  ARM_ANGLE_TOLERANCE            = 1.5;
-        public static final double  ARM_SLOW_ZONE_THRESHOLD        = 10;
+        public static final boolean ARM_ANGLE_ENCODER_INVERTED = false;
+        // Set the encoder offset so that the encoder reads 0.1 rotations against the hard stop
+        // This is so that the angle can go negative instead of back to 360 deg when slightly
+        // less than zero. This constant was read off the REV Hardware Client Absolute Encoder page
+        public static final double  ARM_ANGLE_ENCODER_OFFSET   = 0.0316152;
 
+        // Maximum manual tuning speed
+        public static final double  ARM_TUNE_MAX_SPEED         = 0.2;
 
-        public static final double  CORAL_INTAKE_SPEED             = 0.5;
-        public static final double  CORAL_OUTAKE_SPEED             = 0.8;
-        public static final double  PLANT_ROTATIONS                = 15;
-        public static final double  INTAKE_ROTATIONS               = 8;
+        // Pseudo PID and safe zone constants
+        public static final double  ARM_ANGLE_TOLERANCE        = 1.5;
+
+        public static final double  ARM_FAST_SPEED             = 0.4;
+        public static final double  ARM_SLOW_ZONE_SPEED        = 0.15;
+        public static final double  ARM_SLOW_ZONE_ANGLE        = 10;
+
+        /*
+         * Intake Constants
+         */
+        public static final double  CORAL_INTAKE_SPEED         = 0.5;
+        public static final double  CORAL_OUTAKE_SPEED         = 0.8;
+        public static final double  PLANT_ROTATIONS            = 15;
+        public static final double  INTAKE_ROTATIONS           = 8;
     }
 
     public static final class LightsConstants {

@@ -9,7 +9,7 @@ public class MoveElevatorToHeightCommand extends LoggingCommand {
     private final ElevatorHeight elevatorHeight;
     private final CoralSubsystem coralSubsystem;
 
-    public MoveElevatorToHeightCommand(CoralSubsystem coralSubsystem, ElevatorHeight elevatorHeight) {
+    public MoveElevatorToHeightCommand(ElevatorHeight elevatorHeight, CoralSubsystem coralSubsystem) {
 
         this.elevatorHeight = elevatorHeight;
         this.coralSubsystem = coralSubsystem;
@@ -24,7 +24,7 @@ public class MoveElevatorToHeightCommand extends LoggingCommand {
 
     @Override
     public void execute() {
-        coralSubsystem.setElevatorHeight(elevatorHeight);
+        coralSubsystem.moveElevatorToHeight(elevatorHeight);
     }
 
     @Override

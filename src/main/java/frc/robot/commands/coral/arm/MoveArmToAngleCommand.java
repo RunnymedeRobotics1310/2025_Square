@@ -1,5 +1,6 @@
 package frc.robot.commands.coral.arm;
 
+import frc.robot.Constants.CoralConstants.ArmAngle;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.subsystems.CoralSubsystem;
 
@@ -7,14 +8,14 @@ public class MoveArmToAngleCommand extends LoggingCommand {
 
     private final CoralSubsystem coralSubsystem;
 
-    private final double         angle;
+    private final ArmAngle       armAngle;
 
     private boolean              atAngle = false;
 
-    public MoveArmToAngleCommand(double angle, CoralSubsystem coralSubsystem) {
+    public MoveArmToAngleCommand(ArmAngle armAngle, CoralSubsystem coralSubsystem) {
 
         this.coralSubsystem = coralSubsystem;
-        this.angle          = angle;
+        this.armAngle       = armAngle;
 
         addRequirements(coralSubsystem);
     }
@@ -29,7 +30,7 @@ public class MoveArmToAngleCommand extends LoggingCommand {
     public void execute() {
 
 
-        atAngle = coralSubsystem.moveArmToAngle(angle);
+        atAngle = coralSubsystem.moveArmToAngle(armAngle);
 
 
     }

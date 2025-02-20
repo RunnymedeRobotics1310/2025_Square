@@ -10,10 +10,11 @@ import frc.robot.subsystems.CoralSubsystem;
 public class IntakeCoralCommand extends LoggingCommand {
 
     private final CoralSubsystem coralSubsystem;
-    private boolean firstDetect = true;
-    private double encoderOnFirstDetect;
+    private boolean              firstDetect = true;
+    private double               encoderOnFirstDetect;
 
     public IntakeCoralCommand(CoralSubsystem coralSubsystem) {
+
         this.coralSubsystem = coralSubsystem;
 
         addRequirements(coralSubsystem);
@@ -38,7 +39,7 @@ public class IntakeCoralCommand extends LoggingCommand {
         }
 
         if (!firstDetect &&
-                (Math.abs(encoderOnFirstDetect - coralSubsystem.getIntakeEncoder())) <= CoralConstants.INTAKE_ROTATIONS) {
+            (Math.abs(encoderOnFirstDetect - coralSubsystem.getIntakeEncoder())) <= CoralConstants.INTAKE_ROTATIONS) {
             return true;
         }
         return false;

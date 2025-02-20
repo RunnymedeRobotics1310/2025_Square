@@ -1,6 +1,5 @@
 package frc.robot.commands.coral;
 
-import frc.robot.Constants;
 import frc.robot.Constants.CoralConstants;
 import frc.robot.OperatorInput;
 import frc.robot.commands.LoggingCommand;
@@ -9,11 +8,11 @@ import frc.robot.subsystems.CoralSubsystem;
 public class DefaultCoralCommand extends LoggingCommand {
 
     private final CoralSubsystem coralSubsystem;
-    private final OperatorInput operatorInput;
+    private final OperatorInput  operatorInput;
 
     public DefaultCoralCommand(CoralSubsystem coralSubsystem, OperatorInput operatorInput) {
         this.coralSubsystem = coralSubsystem;
-        this.operatorInput = operatorInput;
+        this.operatorInput  = operatorInput;
 
         addRequirements(coralSubsystem);
     }
@@ -28,28 +27,30 @@ public class DefaultCoralCommand extends LoggingCommand {
     public void execute() {
 
 
-        double elevatorInput = operatorInput.getElevatorInput();
-        boolean ejectButton = operatorInput.getEjectButton();
-        boolean injectButton = operatorInput.getInjectButton();
+        double  elevatorInput = operatorInput.getElevatorInput();
+        boolean ejectButton   = operatorInput.getEjectButton();
+        boolean injectButton  = operatorInput.getInjectButton();
 
         // Elevator commands
-
         coralSubsystem.setElevatorSpeed(elevatorInput * CoralConstants.ELEVATOR_TUNE_MAX_SPEED);
 
         double armStick = operatorInput.getArmStick();
         if (Math.abs(armStick) > 0) {
-            coralSubsystem.setArmSpeed(armStick * Constants.CoralConstants.ARM_TUNE_RATE);
-        } else {
+            coralSubsystem.setArmSpeed(armStick * CoralConstants.ARM_TUNE_MAX_SPEED);
+        }
+        else {
             coralSubsystem.setArmSpeed(0);
         }
 
         // Intake commands
         if (ejectButton) {
             coralSubsystem.setIntakeSpeed(CoralConstants.CORAL_OUTAKE_SPEED);
-        } else if (injectButton) {
+        }
+        else if (injectButton) {
             // Intake & outtake are in the same direction
             coralSubsystem.setIntakeSpeed(-CoralConstants.CORAL_INTAKE_SPEED);
-        } else {
+        }
+        else {
             coralSubsystem.setIntakeSpeed(0);
         }
 
