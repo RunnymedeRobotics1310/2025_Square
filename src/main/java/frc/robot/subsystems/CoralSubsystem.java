@@ -523,6 +523,15 @@ public class CoralSubsystem extends SubsystemBase {
             }
         }
 
+
+        if (getArmAngle() - CoralConstants.ARM_LOWER_LIMIT_POSITION < CoralConstants.ARM_SLOW_ZONE_ANGLE){
+            armSpeed = Math.max(armSpeed, -CoralConstants.ARM_SLOW_ZONE_SPEED);
+        }
+
+        if (CoralConstants.ARM_UPPER_LIMIT_POSITION - getArmAngle() < CoralConstants.ARM_SLOW_ZONE_ANGLE){
+            armSpeed = Math.min(armSpeed, CoralConstants.ARM_SLOW_ZONE_SPEED);
+        }
+
         // If not at either limit, then limit the arm speed
         if (!isArmAtLowerLimit() && !isArmAtUpperLimit()) {
 
