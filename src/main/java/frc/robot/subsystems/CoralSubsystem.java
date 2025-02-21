@@ -312,7 +312,13 @@ public class CoralSubsystem extends SubsystemBase {
 
     public boolean moveArmToAngle(double targetAngle) {
 
-        double currentAngle    = getArmAngle();
+        double currentAngle;
+
+        if (isSimulation) {
+            currentAngle = simulationArmAngle;
+        } else {
+            currentAngle = getArmAngle();
+        }
 
         double angleError      = targetAngle - currentAngle;
         double desiredArmSpeed = CoralConstants.ARM_FAST_SPEED;
@@ -330,6 +336,7 @@ public class CoralSubsystem extends SubsystemBase {
             desiredArmSpeed = -desiredArmSpeed;
         }
 
+        System.out.println("Desired arm speed: " + desiredArmSpeed);
         setArmSpeed(desiredArmSpeed);
         return false;
     }
@@ -415,6 +422,8 @@ public class CoralSubsystem extends SubsystemBase {
         }
 
         simulationArmAngle      += ARM_ANGLE_MAX_DEGREES_PER_LOOP * armSpeed;
+
+        System.out.println("Arm Angle: " + simulationArmAngle);
 
         simulationIntakeEncoder += intakeSpeed;
 

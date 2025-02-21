@@ -125,6 +125,12 @@ public class OperatorInput extends SubsystemBase {
         new Trigger(() -> driverController.getAButton())
             .onTrue(new MoveArmToAngleCommand(Constants.CoralConstants.ARM_ANGLE_INTAKE, coralSubsystem));
 
+        new Trigger(() -> driverController.getBButton())
+            .onTrue(new MoveArmToAngleCommand(150, coralSubsystem));
+        new Trigger(() -> driverController.getXButton())
+                .onTrue(new MoveArmToAngleCommand(30, coralSubsystem));
+
+
         /*
          * Coral Intake Buttons
          */
